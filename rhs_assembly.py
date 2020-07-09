@@ -57,8 +57,6 @@ class Vector():
             s += str(comp) + ' '
         return s
 
-
-
 class LocalRhsVector(Vector):
     '''
     we want all the functionality of Vector, plus some additional functionality,
