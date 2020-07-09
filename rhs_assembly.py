@@ -75,6 +75,7 @@ class GlobalRhsVector(Vector):
         super().__init__(n)
 
     # overload the += operator
+    # same result could be achieved by overloading the + operator
     def __iadd__(self,v:LocalRhsVector):
         for value,glbloc in zip(v,v.l2gmap):
             print('value=',value,'glbloc=',glbloc,'self.v[glbloc]=',self.v[glbloc])
@@ -96,7 +97,10 @@ print(vglobalrhs)
 vglobalrhs += vlocalrhs
 print(vglobalrhs)
 
-
-         
+vlocalrhs2    = LocalRhsVector(2,[1,8])
+vlocalrhs2[0] = 1.616
+vlocalrhs2[1] = 2.0
+vglobalrhs   += vlocalrhs2
+print(vglobalrhs)
 
         
