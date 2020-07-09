@@ -58,8 +58,8 @@
          That defines x and y as members of R^2, or in programming terms, the type of x and y
          is R^2. 
 
-         We can also say that x and y are 'instances' of the 'class' R2. We also say we can 
-         'instantiate' R2 to get x and y.
+         We can also say that x and y are 'instances' of the 'class' R^2. We also say we can 
+         'instantiate' R^2 to get x and y.
 
          An object has 'behaviors' which means we can control how things happen when
          we perform operations on an object. These operations could be applying the operators
