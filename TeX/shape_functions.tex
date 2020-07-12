@@ -36,9 +36,14 @@ So, $x$ is regarded as a function of the local coordinates $\xi$, which are rega
 \ber
 I &=& \int_{\xi=-1}^{\xi=+1}\sum_{A=1}^{A=2}\,N_{A}(x(\xi))f_{A}\,\, x(\xi)_{,\xi} d\xi \text{ where } x(\xi)_{,\xi}=\frac{\partial x(\xi)}{\partial \xi} \nonumber \\
 &=&  \sum_{A=1}^{A=2}\int_{\xi=-1}^{\xi=+1}\,N_{A}(x(\xi))f_{A}\,\, x(\xi)_{,\xi} d\xi \nonumber \\
-&=&  \sum_{A=1}^{A=2}\int_{\xi=-1}^{\xi=+1}\,n_{A}(\xi)f_{A}\,\, x(\xi)_{,\xi} d\xi \text{ where } n_A(\xi)=N_A(x(\xi))
+&=&  \sum_{A=1}^{A=2}\int_{\xi=-1}^{\xi=+1}\,n_{A}(\xi)f_{A}\,\, x(\xi)_{,\xi} d\xi \text{ where } n_A(\xi)=N_A(x(\xi)) \label{eqn:localintegral}
 \eer
-If we can find the form of $n_A(\xi)$, we can evaulate the above integral numerically. To do this, take the definition of the function $N_1(x)$ in global coordinates, and put (\ref{eqn:localtoglobal}) for $x$. Let us take
+The sum $n_A(\xi)f_A$ can be thought of as a local interpolation of $f$. We can define a local interpolant of $f$.
+\beq
+\label{eqn:localinterpolantf}
+\hat{f}(\xi) = n_A(\xi)f_A
+\eeq
+If we can find the form of $n_A(\xi)$, we can evaulate the integral (\ref{eqn:localintegral}) numerically. To do this, take the definition of the function $N_1(x)$ in global coordinates, and put (\ref{eqn:localtoglobal}) for $x$. Let us take
 \beq
 \label{eqn:defglobalN1}
 N_1(x) = \frac{x_2 - x}{x_2 - x_1}.
@@ -51,6 +56,20 @@ n_1(\xi)&=&N_1(x(\xi)) = N_1\Big(\frac{(x_2 - x_1)\xi + x_1 + x_2}{2}\Big) \nonu
         &=& \frac{\frac{1}{2}\Big[2x_2-(x_2-x_1)\xi - x_1 - x_2\Big]}{x_2-x_1} \nonumber \\
         &=& \frac{x_2 - x_1 - (x_2-x_1)\xi}{2(x_2 - x_1)} \nonumber \\
         &=& \frac{(x_2-x_1)(1-\xi)}{2(x_2 - x_1)} \nonumber \\
-        &=& \frac{1}{2}(1-xi) \label{eqn:localbasis}
+        &=& \frac{1}{2}(1-\xi) \label{eqn:localbasis1}
 \eer
+Similarly $n_2$ can be derived to be
+\beq
+\label{eqn:localbasis2}
+n_2(\xi) = \frac{1}{2}(1+\xi)
+\eeq
+\subsection{Isoparameteric finite elements}
+The choice made for the global finite element basis in equation (\ref{eqn:defglobalN1}) and for the transformation from global to local coordinates in equation (\ref{eqn:globaltolocal}) leads to the definition of $n_1$ and $n_2$ in equations (\ref{eqn:localbasis1},\ref{eqn:localbasis2}). This particular basis has the property that in addition to being the basis for the local interpolation in equation (\ref{eqn:localinterpolantf}) the we can also express (\ref{eqn:localtoglobal}) as follows:
+\ber
+x(\xi) &=& \frac{(x_2 - x_1)\xi + x_1 + x_2}{2} \nonumber \\
+       &=& \frac{1}{2}\Big[(x_1 - x_1\xi) + (x_2 + x_2\xi)\Big] \nonumber \\
+       &=& \frac{1}{2}(1-\xi)x_1 + \frac{1}{2}(1+\xi)x_2 \nonumber \\
+       &=& n_1(\xi)x_1 + n_2(\xi)x_2 \label{eqn:localtoglobalusingbasis}
+\eer
+The property of being able to express the local interpolant (\ref{eqn:localinterpolantf}) and the the local to global transformation (\ref{eqn:localtoglobalusingbasis}) using the same basis is called 'isoparametric'. Such elements are referred to as isoparametric finite elements.
 \end{document}
