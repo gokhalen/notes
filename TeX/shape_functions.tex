@@ -1,9 +1,56 @@
 \documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\usepackage{amsmath}
 \begin{document}
 \title{Shape functions}
 \author{Nachiket Gokhale}
 \date{\today}
 \maketitle
 \section{Shape functions}
-Hughes' linear book does not define the transformation from the global domain to the local domain correctly. The notation is confusing esp. on equation (1.15.5) where $N_a(x(\zeta))$ becomes $N_a(\zeta)$
+Hughes' linear book does not define the transformation from the global domain to the local domain in an easy to understand manner. The notation is confusing esp. on equation (1.15.5) where $N_a(x(\xi))$ becomes $N_a(\xi)$. \\
+Let the element in global coordinates be $[x_1,x_2]$. Let $N_1(x)$ and $N_2(x)$ be the shape functions associated with nodes $1$ and $2$. \\
+In finite elements we are often interested in evaluating integrals of the form
+\begin{equation}
+  \label{eqn:mainintegral}
+  I=\int_{x_1}^{x_2}f(x)dx
+\end{equation}
+Most of the time we replace $f(x)$ by its restriction to the finite dimensional space under consideration
+\begin{equation}
+  \label{eqn:restriction}
+f^h(x)=\sum_{A=1}^{A=2}N_{A}(x)f_{A},\text{ where } f_A=f(x_A)
+\end{equation}
+Equation (\ref{eqn:mainintegral}) is typically evaluated by transforming the coordinates from the global domain $[x_1,x_2]$ to the local domain $[-1,1]$ using a transformation $\xi:[x_1,x_2]\rightarrow[-1,1]$. One convenient transformation which accomplishes this is
+\beq
+\label{eqn:globaltolocal}
+\xi(x) = \frac{2x -x_1 - x_2}{x_2-x_1}
+\eeq
+The inverse transformation $x:[-1,1]\rightarrow[x_1,x_2]$ is
+\beq
+\label{eqn:localtoglobal}
+x(\xi) = \frac{(x_2 - x_1)\xi + x_1 + x_2}{2}
+\eeq
+So, $x$ is regarded as a function of the local coordinates $\xi$, which are regarded as independent variables. Therefore, using (\ref{eqn:restriction}) in (\ref{eqn:mainintegral})
+\ber
+I &=& \int_{\xi=-1}^{\xi=+1}\sum_{A=1}^{A=2}\,N_{A}(x(\xi))f_{A}\,\, x(\xi)_{,\xi} d\xi \text{ where } x(\xi)_{,\xi}=\frac{\partial x(\xi)}{\partial \xi} \nonumber \\
+&=&  \sum_{A=1}^{A=2}\int_{\xi=-1}^{\xi=+1}\,N_{A}(x(\xi))f_{A}\,\, x(\xi)_{,\xi} d\xi \nonumber \\
+&=&  \sum_{A=1}^{A=2}\int_{\xi=-1}^{\xi=+1}\,n_{A}(\xi)f_{A}\,\, x(\xi)_{,\xi} d\xi \text{ where } n_A(\xi)=N_A(x(\xi))
+\eer
+If we can find the form of $n_A(\xi)$, we can evaulate the above integral numerically. To do this, take the definition of the function $N_1(x)$ in global coordinates, and put (\ref{eqn:localtoglobal}) for $x$. Let us take
+\beq
+\label{eqn:defglobalN1}
+N_1(x) = \frac{x_2 - x}{x_2 - x_1}.
+\eeq
+Therefore,
+\ber
+n_1(\xi)&=&N_1(x(\xi)) = N_1\Big(\frac{(x_2 - x_1)\xi + x_1 + x_2}{2}\Big) \nonumber \\
+        &=& \frac{x_2 - \frac{(x_2-x_1)\xi + x_1 + x_2}{2}}{x_2-x_1} \nonumber \\
+        &=& \frac{\frac{1}{2}\Big[2x_2-[(x_2-x_1)\xi + x_1 + x_2]\Big]}{x_2-x_1} \nonumber \\
+        &=& \frac{\frac{1}{2}\Big[2x_2-(x_2-x_1)\xi - x_1 - x_2\Big]}{x_2-x_1} \nonumber \\
+        &=& \frac{x_2 - x_1 - (x_2-x_1)\xi}{2(x_2 - x_1)} \nonumber \\
+        &=& \frac{(x_2-x_1)(1-\xi)}{2(x_2 - x_1)} \nonumber \\
+        &=& \frac{1}{2}(1-xi) \label{eqn:localbasis}
+\eer
 \end{document}
