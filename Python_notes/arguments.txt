@@ -1,0 +1,51 @@
+__dictionaries as arguments__
+
+Can use dictionaries to simulate passing structures. 
+For example, 
+complex(real=3,imag=5)
+returns 3+5j
+one can also do dd={'imag':5,'real':3}
+now you can pass dictionary instead
+complex(**dd)
+returns 3+5j
+
+__positional arguments__
+
+https://stackoverflow.com/questions/9450656/positional-argument-v-s-keyword-argument
+(also scroll to the bottom for an update on what happens in python 3.8.3)
+
+The general syntax is 
+
+def f(pos1, pos2, /, pos_or_kwd, *, kwd1, kwd2):
+      -----------    ----------     ----------
+        |             |                  |
+        |        Positional or keyword   |
+        |                                - Keyword only
+         -- Positional only
+
+
+While defining a function, for "positional only" and "positional or keyword", the arguments 
+which have default values assigned have to come after arguments which have no default arguments. 
+Defining, 
+            def f(a1="a1",a2):
+                print (a1,a2)
+gives,
+            non-default argument follows default argument
+
+this is because calling f(1) can mean either a1=1 and a2 not defined, or a2=1 and a1 not defined. 
+probably smarter people can think of more complicated examples
+
+this,
+           def f(a1,a2="a2",/,b1,b2="b2")
+also gives,
+            non-default argument follows default argument
+
+this is because the non-default argument b1 follows default argument a2.
+
+Also, if we define a function 
+            
+            def f(a1,a2="a2"):
+		print (a1,a2)
+
+We cannot call it as f(a2="a2",1). It will give positional argument follows keyword argument.
+The keyword only arguments are much less problematic because they come with a name.

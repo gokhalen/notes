@@ -1,0 +1,106 @@
+https://stackoverflow.com/questions/986006/how-do-i-pass-a-variable-by-reference
+
+The Python documentation seems unclear about whether parameters are passed by reference or value, and the following code produces the unchanged value 'Original'
+
+class PassByReference:
+    def __init__(self):
+        self.variable = 'Original'
+        self.change(self.variable)
+        print(self.variable)
+
+    def change(self, var):
+        var = 'Changed'
+Is there something I can do to pass the variable by actual reference?
+
+Answer by David Cournapeau
+
+It is neither pass-by-value or pass-by-reference - it is call-by-object. See this, by Fredrik Lundh:
+
+http://effbot.org/zone/call-by-object.htm
+
+Here is a significant quote:
+
+"...variables [names] are not objects; they cannot be denoted by other variables or referred to by objects."
+
+In your example, when the Change method is called--a namespace is created for it; and var becomes a name,
+within that namespace, for the string object 'Original'. That object then has a name in two namespaces. 
+Next, var = 'Changed' binds var to a new string object, and thus the method's namespace forgets about 'Original'.
+Finally, that namespace is forgotten, and the string 'Changed' along with it.
+
+
+Consider the following code
+
+def myfunc(xx):
+    print ("start of myfunc: xx = " + str(xx))
+    xx = 2 
+    print ("end of myfunc: xx = " + str(xx))
+ 
+if __name__ == "__main__":
+     xx = 1
+     myfunc(xx)
+     print("end of main: xx= " + str(xx))
+
+The output is 
+
+start of myfunc: xx = 1
+end of myfunc: xx = 2
+end of main: xx= 1
+
+What's happening? If xx was being passed by reference, one would expect the value at the end of main to be 2. 
+According to David Cournapeau's answer, when myfunc is called a namespace is created for it and xx becomes a variable/object within
+that namespace and it binds to/points to the object 1 which was passed in. xx in the global namespace also points to that object.
+You can check this with the id function.
+When we say xx = 2 in myfunc, the variable xx in the namespace myfunc points to a new object 2. Notice, due to namespaces, xx in the
+global namespace always points to 1, that has not been changed by myfunc. So, when myfunc is executed, xx in the global namespace does
+not change. 
+
+Similar logic works with strings. 
+
+def mystring(word):
+    print ("start of myfunc: word = " + word)
+    word = "new string"
+    print ("end of myfunc: word = " + word)
+ 
+if __name__ == "__main__":
+     word = "old string"
+     mystring(word)
+     print("end of main: word= " + str(word))
+
+
+The output is:
+
+start of myfunc: word = old string
+end of myfunc: word = new string
+end of main: word = old string
+
+Again, when mystring is called, a object "word" is created in the namespace for that function. At the start 
+of the function, this object "word" points to the string "old string". You can check this with the id function. 
+Then, word = "new string", makes word
+in the function namespace point to "new string". This does not change what word in the global or outside
+namespace points to. So, when the function exits, word points to "old string".
+
+Note that in the above examples we considered immutables being passed. So what happens when mutables are passed?
+Consider the following program
+
+def mylist(listarg):
+    print ("start of myfunc: list = " + str(listarg))
+    listarg[0]="Bob"
+    listarg.append("Dylan")
+    print ("end of myfunc: list = " + str(listarg))
+ 
+if __name__ == "__main__":
+     listarg = ["john", "paul","george","ringo"]
+     mylist(listarg)
+     print("end of main: list = " + str(listarg))
+
+Again, when listarg is passed, a namespace is created in the function mylist. 
+listarg in this namespace, points to the same list as listarg in the global namespace.
+However, listarg is mutable. We can use dereferencing or object methods to modify it. 
+The output from this program is:
+
+start of myfunc: list = ['john', 'paul', 'george', 'ringo']
+end of myfunc: list = ['Bob', 'paul', 'george', 'ringo', 'Dylan']
+end of main: list = ['Bob', 'paul', 'george', 'ringo', 'Dylan']
+
+
+

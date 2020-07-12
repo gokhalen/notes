@@ -1,0 +1,91 @@
+https://stackoverflow.com/questions/5389507/iterating-over-every-two-elements-in-a-list
+
+What does:     return zip(*[iter(iterable)]*n)  do exactly?
+
+ll=list(range(4))
+mm=list(range(4,8))
+
+'print' is a function which understands unpacking operators.
+
+so,
+
+print(*[ll,mm])
+
+yields
+
+[0, 1, 2, 3] [4, 5, 6, 7]
+
+Similarly
+
+for z in zip(*[ll,mm]):
+    print(z)
+
+yields,
+
+(0, 4)
+(1, 5)
+(2, 6)
+(3, 7)
+
+What is zip doing? It is, by some magic, getting the next value from ll and mm and returning it
+
+This is equivalent to 
+
+for z in zip(ll,mm):
+     print(z)
+
+Now consider,
+
+ll =list(range(8))
+i1 =iter(ll)
+i2 = i1        # note: i2 = iter(ll) will NOT work, a new iterator will be created
+for z in zip(*[i1,i2]):
+    print(z)
+
+(0, 1)
+(2, 3)
+(4, 5)
+(6, 7)
+
+So we can iterate over the original list ll in groups of 2
+Zip is smart enough to unpack intelligently. It gets the first value from i1,
+then the next value from i2. But i1 and i2 are the same iterator 
+(bcos: i2=i1), defined on ll. So, after 0, 1 is returned and so on.
+
+Now the stackoverflow code,
+
+zip(*[iter(iterable)]*n)  
+
+is equivalent to 
+
+zip(*[i_1,i_2,....,i_n])
+
+where i_1, i_2 ....,i_n are iterators pointing to the same underlying object. 
+Remember, just like the Amy Hanlon example, list multiplication creates a new object
+with n objects pointing to the original object.
+
+So, when zip goes calling next on the iterators, values in sequence from the original
+iterator are generated. 
+
+Note: the code
+
+ll = list(range(8))
+mm = ll
+nn = ll
+for z in zip(*[ll,ll,ll]):
+    print(z)
+
+yields,
+
+(0, 0, 0)
+(1, 1, 1)
+(2, 2, 2)
+(3, 3, 3)
+(4, 4, 4)
+(5, 5, 5)
+(6, 6, 6)
+(7, 7, 7)
+
+This is because ll is NOT an iterator. Getting a value from the first ll, 
+does not mean that we have to get the next value from the next ll and so on.
+

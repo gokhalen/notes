@@ -1,0 +1,51 @@
+https://docs.python-guide.org/writing/gotchas/
+
+Python’s default arguments are evaluated once when the function is defined, 
+not each time the function is called (like it is in say, Ruby). This means 
+that if you use a mutable default argument and mutate it, you will and have 
+mutated that object for all future calls to the function as well.
+
+This is from Amy Hanlon's talk: https://www.youtube.com/watch?v=sH4XF6pKKmk
+
+
+def bar(l=[]):
+    print (locals())
+    l.append('cat')
+    return l
+
+Running this on the command line returns
+
+bar() => ['cat']
+bar() => ['cat','cat']
+bar() => ['cat','cat','cat']
+
+And so on? Why?
+
+Because Python's default arguments are evaulated at function definition time. 
+So, l always points to the empty object which is created once. This empty
+object is mutated in place inside the function. As Amy says, we can modify
+the list pointed to by the default argument l, by accessing bar.__defaults__
+Starting afresh, by redefining bar and then calling it
+
+bar() ==> ['cat']
+bar.__defaults__ ==>['cat']
+bar.__defaults__[0].append("dragon")
+bar.__defaults__ ==>(['cat','dragon'])
+bar() ==> (['cat','dragon','cat'])
+
+Now, let's make bar.__defaults__  point to a completely different object.
+Starting afresh, by redefining bar and then calling it
+
+bar() ==> ['cat']
+bar.__defaults__ = (['lion'],) # notice the "," after the list. that's the way to define a 1 element tuple containing a single list
+bar() ==> ['lion','cat']
+bar() ==> ['lion','cat','cat']
+
+Now, starting afresh, by redefining bar and then calling it
+bar([]) ==> ['cat']
+bar([]) ==> ['cat']
+bar([]) ==> ['cat']
+
+Why does this happen? Since we are actually passing an empty list, the default argument points to a new empty list everytime
+
+

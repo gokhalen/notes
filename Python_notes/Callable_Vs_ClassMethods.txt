@@ -1,0 +1,4 @@
+Callable is invoked on an instance of a class.
+Callable can be used to redefine an instance of a class 
+Classmethods are called on the class itself.
+Classmethods can be used to define alternate constructors

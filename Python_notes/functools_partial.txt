@@ -1,0 +1,6 @@
+from functools import partial
+def multiply(x,y):
+    print(f'x={x},y={y}')
+    return x*y
+dbl = partial(multiply,2)
+print(dbl(11))

@@ -1,0 +1,152 @@
+for and with do not seem to create new local scopes. 
+just because things are indented. 
+
+e.g.
+
+for ii in range(10):
+    jj = 1
+
+print(ii)
+print(jj)
+
+yields,
+9
+1
+
+indicating that ii and jj are available in the main program
+
+Also, consider the following program
+
+with open('Data/portfolio.csv','rt') as f:
+    header = next(f)
+    total_cost = 0.0
+    for line in f:
+        line=line.strip('\n')
+        listline = line.split(',')
+        nn   = int(listline[1])
+        cost = float(listline[2])
+        total_cost += nn*cost 
+
+print(total_cost)
+print(cost)
+print(nn)
+
+total_cost (defined under with),cost and nn (both defined inside for)
+are avaiable in the main program. since for does not start a new scope,
+nn and cost are available in with. since with does not start a new scope,
+nn and cost are available outside it in main 
+
+while doesn't define a new local scope either
+
+ii = 0
+while ii < 10:
+    jj  = 1
+    ii += 1
+
+print(jj)
+
+yields,
+
+1
+
+jj is available outside the while loop
+
+aa = 0
+if ( aa == 0):
+    bb = 1
+print(bb)
+
+yields 1, indicating bb is available outside.
+
+Next, let's go to Amy Hanlon's talk https://www.youtube.com/watch?v=sH4XF6pKKmk at 17:45
+
+
+x = 111
+def my_function():
+    print(x)     
+
+my_function()
+
+This prints 111. 
+
+#################################################################################
+This is because Python looks in the local scope, then the enclosing scope 
+and then the global scope and then the builtins. 
+#################################################################################
+
+x = 111
+def my_function():
+    x = 222
+    def my_function2():
+        print(x)
+    my_function2()
+
+my_function()
+
+this prints 222, because x is found in the enclosing scope.
+
+Similarly,
+
+x = 111
+def my_function():
+    x = 222
+    def my_function2():
+        x=333
+        def my_function3():
+            print(x)    
+        my_function3()
+    my_function2()
+    
+my_function()
+
+prints 333, because xx is found in the first enclosing scope
+
+Now,
+
+x=111
+
+def my_function():
+    x = x+1
+    
+my_function()
+
+throws an error. Because as Amy states,  
+###############################################################################################
+"When you make an assignment to a variable in a scope, that variable 
+ becomes local to that scope" Since x is not there in the local scope
+ an error is thrown. 
+###############################################################################################
+
+One can use the "global" keyword as in 
+
+x=111
+
+def my_function():
+    global x
+    x = x+1
+    
+my_function()
+print(x)
+
+This yields 112
+
+To conclude,
+
+x=111
+
+def my_function():
+    x = 222
+    def my_function2():
+        nonlocal x
+        x = x+1
+        print(x)
+    my_function2()
+    
+my_function()
+print(x)
+
+yields 223 and 111. The first print statement points to x = 222
+The global print statement points to x = 111
+
+I don't know how to use a variable defined in a particular outer scope
+Most likely, can't do it in C/C++ either.

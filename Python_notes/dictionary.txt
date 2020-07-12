@@ -1,0 +1,45 @@
+dd={'name'="Nachiket",'weight'=200}
+ddkeys=dd.keys()                #returns a special dict_keys object
+ddvals=dd.values()              #returns a special dict_values object
+
+both these special objects are dynamic
+
+i.e. if you do,
+
+del dd['weight']
+
+then 
+
+weight will automatically be deleted from ddkeys
+200    ----------------"----------------- ddvals
+
+similarly if you add an item to dd, then ddkeys and ddvals will be updated dynamically
+however, if one makes a list using list1=list(dd.keys()) and list2=list(dd.values()),
+these lists are static. deleting or adding an item from the original dictionary has 
+no effect on list1 and list2
+
+====================================================================================
+Dictionary keys have to be immutable. 
+Cannot use lists, sets, dictionaries as dictionary keys.
+Also, cannot get around this by using tuples of lists as keys.
+====================================================================================
+columns = ['name','shares','price','account']
+values  = ['GOOG',100,490.1, 12345 ]
+pairs   = zip(columns,values)
+
+we can loop over "pairs" like so
+
+for aa,bb in pairs:
+	print(aa,bb)
+
+"pairs" is like an iterator 
+we can also make a dictionary
+
+dd = dict(zip(columns,values))
+
+If the iterator "pairs" is not exhausted, dd=dict(pairs) will also work.  
+=================================================================================
+If a dictionary contains a list ( only in its values, obviously. (trying to put a list in a 
+dictionary's key will give "unhashable type" list)), then mutating that list will mutate the list
+in the dictionary
+

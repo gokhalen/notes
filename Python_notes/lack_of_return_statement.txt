@@ -1,0 +1,7 @@
+Lack of return statement in a function will cause NoneType object to be returned.
+
+def ff():
+    print("Nachiket")
+
+aa=ff()
+type(aa) => NoneType object 

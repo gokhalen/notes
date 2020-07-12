@@ -1,0 +1,7 @@
+			Called from Class			Called from Object Instance
+
+@staticmethod                OK                                              OK
+
+@classmethod              Will be passed cls                          Will not be passed cls
+
+instancemethod            Will not be passed self                     Will be passed self

@@ -1,0 +1,13 @@
+Each module loads and executes only once. Note: Repeated imports just return a reference to the previously loaded module.
+
+A common confusion arises if you repeat an import statement after changing the source code for a module. 
+Because of the module cache sys.modules, repeated imports always return the previously loaded module–even if a change was made. 
+The safest way to load modified code into Python is to quit and restart the interpreter.
+
+Spyder and other IDEs seem to reload modules if the files have changed. Python on the command line requires:
+
+import importlib
+importlib.reload(test_modules)
+
+
+

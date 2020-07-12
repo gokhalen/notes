@@ -1,0 +1,8 @@
+assert (len(select) == len(types)),  'Length of select is not equal to length of types'
+
+Do not use
+
+assert (len(select) == len(types),  'Length of select is not equal to length of types')
+
+It will treat (len(select) == len(types),  'Length of select is not equal to length of types') as a tuple, which being non empty 
+will always evaluate to True

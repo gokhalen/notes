@@ -1,6 +1,6 @@
 '''
  Nachiket Gokhale gokhalen@gmail.com
-
+ 
  Since you said twice that you could not wrap your head around objects
  and OOP (Object Oriented Programming) here is my attempt to explain objects to you.
  Perhaps it might teach me a few things too. They say that the best way to learn 

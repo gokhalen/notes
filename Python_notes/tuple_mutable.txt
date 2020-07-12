@@ -1,0 +1,8 @@
+What is immutable in a tuple are the object references it contains. Not the objects themselves.
+A tuple can contain a list, which can be modified using append.
+
+e.g. 
+
+a_tuple=(["Nachiket"],1,2)
+a_tuple[0].append(" Gokhale")
+a_tuple yields (['Nachiket', ' Gokhale'], 1, 2)

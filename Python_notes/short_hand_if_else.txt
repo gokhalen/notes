@@ -1,0 +1,2 @@
+Try on command line
+state = 1 if state == 4 else state + 1

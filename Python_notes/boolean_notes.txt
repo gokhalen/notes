@@ -1,0 +1,50 @@
+At the end of 
+https://dabeaz-course.github.io/practical-python/Notes/01_Introduction/03_Numbers.html
+the author asks 
+
+>>> bool("False")
+True
+>>>
+
+Can you explain this behavior?
+
+Answer: Non-Empty strings, lists, dicts, tuples evaluate to True. 
+So, the non-empty string "False" evaluates to True.
+Note: Empty lists can be created using ll=[], dicts using dd={}, tuples using tt=().
+bool(1) evaluates to True, just bool() evaluates to False.
+but bool(0) evaluates to False, even though 0 is a non-empty object.
+
+
+
+As an aside, None evaluates to False. not None evaluates to True. 
+
+if None:
+    print("None is True")
+
+yields no output
+
+if not None:
+    print("None is False")
+
+yields "None is False"
+
+However, None is not equal to True __AND__ not equal to False. 
+
+if (None==True):
+    print("None==True")
+
+yields no output
+
+if (None==False):
+    print("None==False")
+
+also yields no output
+
+Also, 
+
+None == [], None == {}, None == () yield False. 
+
+Also,
+
+1 == True, yields True
+0 == False, yields False

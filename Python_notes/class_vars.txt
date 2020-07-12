@@ -1,0 +1,7 @@
+class MyClass():
+    xx = 1
+    def __init__(self,var):
+        self.xx = var
+        
+    def __repr__(self):
+        return f'xx={__class__.xx}, self.xx={self.xx}'
