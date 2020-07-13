@@ -1,0 +1,32 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Traction notes}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Traction notes}
+\subsection{My misconception}
+Let us assume that the boundary can be divided as follows. $\Gamma=\Gamma_h\cup\Gamma_q$ and that all three displacement degrees of freedom are specified on $\Gamma_q$ and all three traction components are specified on $\Gamma_h$. This makes the notation simpler. The traction contribution to the rhs vector resulting from $(\mathbf{w},\mathbf{h})_{\Gamma_h}$
+\beq
+(N_A\mathbf{e}_{i},\mathbf{h})_{\Gamma_h}
+\eeq
+My mistake was that it seemed that we were assembling the vector $\mathbf{h}$ into the location $(A,i)$. That is not so, due to the defition of the innerproduct $(\cdot,\cdot)_{\Gamma_h}$ which maps a pair of vectors to a real number. The simplification is
+\beq
+(N_A\mathbf{e}_{i},\mathbf{h})_{\Gamma_h} = \int_{\Gamma_h} N_{A}\mathbf{e}_{i}\cdot\mathbf{h}\,d\Gamma_{h} = \int_{\Gamma_h}N_Ah_id\Gamma_{h}
+\eeq
+Note $\mathbf{e}_{i}$ is a vector with zeros everywhere except at its $i^{th}$ component, which is $1$.
+\subsection{Traction elements not aligned with the co-ordinate axes}
+If traction elements are not aligned with the coordinate axes, performing integration over them is non-trivial. Some references are:\\
+\url{http://sites.science.oregonstate.edu/math/home/programs/undergrad/CalculusQuestStudyGuides/vcalc/surfint/surfint.html}\\
+\url{https://www.khanacademy.org/math/multivariable-calculus/integrating-multivariable-functions/surface-integrals-articles/a/surface-integrals}\\
+\url{https://www.khanacademy.org/math/multivariable-calculus/integrating-multivariable-functions/surface-integrals-articles/a/surface-integral-example}\\
+\url{https://www.khanacademy.org/math/multivariable-calculus/integrating-multivariable-functions/line-integrals-for-scalar-functions-articles/a/line-integrals-in-a-scalar-field}
+
+\end{document}
