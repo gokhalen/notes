@@ -72,4 +72,6 @@ x(\xi) &=& \frac{(x_2 - x_1)\xi + x_1 + x_2}{2} \nonumber \\
        &=& n_1(\xi)x_1 + n_2(\xi)x_2 \label{eqn:localtoglobalusingbasis}
 \eer
 The property of being able to express the local interpolant (\ref{eqn:localinterpolantf}) and the the local to global transformation (\ref{eqn:localtoglobalusingbasis}) using the same basis is called 'isoparametric'. Such elements are referred to as isoparametric finite elements.
+\subsection{Global $N(\mathbf{x})$ not defined \& Completeness}
+Hughes does not explicitly define $N(\mathbf(x))$ in global coordinates as we have done in equation (\ref{eqn:defglobalN1}). Hughes defines completenes in the global and element domain. But because we do not have explicit definitions of $N(\mathbf(x))$ in the global domain we cannot verify this for ourselves directly. Hughes does it in a different way on pg 117 where he proves $u^h(\xi,\eta)=u^h(\mathbf{x})$. Notation as usual is confusing.
 \end{document}
