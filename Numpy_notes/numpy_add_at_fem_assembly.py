@@ -9,7 +9,7 @@ Created on Wed Jul 22 12:49:32 2020
 """
 
 import numpy as np
-from scipy.sparse.linalg import spsolve
+from scipy.sparse.linalg import *  # gets solvers
 from scipy import sparse,linalg
 
 
@@ -89,8 +89,10 @@ kreg=sparse.coo_matrix(tt,shape=(N,N))
 
 K_global +=kreg
 
+rhs_global=rhs_global.reshape(N,1)
 # x=scipy.sparse.linalg.spsolve(K_global,rhs_global)
-x=spsolve(K_global,rhs_global)
+# sparse solvers require dense right hand sides
+x,exitCode=bicg(K_global,rhs_global.todense())
 # for some reason the shape of the vector returned is (N,) i.e. a row vector
 # make it a column vector
 x=x.reshape(N,1)
