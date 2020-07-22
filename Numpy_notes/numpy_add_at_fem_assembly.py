@@ -9,7 +9,9 @@ Created on Wed Jul 22 12:49:32 2020
 """
 
 import numpy as np
-from scipy import sparse
+from scipy.sparse.linalg import spsolve
+from scipy import sparse,linalg
+
 
 x       = np.arange(8)
 indices = np.array([1,5,7])
@@ -58,3 +60,41 @@ print('-'*40)
 
 # now define a right hand side
 rhs_global=sparse.coo_matrix(np.zeros(N).reshape(N,1))
+# define element rhs vectors r1 and r2
+row=[0,3]
+col=[0,0]
+data=[1,1]
+tt=(data,(row,col))
+r1=sparse.coo_matrix(tt,shape=(N,1))
+rhs_global += r1
+
+row=[0,7]
+col=[0,0]
+data=[1,1]
+tt=(data,(row,col))
+r2=sparse.coo_matrix(tt,shape=(N,1))
+rhs_global += r2
+
+print(rhs_global.todense())
+print('-'*40)
+
+# since we have assembled only two 'elements' the global matrix is singular
+# add '1' to the global matrix to make it non-singular
+
+row=list(range(N))
+col=row
+data=[ 1 for i in range(N)] # or alternatively data = [1]*N
+tt=(data,(row,col))
+kreg=sparse.coo_matrix(tt,shape=(N,N))
+
+K_global +=kreg
+
+# x=scipy.sparse.linalg.spsolve(K_global,rhs_global)
+x=spsolve(K_global,rhs_global)
+# for some reason the shape of the vector returned is (N,) i.e. a row vector
+# make it a column vector
+x=x.reshape(N,1)
+print(f'{K_global.dot(x)=}')
+boolvec = K_global.dot(x) == rhs_global
+# everything is not true because of floating point comparisons
+print(f'{boolvec=}')
