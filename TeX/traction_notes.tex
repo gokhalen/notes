@@ -28,8 +28,14 @@ If traction elements are not aligned with the coordinate axes, performing integr
 \url{https://www.khanacademy.org/math/multivariable-calculus/integrating-multivariable-functions/surface-integrals-articles/a/surface-integrals}\\
 \url{https://www.khanacademy.org/math/multivariable-calculus/integrating-multivariable-functions/surface-integrals-articles/a/surface-integral-example}\\
 \url{https://www.khanacademy.org/math/multivariable-calculus/integrating-multivariable-functions/line-integrals-for-scalar-functions-articles/a/line-integrals-in-a-scalar-field}
-\subsection{Similar problems in Hughes}
-Integration over a line in 2D: Exercise 8 on pg 161. Exercise 10,11,12,13 on pg 163.
+\subsection{Integrating over traction elements}
+In 2D traction elements are lines. See in Hughes' linear book, Integration over a line in 2D: Exercise 8 on pg 161. Exercise 10,11,12,13 on pg 163.
 
-Integrating over a boundary of a 3D trilinear element: we want to integrate over an arbitrary plane (which is not parallel to XY, XZ, or YZ planes) in 3D, we can regard x,y as independent variables and treat z=f(x,y). f depends on the equation of the plane.  Find the angle theta between the plane and the XY plane. Change a surface element of the plane dS=cos(theta)dxdy or something similar. Now this problem reduces to a double integration problem. 
+Integrating over a boundary of a 3D trilinear element: we want to integrate over an arbitrary plane (which is not parallel to XY, XZ, or YZ planes) in 3D, we can regard x,y as independent variables and treat z=f(x,y). f depends on the equation of the plane.  Find the angle theta between the plane and the XY plane, by finding the angle between their normals. Change a surface element of the plane $dS=\frac{dxdy}{cos(\theta)}$ or something similar. Now this problem reduces to a double integration problem. So, if the nodes of the 2D traction element living ing 3D space we're integrating over are: $(x_a,y_a,z_a), a=1,2,3,4$. So,
+\beq
+\int_{S}g(x,y,z)\,dS = \int_{\Omega} g(x,y,f(x,y))\,\frac{dxdy}{cos(\theta)}
+\eeq
+where, $\Omega$ is the region defined by projecting the plane we're intgrating over to the XY plane. i.e. the quadrilateral with the nodes $(x_a,y_a,0), a=1,2,3,4$. This procedure will not work when the plane we're integrating over is perpendicular to the XY-plane. $cos(\theta)$ will be $0$. Those cases must be handled as special cases.
+\subsection{Intgration over curved surfaces}
+If we're integrating over non-planar surfaces, $cos(\theta)$ will not be a constant, but will vary at every point on the surface. By dividing the non-planar surface into many small planar surfaces, we can evaluate surface integrals. If the small surfaces become perpendicular to the $XY$ plane then those cases must be handled separately. Dividing a surface into planes and calculating the integral is similar to to 1D numerical integration, in which we approximate the function to be intgrated by straigt lines over a small segments, calculate the area under each straight line and then sum it up.
 \end{document}
