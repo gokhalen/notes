@@ -1,0 +1,62 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\ddeps}{\frac{d}{d{\epsilon}}\Big{|}_{\epsilon\rightarrow{0}}}
+%\newcommand{\bm}[1]{{\mathbf{#1}}}
+\newcommand{\eps}{\epsilon}
+\newcommand{\nn}{\nonumber}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\usepackage{bm}
+\begin{document}
+\title{Imposing general Dirchlet boundary conditions}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{General dirichlet boundary conditions in linear elasticity}
+Consider 2D elasticity. It is easy to impose simple Dirichlet boundary conditions which are aligned with the global coordinate axes i.e. $u_x=q_1$, or $u_y=q_2$ or $u_z=q_3$. However, it may be necessary to impose more complicated Dirichlet boundary conditions. For example, in 2D we might want to say that displacement normal to a line is zero, or in 3D displacement normal to a plane is zero. Such a constraint, at a particular node can be expressed in the form $au_x + bu_y + cu_z=d$. Simple Dirichlet boundary conditions $u_x=q_1$, or $u_y=q_2$ or $u_z=q_3$ can be handled by simply not assembling those dofs into the stiffness matrix. With more complicated Dirichlet boundary conditions things become complicated. The weighting function $\bm{w}$ is zero on the Dirichlet boundary. How exactly should the Dirichlet boundary be defined when there are combinations of degrees of freedom? We can sidestep this problem by assembling the unconstrained stiffness matrix $\bm{K}$ and solving it subject to constraints. The constraints are applied using Lagrange multipliers. I saw this method in \url{http://www.softeng.rl.ac.uk/st/projects/felib4/Docs/PDF/Intro.pdf} available in the Books directory on Google Drive (file:FEM Constrained Dirichlet Not Parallel To Coordinate Axes).
+\subsection{Solving $\bm{Ku}=\bm{f}$}
+Solving $\bm{Ku}=\bm{f}$ can be thought of as minimizing
+\beq
+\label{eqn:min}
+\pi(\bm{u}) = \frac{1}{2}\bm{u}^T(\bm{Ku}-\bm{f})
+%\(\bm{Ku}-\bm{f})
+\eeq
+If we look for stationary points of (\ref{eqn:min}), we get
+\ber
+\delta\pi(\bm{u}) &=& \ddeps  \frac{1}{2}(\bm{u}+\eps\delta\bm{u})^T(\bm{K}{(\bm{u}+\eps\delta\bm{u})}-\bm{f}) \nn \\
+&=& \ddeps  \frac{1}{2}(\bm{u}^T + \eps\delta\bm{u}^T)(\bm{K}\bm{u}+\eps\bm{K}\delta\bm{u}) - \frac{1}{2}(\bm{u}^T + \eps\delta\bm{u}^T)\bm{f} \nn \\
+&=& \frac{1}{2}\ddeps (\bm{u}^T\bm{K}\bm{u} + \eps\delta\bm{u}^T\bm{Ku} + \eps\bm{u}^t\bm{K}\delta\bm{u} + \eps^2\delta\bm{u}^T)  - \frac{1}{2}(\bm{u}^T + \eps\delta\bm{u}^T)\bm{f} \nn \\
+&=& \delta\bm{u}^T(\bm{Ku}-\bm{f})
+\eer
+Setting $\delta\pi(\bm{u}) = 0\,\,\forall{\delta\bm{u}}$ yields, $\bm{Ku}-\bm{f}$
+\subsection{Solving with constraints}
+The non-aligned Dirichlet boundary conditions can be described in the matrix form $\bm{Bu}=\bm{h}$. We want to enforce this constraint while solving $\bm{Ku}=\bm{f}$. That is we want to minimize (\ref{eqn:min}) subject to $\bm{Bu}=\bm{h}$. We can enforce this constraint using Lagrange multipliers by considering the Lagrangian
+\ber
+\mathcal{L}(\bm{u},\bm{\lambda}) = \pi(\bm{u}) + \bm{\lambda}^{T}(\bm{Bu}-\bm{h})
+\eer
+Setting the variations wrt $\bm{u}$ and $\lambda$ to $0,\,\,\forall \delta{\bm{u}},\delta{\bm{\lambda}}$ we get
+\ber
+\delta\mathcal{L}_{\bm{u}}&=&\delta\bm{u}^T(\bm{Ku}-\bm{f}) + \bm{\lambda}^{T}\bm{B}\delta{\bm{u}} = \delta\bm{u}^T(\bm{Ku} + \bm{B}\bm{\lambda}-\bm{f}) = 0 \implies \bm{Ku} + \bm{B}\bm{\lambda}=\bm{f}\nn \\
+\delta\mathcal{L}_{\bm{\lambda}} &=& \delta\bm{\lambda}^{T}(\bm{Bu}-\bm{h}) = 0 \implies \bm{Bu}+ \bm{0}\bm{\lambda}=\bm{h}
+\eer
+The above equations imply
+\ber
+\begin{bmatrix}
+  \bm{K} & \bm{B} \\
+  \bm{B} & \bm{0} 
+\end{bmatrix}
+\begin{bmatrix}
+  \bm{u}\\
+  \bm{\lambda}
+\end{bmatrix}
+=
+\begin{bmatrix}
+  \bm{f}\\
+  \bm{h}
+\end{bmatrix}
+\eer
+\end{document}
