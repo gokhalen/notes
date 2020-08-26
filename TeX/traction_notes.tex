@@ -38,4 +38,16 @@ Integrating over a boundary of a 3D trilinear element: we want to integrate over
 where, $\Omega$ is the region defined by projecting the plane we're intgrating over to the XY plane. i.e. the quadrilateral with the nodes $(x_a,y_a,0), a=1,2,3,4$. This procedure will not work when the plane we're integrating over is perpendicular to the XY-plane. $cos(\theta)$ will be $0$. Those cases must be handled as special cases.
 \subsection{Intgration over curved surfaces}
 If we're integrating over non-planar surfaces, $cos(\theta)$ will not be a constant, but will vary at every point on the surface. By dividing the non-planar surface into many small planar surfaces, we can evaluate surface integrals. If the small surfaces become perpendicular to the $XY$ plane then those cases must be handled separately. Dividing a surface into planes and calculating the integral is similar to to 1D numerical integration, in which we approximate the function to be intgrated by straigt lines over a small segments, calculate the area under each straight line and then sum it up.
+\subsection{Order of integration}
+The boundary traction integral is given by:
+\beq
+\label{eqn:boundaryintegral}
+(\mathbf{w},\mathbf{h})_{\Gamma_h} = \int_{\Gamma_h}w_ih_i d\Gamma_h
+\eeq
+When we're implementing the above in 2D, the question arises: Should be integrate from node 1 to node 2 or from node 2 to node 1?
+Based on
+\beq
+\int_{x_1}^{x_2} dx = -\int_{x_2}^{x_1} dx
+\eeq
+we might think that order matters. However, this is not correct, because eqn \ref{eqn:boundaryintegral} is a line integral. As explained here \url{https://math.stackexchange.com/questions/3803685/sign-of-a-line-integral/3803697} the direction of integration does not matter for a scalar line integral. Line integrals are different creatures from ordinary integrals.
 \end{document}
