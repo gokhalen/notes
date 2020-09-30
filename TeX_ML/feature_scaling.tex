@@ -1,0 +1,24 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Need for feature scaling}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Least squares problem}
+\ber
+\text{ minimize }\nn\\
+\pi(\theta_0,\theta_1,\theta_2) &=& \frac{1}{2}(\theta_0 + \theta_1x_1 + \theta_2x_2 - y)^2\\
+\frac{\partial\pi}{\partial\theta_0} &=& (\theta_0 + \theta_1x_1 + \theta_2x_2 - y) \nn \\
+\frac{\partial\pi}{\partial\theta_1} &=& (\theta_0 + \theta_1x_1 + \theta_2x_2 - y)x_1 \nn \\
+\frac{\partial\pi}{\partial\theta_2} &=& (\theta_0 + \theta_1x_1 + \theta_2x_2 - y)x_2 \nn \\
+\eer
+Clearly, if $x_1$ and $x_2$ are on vastly different scales, the gradients will be on vastly different scales, and optimization will prefer one direction over the other. Therefore we need $x_1\approx x_2$ 
+\end{document}

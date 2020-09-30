@@ -55,6 +55,9 @@ a[[2,3],[2,3]]  +=100
 print(f'{a=}')
 print('-'*60)
 
+
+
+
 # Example at the end of
 # https://scipy-cookbook.readthedocs.io/items/ViewsVsCopies.html
 
