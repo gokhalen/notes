@@ -103,3 +103,33 @@ a[ifancy, :][:, islice] = 100  # note that ifancy and islice are interchanged he
 print(f'{a=}')
 print('-'*60)
 
+# what if we're taking [] on the right?
+# as long as we're taking slices, we will get references or views
+# e.g.
+
+a = np.arange(10)
+b = a[1:7][1:4:2]
+b +=100
+print(f'{a=}')
+print(f'{b=}')
+print('-'*60)
+
+# whenever we use non-slice notation we will get a copy
+a = np.arange(10)
+b = a[1:7][[1,3]]
+b +=100
+print(f'{a=}')
+print(f'{b=}')
+print('-'*60)
+
+# let's extend this to multi-d
+# the [0:3,0:3] returns a slice
+# the [[0,1],[0,1]] returns a copy
+a = np.arange(16).reshape(4,4)
+print(f'{a=}')
+b  = a[0:3,0:3][[0,1],[0,1]]
+b +=100
+print(f'{a=}') 
+print(f'{b=}') 
+print('-'*60)
+
