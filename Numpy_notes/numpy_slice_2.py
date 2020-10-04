@@ -6,6 +6,7 @@ Created on Mon Sep 28 16:06:04 2020
 """
 
 import numpy as np;
+import sys;
 
 # B is a slice of A because we're using slice (2:4) notation
 a = np.arange(16).reshape(4,4)
@@ -48,14 +49,35 @@ b +=100
 print(f'{a=}')
 print('-'*60)
 
-# indexing on the left of the = is always a view
+# all dimensions have to be slices to be a view
+aa = np.arange(16).reshape(4,4)
+bb = aa[0:2,[0,1,2,3]]
+bb += 100
+print(f'{aa=}')
+print(f'{bb=}')
+print('-'*60)
+
+# indexing on the left of the = is always a View
 a = np.arange(16).reshape(4,4)
 print(f'{a=}')
 a[[2,3],[2,3]]  +=100
 print(f'{a=}')
 print('-'*60)
 
+# ALWAYS a view on the left
+aa = np.arange(16).reshape(4,4)
+aa[0:2,[0,1,2,3]] +=100
+print(f'{aa=}')
+print('-'*60)
 
+
+# so for we have seen cases where only one [] operator is used
+# when there is only one operator, it is used to set values
+# when multiple [] operators are used, the last one (rightmost) 
+# is used to set values
+# the previous ones are used to return either views of the original object
+# if indexed using slice
+# or copies of parts of the original object, if using general purpose notation
 
 
 # Example at the end of
