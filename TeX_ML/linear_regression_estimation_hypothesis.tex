@@ -14,9 +14,9 @@
 \date{\today}
 \maketitle
 \section{Introduction}
-The main reference for this is Chap 1 and Chap 2 of \url{http://home.iitk.ac.in/~shalab/course5.htm}. Consider the following relationship between the observed variable $y$ and the ``explanatory variable'' $X_1$:
+The main reference for this is Chap 1 and Chap 2 of \url{http://home.iitk.ac.in/~shalab/course5.htm}. Consider the following relationship between the observed variable $y$ and the ``explanatory variable'' $x_1$:
 \beq
-y = \beta_0 + \beta_1X_1 + \epsilon
+y = \beta_0 + \beta_1x_1 + \epsilon
 \eeq
 Following what Shalab says in Chapter 1: There exist the true values of $\beta_0$ and $\beta_1$ in nature but are unknown to the experimenter. We need to estimate these true parameters.
 \subsection{Least squares estimation}
@@ -58,10 +58,10 @@ Even though we do not know $\beta_1$, it apparently suffices to know that $b_1$ 
 \beq
 Z_1 = \frac{b_1-\beta_{10}}{\sqrt{\frac{\sigma^2}{s_{xx}}}}
 \eeq
-$Z_1$ is normally distributed as $N(0,1)$ when $H_0$ is true. A decision rule to test $H_1:\beta_1 \neq \beta_{10}$ can be framed as folows:
+IMPORTANT:\underline{$Z_1$ is normally distributed as $N(0,1)$ when $H_0$ is true}. It seems that we need to construct a statistic (such as $Z_1$) that follows the pdf (according to which we judge whether things are true or not) when $H_0$ is true. A decision rule to test $H_1:\beta_1 \neq \beta_{10}$ can be framed as folows:
 Reject $H_0$ if $|Z_1| > Z_{\alpha/2}$, where $Z_{\alpha/2}$ is the $\alpha/2$ percent points on the normal distribution. I think $\alpha/2 \in(0,0.5)$. $Z_{\alpha/2}$ is a point on the x-axis beyond which the area under the normal distribution pdf ( i.e. probability) is $\alpha/2$. i.e.
 \beq
 \int_{Z_{\alpha/2}}^{\infty}N(0,1)dx = \frac{\alpha}{2} \text{ and } \int_{-\infty}^{-Z_{\alpha/2}}N(0,1)dx = \frac{\alpha}{2}
 \eeq
-Typically, $\alpha = 0.05$. This means if the we're rejecting $H_0:\beta_1 = \beta_{10}$ if the probability of the statistic $Z_1$ is less than $\alpha$. In particular, if $\beta_{10}=0$, we're saying that 
+Typically, $\alpha = 0.05$. This means if the we're rejecting $H_0:\beta_1 = \beta_{10}$ if the probability of the statistic $Z_1$ is less than $\alpha$. In particular, if $\beta_{10}=0$, our null hypothesis becomes $H_0:\beta_1 = 0$. This means that we're postulating that no relationship exists between $x_1$ and the $y$ (because the coefficient of $x_1$ is zero). Note: our null-hypothesis is on the true parameter $\beta_1$ and not the estimated parameter $b_1$. If we reject  $H_0:\beta_1 = 0$, this means that there is a relationship between $y$ and $x_1$.
 \end{document}
