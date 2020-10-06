@@ -58,7 +58,13 @@ Even though we do not know $\beta_1$, it apparently suffices to know that $b_1$ 
 \beq
 Z_1 = \frac{b_1-\beta_{10}}{\sqrt{\frac{\sigma^2}{s_{xx}}}}
 \eeq
-IMPORTANT:\underline{$Z_1$ is normally distributed as $N(0,1)$ when $H_0$ is true}. It seems that we need to construct a statistic (such as $Z_1$) that follows the pdf (according to which we judge whether things are true or not) when $H_0$ is true. A decision rule to test $H_1:\beta_1 \neq \beta_{10}$ can be framed as folows:
+IMPORTANT:\underline{$Z_1$ is normally distributed as $N(0,1)$ when $H_0$ is true}. It seems that we need to construct a statistic (such as $Z_1$) that follows the pdf (according to which we judge whether things are true or not) when $H_0$ is true.\\
+I am pretty sure that the statistic $Z_1$ is originally 
+\beq
+Z_1 = \frac{\beta_1-\beta_{10}}{\sqrt{\frac{\sigma^2}{s_{xx}}}}
+\eeq
+But we are probably allowed to replace $\beta_1$ by $b_1$, since $b_1 \sim N(\beta_1,\frac{\sigma^2}{s_{xx}})$ hence $b_1$ is centered around $\beta_1$. I'm also almost sure that $\text{var}(\beta_1)=\text{var}(b_1)$ but I don't have time to prove it right now.\\
+A decision rule to test $H_1:\beta_1 \neq \beta_{10}$ can be framed as folows:
 Reject $H_0$ if $|Z_1| > Z_{\alpha/2}$, where $Z_{\alpha/2}$ is the $\alpha/2$ percent points on the normal distribution. I think $\alpha/2 \in(0,0.5)$. $Z_{\alpha/2}$ is a point on the x-axis beyond which the area under the normal distribution pdf ( i.e. probability) is $\alpha/2$. i.e.
 \beq
 \int_{Z_{\alpha/2}}^{\infty}N(0,1)dx = \frac{\alpha}{2} \text{ and } \int_{-\infty}^{-Z_{\alpha/2}}N(0,1)dx = \frac{\alpha}{2}
