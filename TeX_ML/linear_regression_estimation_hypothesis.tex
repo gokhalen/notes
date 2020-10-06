@@ -1,0 +1,67 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Linear regression and hypothesis testing}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Introduction}
+The main reference for this is Chap 1 and Chap 2 of \url{http://home.iitk.ac.in/~shalab/course5.htm}. Consider the following relationship between the observed variable $y$ and the ``explanatory variable'' $X_1$:
+\beq
+y = \beta_0 + \beta_1X_1 + \epsilon
+\eeq
+Following what Shalab says in Chapter 1: There exist the true values of $\beta_0$ and $\beta_1$ in nature but are unknown to the experimenter. We need to estimate these true parameters.
+\subsection{Least squares estimation}
+\beq
+y_i = \beta_0 + \beta_1x_1 + \epsilon_i
+\eeq
+Minimize the following any way we want (gradient descent/normal equations) to get $\beta_0,\beta_1$:
+\beq
+\pi = \sum_{i=1}^{i=n}\epsilon_i^2 = \sum_{i=1}^{i=n}(y_i - \beta_0 - \beta_1x_1)^2
+\eeq
+The parameters which are obtained by solving the above equation are called $b_0,b_1$ and our model becomes
+\beq
+y = b_0 + b_1x_1
+\eeq
+\subsection{Hypothesis testing}
+Notes from Chapter 2 (pg 15) of Shalab. Sometimes we need to see if there is a significant relationship between the explanatory variables and the observed variables. The way to do this is called 'hypothesis testing'. Let us assume that we know the variance of $\epsilon_i$ i.e.
+\beq
+\text{var}(\epsilon_i) = \sigma^2
+\eeq
+Also, assume that
+\beq
+\epsilon_i \sim N(0,\sigma^2)
+\eeq
+We develop a test for the null hypothesis related to the slope parameter
+\beq
+H_0:\beta_1 = \beta_{10}
+\eeq
+Where, $\beta_{10}$ is some constant. Assuming $\sigma^2$ to be known, we know:
+\ber
+E(b_1)&=&\beta_1 \\
+\text{var}(b_1) &=& \frac{\sigma^2}{s_{xx}}\\
+s_{xx} &=& \sum_{i=1}^{n}(x_i - \bar{x})^2,\,\bar{x} = \frac{1}{n}\sum_{i=1}^{i=n}x_i
+\eer
+Since $b_1$ is a linear combination of normally distributed $y_i's$. So,
+\beq
+b_1 \sim N(\beta_1,\frac{\sigma^2}{s_{xx}})  
+\eeq
+Even though we do not know $\beta_1$, it apparently suffices to know that $b_1$ is normally distributed. Based on this, we can construct the following statistic
+\beq
+Z_1 = \frac{b_1-\beta_{10}}{\sqrt{\frac{\sigma^2}{s_{xx}}}}
+\eeq
+$Z_1$ is normally distributed as $N(0,1)$ when $H_0$ is true. A decision rule to test $H_1:\beta_1 \neq \beta_{10}$ can be framed as folows:
+Reject $H_0$ if $|Z_1| > Z_{\alpha/2}$, where $Z_{\alpha/2}$ is the $\alpha/2$ percent points on the normal distribution. I think $\alpha/2 \in(0,0.5)$. $Z_{\alpha/2}$ is a point on the x-axis beyond which the area under the normal distribution pdf ( i.e. probability) is $\alpha/2$. i.e.
+\beq
+\int_{Z_{\alpha/2}}^{\infty}N(0,1)dx = \frac{\alpha}{2} \text{ and } \int_{-\infty}^{-Z_{\alpha/2}}N(0,1)dx = \frac{\alpha}{2}
+\eeq
+Typically, $\alpha = 0.05$. This means if the we're rejecting $H_0:\beta_1 = \beta_{10}$ if the probability of the statistic $Z_1$ is less than $\alpha$. In particular, if $\beta_{10}=0$, we're saying that 
+\end{document}
