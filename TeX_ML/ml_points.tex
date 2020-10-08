@@ -18,6 +18,17 @@
     \url{https://www.udemy.com/course/machinelearning/learn/lecture/19048226#notes}. This is because we do not want to learn the normalization parameters from the test set or cross validation set. The normalization parameters need to be learned only from the test set}
   \item{Estimating the p-value for linear regression: Elements of statistical learning Hastie, Tibshirani, Friedman: Pg 47,48}
   \item{p-value: Probability of observing the given results assuming that the null-hypothesis is correct}
-    \item{null-hypothesis:In inferential statistics, the null hypothesis (often denoted H0,[1]) is a general statement or default position that there is no relationship between two measured phenomena or no association among groups}
+  \item{null-hypothesis:In inferential statistics, the null hypothesis (often denoted H0,[1]) is a general statement or default position that there is no relationship between two measured phenomena or no association among groups}
 \end{enumerate}
+\subsection{SVM: Optimization}
+The SVM optimization problem on Wikipedia (\url{https://en.wikipedia.org/wiki/Support_vector_machine#Regression}) is\\\\
+Find: $w_i, b$ that minimize
+\beq
+\pi = \frac{1}{2}\|\bf{w}\|^2
+\eeq
+Subject to:
+\beq
+|y_i -  \langle {\bf{w}},{\bf{x}_i} \rangle - b | \le \epsilon
+\eeq
+Here, $b$ does not enter into $\pi$. So, it is reasonable to ask: How can one find a variable that does not appear in the objective function?. I think the answer is: $b$ appears in the constraints. And the constraints get included in the Lagrangian, along with slack variables etc. 
 \end{document}
