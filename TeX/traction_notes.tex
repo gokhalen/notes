@@ -3,6 +3,8 @@
 \newcommand{\eeq}{\end{equation}}
 \newcommand{\ber}{\begin{eqnarray}}
 \newcommand{\eer}{\end{eqnarray}}
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\nn}{\nonumber}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{url}
@@ -36,6 +38,8 @@ Integrating over a boundary of a 3D trilinear element: we want to integrate over
 \int_{S}g(x,y,z)\,dS = \int_{\Omega} g(x,y,f(x,y))\,\frac{dxdy}{cos(\theta)}
 \eeq
 where, $\Omega$ is the region defined by projecting the plane we're intgrating over to the XY plane. i.e. the quadrilateral with the nodes $(x_a,y_a,0), a=1,2,3,4$. This procedure will not work when the plane we're integrating over is perpendicular to the XY-plane. $cos(\theta)$ will be $0$. Those cases must be handled as special cases.
+{\textbf{Important}} In general, the face of a 3D trilinear hex element is not plane. See Section (\ref{sect:3dhexcorrect}) for the correct implementation. 
+
 \subsection{Intgration over curved surfaces}
 If we're integrating over non-planar surfaces, $cos(\theta)$ will not be a constant, but will vary at every point on the surface. By dividing the non-planar surface into many small planar surfaces, we can evaluate surface integrals. If the small surfaces become perpendicular to the $XY$ plane then those cases must be handled separately. Dividing a surface into planes and calculating the integral is similar to to 1D numerical integration, in which we approximate the function to be intgrated by straigt lines over a small segments, calculate the area under each straight line and then sum it up.
 \subsection{Order of integration}
@@ -50,4 +54,39 @@ Based on
 \int_{x_1}^{x_2} dx = -\int_{x_2}^{x_1} dx
 \eeq
 we might think that order matters. However, this is not correct, because eqn \ref{eqn:boundaryintegral} is a line integral. As explained here \url{https://math.stackexchange.com/questions/3803685/sign-of-a-line-integral/3803697} the direction of integration does not matter for a scalar line integral. Line integrals are different creatures from ordinary integrals. Also see \url{https://mathinsight.org/line_integral_independent_parametrization}
+\section{\label{sect:3dhexcorrect}Integrating traction correctly for 3D hex elements}
+The methods in previous sections are correct for planes and curved surfaces, but they are not the way they are implemented in finite element codes. The correct way is from \url{https://classes.engineering.wustl.edu/mase5510/} Chapter 5, Section 5.6.2. This is summarized below. The mapping functions
+\beq
+x = Q_x(\xi,\eta,\zeta) \qquad  y = Q_y(\xi,\eta,\zeta) \qquad   z = Q_z(\xi,\eta,\zeta) 
+\eeq
+map the parent element to the physical/global element. Explicitly,
+\beq
+Q_x = \sum_{A=1}^{A=8}N_A(\xi,\eta,\zeta)x_A
+\eeq
+and similar mapping formulae for the others.\\
+Given the mapping functions, each face of the hex is parameterized by imposing the appropriate restriction on the mapping function. For example, if integration is to be performed on the face of a hexahedron that corresponds to $\zeta$ = 1 then, the parametric form of the surface becomes:
+\beq
+x = Q_x(\xi,\eta,1) \qquad  y = Q_y(\xi,\eta,1) \qquad   z = Q_z(\xi,\eta,1) 
+\eeq
+Then,
+\beq
+\int_{{d\Omega}_{\zeta=1}} F(x,y,z)dS = \int_{-1}^{1}\int_{-1}^{1}F(x(\xi,\eta,1),y(\xi,\eta,1),z(\xi,\eta,1))\Big{|}\pdd{\stackrel{\rightarrow}{r}}{\xi}\times\pdd{\stackrel{\rightarrow}{r}}{\eta}\Big{|}{d\xi}d\eta
+\eeq
+where,
+\beq
+\stackrel{\rightarrow}{r} = x(\xi,\eta,\zeta)\stackrel{\rightarrow}{e_x} + y(\xi,\eta,\zeta)\stackrel{\rightarrow}{e_y} + z(\xi,\eta,\zeta)\stackrel{\rightarrow}{e_z}
+\eeq
+So, to make things more explicit,
+\beq
+T=\int_{{d\Omega}_{\zeta=1}} N_A(x,y,z)h_i dS = \int_{{d\Omega}_{\zeta=1}} N_A(x,y,z)(\sum_{B=1}^{B=8}N_{B}(x,y,z)h_{iB} )dS
+\eeq
+4 out of 8 shape functions will vanish in $\sum_{B=1}^{B=8}N_{B}(x,y,z)h_{iB}$ because that summation is over a face.
+\beq
+T =  \int_{-1}^{1}\int_{-1}^{1}  n_A(\xi,\eta,\zeta) (\sum_{B=1}^{B=8}n_{B}(\xi,\eta,\zeta)h_{iB})       \Big{|}\pdd{\stackrel{\rightarrow}{r}}{\xi}\times\pdd{\stackrel{\rightarrow}{r}}{\eta}\Big{|}{d\xi}d\eta
+\eeq
+Where,
+\beq
+n_A(\xi,\eta,\zeta) = N_A(x(\xi,\eta,\zeta),y(\xi,\eta,\zeta),z(\xi,\eta,\zeta))
+\eeq
+Shape functions are defined in the parent domain, as noted in the shape\_functions.tex document.
 \end{document}
