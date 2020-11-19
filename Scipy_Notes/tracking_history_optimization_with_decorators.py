@@ -11,9 +11,12 @@ import numpy as np
 
 def history(func):
     def wrapper(x):
-        wrapper.history.append(x)
-        return func(x)
-    wrapper.history = []
+        val = func(x)
+        wrapper.var_history.append(x)
+        wrapper.func_history.append(val)
+        return val
+    wrapper.func_history = []
+    wrapper.var_history  = []
     return wrapper
 
 @history
@@ -28,4 +31,4 @@ bnds=(b0,b1)
 if __name__ == '__main__':
    x0 = np.asarray([0.1,1000])
    solution = minimize(ff,x0,method='L-BFGS-B',bounds=bnds)
-   print(f'{ff.history=}')
+   print(f'{ff.func_history=} \n {ff.var_history=}')
