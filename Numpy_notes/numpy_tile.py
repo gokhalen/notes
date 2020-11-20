@@ -40,8 +40,8 @@ AA = np.tile(aa.reshape(3,1,1,1),(1,10,15,20))
 
 # simple example
 # AA has shape (12,1,1,1) 
-# AA[i,0,0,0] = AA[i%3,0,0,0]
-# same thing happens for other indices
+# AA[i,0,0,0] = aa.reshape(3,1,1,1)[i%3,0,0,0]
+# similar thing happens for other indices
 AA = np.tile(aa.reshape(3,1,1,1),(4,1,1,1))
 
 print(f'{AA[:,0,0,0]=}')
@@ -51,8 +51,8 @@ print('-'*80)
 # as below, then, the shapes are right aligned
 #          (4,4)
 #            (2,)
-# so the output matrix will have shape (4,8)
-# bb[i,j] = aa[i,j%2]
+# so the output matrix bb will have shape (4,8)
+# bb[i,j] = aa[i,j%4]
 # similarly for higher dimensions
 
 aa = np.arange(16).reshape(4,4)
