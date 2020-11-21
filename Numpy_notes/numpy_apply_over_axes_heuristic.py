@@ -13,6 +13,7 @@ output = np.apply_over_axes(np.sum,a,0)
 print(f'{output=}')
 print('-'*60)
 
+
 a = np.arange(9).reshape(3,3)
 output = np.apply_over_axes(np.sum,a,[0,1])
 print(f'{output=}')
