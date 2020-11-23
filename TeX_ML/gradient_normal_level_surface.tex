@@ -1,0 +1,32 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\pdd}[2]{\frac{\partial}{\partial{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Gradient normal to level surface}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Gradient normal to level surface}
+See: \url{https://ocw.mit.edu/courses/mathematics/18-02sc-multivariable-calculus-fall-2010/2.-partial-derivatives/part-b-chain-rule-gradient-and-directional-derivatives/session-36-proof/MIT18_02SC_notes_19.pdf} Basically, let 
+\beq
+f(x(t),y(t),z(t)) = c
+\eeq
+be a level surface of $f$. Differentiate
+\beq
+\pdd{f}{x}\dd{x(t)}{t} + \pdd{f}{y}\dd{y(t)}{t} + \pdd{f}{z}\dd{z(t)}{t} = 0
+\eeq
+Write it as a dot product of two vectors.
+\ber
+\Big{(}\pdd{f}{x},\pdd{f}{y},\pdd{f}{z}\Big{)}{\bullet}\Big{(}\dd{x(t)}{t},\dd{y(t)}{t},\dd{z(t)}{t}\Big{)} = 0\\
+\nabla{f}\bullet{\dd{\mathbf{r}(t)}{t}} = 0
+\eer
+So, the gradient of $f$ is perpendicular to the tangent to the curve $\dd{\mathbf{r}(t)}{t}$. This is exactly what we wanted to prove. In other words, gradient is tangent to the level surface.
+\end{document}
