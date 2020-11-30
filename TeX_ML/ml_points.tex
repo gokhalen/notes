@@ -31,9 +31,14 @@ Subject to:
 |y_i -  \langle {\bf{w}},{\bf{x}_i} \rangle - b | \le \epsilon
 \eeq
 Here, $b$ does not enter into $\pi$. So, it is reasonable to ask: How can one find a variable that does not appear in the objective function?. I think the answer is: $b$ appears in the constraints. And the constraints get included in the Lagrangian, along with slack variables etc.
+\section{Loss functions}
+In TensorFlow/Keras the loss function `binary\_crossentropy` and activation `sigmoid` should be used for binary classification and `categorical\_crossentropy` and `softmax` for multiclass classification.
+\section{Repeatable results}
+Network weights are randomly initialized to break symmetries. This random initialization can result in non-reproducible results. To get repeatable weights, we need to set the seed. This can be done using `tf.random.set\_seed(some\_constant\_value)`
 \section{Links}
 \begin{enumerate}
 \item{http://neuralnetworksanddeeplearning.com/}
 \item{https://stats.stackexchange.com/questions/154879/a-list-of-cost-functions-used-in-neural-networks-alongside-applications}
+\item{https://www.udemy.com/course/linear-regression-with-artificial-neural-network/}
 \end{enumerate}
 \end{document}
