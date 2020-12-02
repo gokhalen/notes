@@ -1,0 +1,9 @@
+case  in
+    *)
+	
+esac
+
+#!/bin/bash
+git add .
+git commit --no-edit --allow-empty-message
+git push
