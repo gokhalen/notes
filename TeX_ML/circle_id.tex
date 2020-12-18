@@ -1,4 +1,4 @@
-% Send to Mandar,Jayesh,Arnab and perhaps Rahee
+% Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee
 \documentclass{article}
 \newcommand{\beq}{\begin{equation}}
 \newcommand{\eeq}{\end{equation}}
@@ -70,7 +70,7 @@ We consider a dataset consisting of images of stiffness of the type shown in Fig
 We have $1024$ training images, $205$ validation images and $205$ test imagees. We set maximum epochs to $512$ and terminate the training process if the validation loss function does not change by more than $10^{-4}$ over $10$ epochs. We first feature scale the images using the standard deviation. The loss function is 'binary\_crossentropy'. There were $701$ positive (with circle) training examples and $323$ negative training examples. \\ The CNN is shown in Figure (\ref{fig:binary_model}). This architecture is the same as a CNN to classify images into two categories: 'cat' or 'dog'. The CNN has $812,641$ trainable parameters. Maybe this is overfitting the data. And the good results that are seen are a consequence of this. It is also observed that the training of the CNN is quite strongly dependent on the initial random choice of parameters. The metrics for binary classification are shown in Figure (\ref{fig:binarymetrics}). We get an accuracy score of $1.0$ right from the start. The confusion matrix is shown in Figure 
 \begin{figure}
    \centering
-    \includegraphics[totalheight=8cm]{circle_id/binary_model.png}
+    \includegraphics[totalheight=8cm]{circle_id/binary/model.png}
   \caption{\label{fig:binary_model} CNN for binary classification}
 \end{figure}
 %
@@ -78,39 +78,41 @@ We have $1024$ training images, $205$ validation images and $205$ test imagees. 
 \centering
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[totalheight=4cm]{circle_id/binary_plotloss.png}
+    \includegraphics[totalheight=4cm]{circle_id/binary/plotloss.png}
     \caption{Training loss}
   \end{subfigure}
 %
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[totalheight=4cm]{circle_id/binary_plotaccuracy.png}
+    \includegraphics[totalheight=4cm]{circle_id/binary/plotaccuracy.png}
     \caption{Training accuracy}
   \end{subfigure}
 %
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[totalheight=4cm]{circle_id/binary_plotval_loss.png}
+    \includegraphics[totalheight=4cm]{circle_id/binary/plotval_loss.png}
     \caption{Validation loss}
   \end{subfigure}
 %
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[totalheight=4cm]{circle_id/binary_plotval_accuracy.png}
+    \includegraphics[totalheight=4cm]{circle_id/binary/plotval_accuracy.png}
     \caption{Validation accuracy}
   \end{subfigure}
 \caption{\label{fig:binarymetrics} Metrics for binary classification}
 \end{figure}
 %
 \begin{center}
-  \begin{tabular}{|cccc}
-    \hline
+  \begin{tabular}{cccc}
+    \cline{3-4}
     & & \multicolumn{2}{|c|}{Actual class}  \\
-    \hline
+    \cline{3-4}
     & & \multicolumn{1}{|c|}{Circle} &  \multicolumn{1}{|c|}{No Circle}\\
     \hline
-    \multirow{2}{4em}{Predicted class} & \multicolumn{1}{|c|}{circle} & a & b \\
-    & no circle & c & d
+    \multicolumn{1}{|c}{Predicted} & \multicolumn{1}{|c|}{Circle} & \multicolumn{1}{|c|}{47} & \multicolumn{1}{|c|}{0} \\
+    \cline{2-4}
+    \multicolumn{1}{|c}{class} & \multicolumn{1}{|c|}{no circle} & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{158}\\
+    \hline
   \end{tabular}
 \end{center}
 \section{Predicting stiffness location}
