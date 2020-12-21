@@ -150,7 +150,7 @@ The parameters used for 'Stiffness location' are given in Table (\ref{tab:stiffl
 \item{We have two output units instead of one.}
 \item{There is no activation for the output layer.}
 \end{enumerate}
-The training loss and validation loss are shown in Figure (\ref{fig:locationmetrics}) and the errors in location are shown in Figure (\ref{fig:locationerror}). It is seen that for most test examples the error in location is quite small. The absolute error in the x-coordinate is always bounded below 5 pixels and the absolute error in the y-coordinate in 1014 out of 1024 examples is less than 5 pixels.
+The training loss and validation loss are shown in Figure (\ref{fig:locationmetrics}) and the errors in location are shown in Figure (\ref{fig:locationerror}). It is seen that for most test examples the error in location is quite small. The absolute error in the x-coordinate is always bounded below 5 pixels and the absolute error in the y-coordinate in 1014 out of 1024 examples is less than 5 pixels. The error in a tiny minority of examples in large (especially in the y coordinate). It would be interesting to see if the model can flag these examples. Perhaps output a measure of 'confidence' in the results.
 \begin{table}
   \centering
   \begin{tabular}{|c|c|}
@@ -193,7 +193,7 @@ The training loss and validation loss are shown in Figure (\ref{fig:locationmetr
 \includegraphics{circle_id/location/plotabserror.png}
 \caption{\label{fig:locationerror} Error in pixels for stiffness location identification.}
 \end{figure}
-
+%
 \section{Predicting stiffness value}
 %
 \section{Predicting circle radius}
