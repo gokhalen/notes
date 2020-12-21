@@ -20,7 +20,8 @@
 \date{\today}
 \maketitle
 \section{Introduction}
-We consider a dataset consisting of images of stiffness of the type shown in Figure (\ref{fig:sampleimages}). All images are 32 pixels (x direction) by 128 pixels (y-direction). Unlike standard RGB images which have three channels, these images have only one channel. So, the shape of each image is $(32,128,1)$. The value of the background stiffness is $1$ and the value of the circle stiffness is a real number which ranges from $2.0$ to $5.0$. Each image contains only one circle or is homogeneous (no circles). We consider the following problems
+We consider a dataset consisting of images of stiffness of the type shown in Figure (\ref{fig:sampleimages}). All images are 32 pixels (x direction) by 128 pixels (y-direction). Unlike standard RGB images which have three channels, these images have only one channel. So, the shape of each image is $(32,128,1)$. The value of the background stiffness is $1$ and the value of the circle stiffness is a real number which ranges from $2.0$ to $5.0$. Each image contains only one circle or is homogeneous (no circles). That radii of the circles is between $1$ to $3$ pixels both inclusive. Because of the small radii considered, the circles may look like crosses.\\
+We consider the following problems
 \begin{enumerate}
 \item{\textbf{Binary classification}: Given a stiffness image classify it into homogneous (label 0)or having an inclusion (label 1).}
 \item{\textbf{Predicting stiffness location:} Given a stiffness image containing a circle find the center of the circle.}
@@ -69,7 +70,7 @@ We consider a dataset consisting of images of stiffness of the type shown in Fig
 \section{Preliminaries}
 We first define two parameters '\textbf{min\_delta}' and '\textbf{patience}'. From the TensorFlow manual '\textbf{min\_delta}'is the ``minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min\_delta, will count as no improvement''. In our case, the monitored quantity is the validation loss. '\textbf{patience}' is the ``number of epochs with no improvement after which training will be stopped''.
 \section{Binary classification}
- The parameters used for 'Binary classification' are given in Table (\ref{tab:binaryparam}).We first feature scale the images using their standard deviation and mean using the 'StandardScaler' in 'scikit-learn'. The architecture of the CNN\footnote{This architecture is taken 'as is' from a CNN to classify images into two categories: 'cat' or 'dog'} is shown in Figure (\ref{fig:binary_model}). Both the convolutional layers have $32$ filters with a kernel size of $3$. The max-pooling layers have a pool size of $2$ and a stride of $2$. The activation for the output layer is 'sigmoid' and the threshold probability for positive images is $0.5$. The good results that are seen are a consequence of the large number of training parameters. It is also observed that the training of the CNN is quite strongly dependent on the initial random choice of parameters. The metrics for binary classification are shown in Figure (\ref{fig:binarymetrics}). We get an accuracy score of $1.0$ right from the start. The confusion matrix is shown in Table (\ref{tab:confusionbinary}). 
+ The parameters used for 'Binary classification' are given in Table (\ref{tab:binaryparam}).We first feature scale the images using their standard deviation and mean using the 'StandardScaler' in 'scikit-learn'. The architecture of the CNN\footnote{This architecture is taken 'as is' from a CNN to classify images into two categories: 'cat' or 'dog'. Ideas for better network architectures are appreciated.} is shown in Figure (\ref{fig:binary_model}). Both the convolutional layers have $32$ filters with a kernel size of $3$. The max-pooling layers have a pool size of $2$ and a stride of $2$. The activation for the output layer is 'sigmoid' and the threshold probability for positive images is $0.5$. The good results that are seen are a consequence of the large number of training parameters. It is also observed that the training of the CNN is quite strongly dependent on the initial random choice of parameters. The metrics for binary classification are shown in Figure (\ref{fig:binarymetrics}). We get an accuracy score of $1.0$ right from the start. The confusion matrix is shown in Table (\ref{tab:confusionbinary}). 
 \begin{table}
   \centering
   \begin{tabular}{|c|c|}
@@ -149,7 +150,7 @@ The parameters used for 'Stiffness location' are given in Table (\ref{tab:stiffl
 \item{We have two output units instead of one.}
 \item{There is no activation for the output layer.}
 \end{enumerate}
-The training loss and validation loss are shown in Figure (\ref{fig:locationmetrics}) and the errors in location are shown in Figure (\ref{fig:locationerror}).
+The training loss and validation loss are shown in Figure (\ref{fig:locationmetrics}) and the errors in location are shown in Figure (\ref{fig:locationerror}). It is seen that for most test examples the error in location is quite small. The absolute error in the x-coordinate is always bounded below 5 pixels and the absolute error in the y-coordinate in 1014 out of 1024 examples is less than 5 pixels.
 \begin{table}
   \centering
   \begin{tabular}{|c|c|}
@@ -160,14 +161,14 @@ The training loss and validation loss are shown in Figure (\ref{fig:locationmetr
     Number of validation examples & 205 \\
     Number of training examples   & 1024 \\
     Maximum number of epochs      & 512 \\
-    min{\_}delta      & 10$^{-4}$\\
-    patience                      & 10  \\
-    Trainable parameters          & 812770\\
+    min{\_}delta      & not used\\
+    patience                      & not used  \\
+    Trainable parameters          & 747,234\\
     Optimizer         & 'adam'     \\
     Loss function     & 'mse' (mean squared error) \\
     \hline
   \end{tabular}
-  \caption{\label{tab:stifflocparam} Parameters for stiffness location}
+  \caption{\label{tab:stifflocparam} Parameters for stiffness location. Note: early termination was not used. The optimized was run for the entire $512$ steps.}
 \end{table}
 %
 \begin{figure}
@@ -180,7 +181,7 @@ The training loss and validation loss are shown in Figure (\ref{fig:locationmetr
 %
 \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \includegraphics[totalheight=4cm]{circle_id/binary/plotval_loss.png}
+    \includegraphics[totalheight=4cm]{circle_id/location/plotval_loss.png}
     \caption{Validation loss}
   \end{subfigure}
 %
