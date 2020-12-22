@@ -15,18 +15,19 @@
 \usepackage{subcaption}
 \usepackage{multirow}
 \begin{document}
-\title{Circle identification using Convolutional Neural Networks in TensorFlow}
-\author{Nachiket Gokhale\footnote{Conversations with Arnab Majumdar and Mandar Kulkarni are acknowledged and much appreciated.}}
+\title{Stiffness parameter identification using Convolutional Neural Networks in TensorFlow}
+\author{Nachiket Gokhale\footnote{Conversations with Arnab Majumdar and Mandar Kulkarni are acknowledged and much appreciated.}\\gokhalen@gmail.com}
 \date{\today}
 \maketitle
 \section{Introduction}
-We consider a dataset consisting of images of stiffness of the type shown in Figure (\ref{fig:sampleimages}). All images are 32 pixels (x direction) by 128 pixels (y-direction). Unlike standard RGB images which have three channels, these images have only one channel. So, the shape of each image is $(32,128,1)$. The value of the background stiffness is $1$ and the value of the circle stiffness is a real number which ranges from $2.0$ to $5.0$. Each image contains only one circle or is homogeneous (no circles). That radii of the circles is between $1$ to $3$ pixels both inclusive. Because of the small radii considered, the circles may look like crosses.\\
+We consider a dataset consisting of images of stiffness of the type shown in Figure (\ref{fig:sampleimages}). All images are 32 pixels (x direction) by 128 pixels (y-direction). Unlike standard RGB images which have three channels, these images have only one channel (stiffness). So, the shape of each image is $(32,128,1)$. The value of the background stiffness is $1$ and the value of the circle stiffness is a real number which ranges from $2.0$ to $5.0$. Each image contains only one circle or is homogeneous (no circles). That radii of the circles is between $1$ to $3$ pixels both inclusive. Because of the small radii considered, the circles may look like crosses when visualized.\\
+
 We consider the following problems
 \begin{enumerate}
 \item{\textbf{Binary classification}: Given a stiffness image classify it into homogneous (label 0)or having an inclusion (label 1).}
 \item{\textbf{Predicting stiffness location:} Given a stiffness image containing a circle find the center of the circle.}
 \item{\textbf{Predicting stiffness value:} Given a stiffness image containing a circle find the value of the stiffness of the circle.}
-\item{\textbf{Predicting circle radius:} Given a stiffness image containing a circle find the radius of the circle.}
+\item{\textbf{Predicting stiffness radius:} Given a stiffness image containing a circle find the radius of the circle.}
 \end{enumerate}
 \begin{figure}
   \centering
@@ -68,7 +69,7 @@ We consider the following problems
 \end{figure}
 %
 \section{Preliminaries}
-We first define two parameters '\textbf{min\_delta}' and '\textbf{patience}'. From the TensorFlow manual '\textbf{min\_delta}'is the ``minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min\_delta, will count as no improvement''. In our case, the monitored quantity is the validation loss. '\textbf{patience}' is the ``number of epochs with no improvement after which training will be stopped''.
+We first define the terms '\textbf{epochs}', '\textbf{loss}' of '\textbf{loss function}', '\textbf{min\_delta}' and '\textbf{patience}'. \\ '\textbf{epochs}' refers to the number of passes through the training dataset. \\'\textbf{loss}' of '\textbf{loss function}' refers to the cost function being minimized.\\ From the TensorFlow manual: '\textbf{min\_delta}'is the `minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min\_delta, will count as no improvement`. In our case, the monitored quantity is the validation loss. '\textbf{patience}' is the `number of epochs with no improvement after which training will be stopped`.
 \section{Binary classification}
  The parameters used for 'Binary classification' are given in Table (\ref{tab:binaryparam}).We first feature scale the images using their standard deviation and mean using the 'StandardScaler' in 'scikit-learn'. The architecture of the CNN\footnote{This architecture is taken 'as is' from a CNN to classify images into two categories: 'cat' or 'dog'. Ideas for better network architectures are appreciated.} is shown in Figure (\ref{fig:binary_model}). Both the convolutional layers have $32$ filters with a kernel size of $3$. The max-pooling layers have a pool size of $2$ and a stride of $2$. The activation for the output layer is 'sigmoid' and the threshold probability for positive images is $0.5$. The good results that are seen are a consequence of the large number of training parameters. It is also observed that the training of the CNN is quite strongly dependent on the initial random choice of parameters. The metrics for binary classification are shown in Figure (\ref{fig:binarymetrics}). We get an accuracy score of $1.0$ right from the start. The confusion matrix is shown in Table (\ref{tab:confusionbinary}). 
 \begin{table}
@@ -95,7 +96,7 @@ We first define two parameters '\textbf{min\_delta}' and '\textbf{patience}'. Fr
 \begin{figure}
    \centering
     \includegraphics[totalheight=16cm]{circle_id/binary/model.png}
-  \caption{\label{fig:binary_model} CNN for binary classification.}
+  \caption{\label{fig:binary_model} CNN for binary classification. CNNs for other problems have the same architecture with very minor changes to the output layer.}
 \end{figure}
 %
 \begin{figure}
@@ -145,7 +146,7 @@ We first define two parameters '\textbf{min\_delta}' and '\textbf{patience}'. Fr
 %
 \section{Predicting stiffness location}
 %
-The parameters used for 'Stiffness location' are given in Table (\ref{tab:stifflocparam}). We first feature scale the images using their standard deviation and mean using the 'StandardScaler' in 'scikit-learn'. We also feature scale the predicted values, because of the range of scales involved. The CNN architecture is the same as the one used in 'Binary classification' shown in Figure (\ref{fig:binary_model}) with the following differences:
+The parameters used for 'Stiffness location' are given in Table (\ref{tab:stifflocparam}). All the images in this dataset are 'positive' i.e. they have a circle present. We first feature scale the images using their standard deviation and mean using the 'StandardScaler' in 'scikit-learn'. We also feature scale the predicted values, because of the range of scales involved. The CNN architecture is the same as the one used in 'Binary classification' shown in Figure (\ref{fig:binary_model}) with the following differences:
 \begin{enumerate}
 \item{We have two output units instead of one.}
 \item{There is no activation for the output layer.}
@@ -168,7 +169,7 @@ The training loss and validation loss are shown in Figure (\ref{fig:locationmetr
     Loss function     & 'mse' (mean squared error) \\
     \hline
   \end{tabular}
-  \caption{\label{tab:stifflocparam} Parameters for stiffness location. Note: early termination was not used. The optimized was run for the entire $512$ steps.}
+  \caption{\label{tab:stifflocparam} Parameters for stiffness location. Note: early termination was not used. The optimizer was run for the entire $512$ steps.}
 \end{table}
 %
 \begin{figure}
@@ -195,7 +196,129 @@ The training loss and validation loss are shown in Figure (\ref{fig:locationmetr
 \end{figure}
 %
 \section{Predicting stiffness value}
+The parameters used for 'Predicting stiffness value' are given in Table (\ref{tab:stiffvalparam}). All the images in this dataset are 'positive' i.e. they have a circle present. We first feature scale the images using their standard deviation and mean using the 'StandardScaler' in 'scikit-learn'. We also feature scale the predicted values, because of the range of scales involved. The CNN architecture is the same as the one used in 'Binary classification' shown in Figure (\ref{fig:binary_model}) with the following difference:
 %
+\begin{enumerate}
+\item{There is no activation for the output layer.}
+\end{enumerate}
+The training and validation loss are shown in Figure (\ref{fig:stiffvalmetrics}). The absolute and relative error in the stiffness value prediction are shown in Figure (\ref{fig:stiffvalerror}). Most of the test cases (982 out of 1024) show a relative error of less than 10\%. 
+%
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    Parameter & Value \\
+    \hline
+    Number of training examples   & 1024 \\
+    Number of validation examples & 205 \\
+    Number of training examples   & 1024 \\
+    Maximum number of epochs      & 512 \\
+    min{\_}delta      & not used\\
+    patience                      & not used  \\
+    Trainable parameters          & 747,105\\
+    Optimizer         & 'adam'     \\
+    Loss function     & 'mse' (mean squared error) \\
+    \hline
+  \end{tabular}
+  \caption{\label{tab:stiffvalparam} Parameters for stiffness value identification. Note: early termination was not used. The optimizer was run for the entire $512$ steps.}
+\end{table}
+%
+\begin{figure}
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[totalheight=4cm]{circle_id/stiffval/plotloss.png}
+    \caption{Training loss}
+  \end{subfigure}
+%
+\begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[totalheight=4cm]{circle_id/stiffval/plotval_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+%
+\caption{\label{fig:stiffvalmetrics} Metrics for stiffness value identification.}
+\end{figure}
+%
+\begin{figure}
+  \centering
+\begin{subfigure}[b]{0.95\textwidth}
+    \centering  
+    \includegraphics{circle_id/stiffval/plotabserror.png}
+    \caption{\label{fig:stiffvalabserror} Error in stiffness value identification.}
+\end{subfigure}
+\begin{subfigure}[b]{0.95\textwidth}
+    \centering  
+    \includegraphics{circle_id/stiffval/plotrelcomparison.png}
+    \caption{\label{fig:stiffvalrelerror} Relative error in stiffness value identification.}
+\end{subfigure}
+\caption{\label{fig:stiffvalerror} Error in stiffness value identification}
+\end{figure}
 \section{Predicting circle radius}
 %
+The parameters used for 'Predicting stiffness radius' are given in Table (\ref{tab:stiffradparam}). All the images in this dataset are 'positive' i.e. they have a circle present. We first feature scale the images using their standard deviation and mean using the 'StandardScaler' in 'scikit-learn'. We also feature scale the predicted values, because of the range of scales involved. The CNN architecture is the same as the one used in 'Binary classification' shown in Figure (\ref{fig:binary_model}) with the following difference:
+%
+\begin{enumerate}
+\item{There is no activation for the output layer.}
+\end{enumerate}
+The training and validation loss are shown in Figure (\ref{fig:stiffradmetrics}). The absolute and relative error in the stiffness radius prediction are shown in Figure (\ref{fig:stiffraderror}). Most of the test cases (868 out of 1024) show a relative error of less than 10\%.
+%
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    Parameter & Value \\
+    \hline
+    Number of training examples   & 1024 \\
+    Number of validation examples & 205 \\
+    Number of training examples   & 1024 \\
+    Maximum number of epochs      & 512 \\
+    min{\_}delta      & not used\\
+    patience                      & not used  \\
+    Trainable parameters          & 747,105\\
+    Optimizer         & 'adam'     \\
+    Loss function     & 'mse' (mean squared error) \\
+    \hline
+  \end{tabular}
+  \caption{\label{tab:stiffradparam} Parameters for stiffness radius identification. Note: early termination was not used. The optimizer was run for the entire $512$ steps.}
+\end{table}
+%
+\begin{figure}
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[totalheight=4cm]{circle_id/stiffrad/plotloss.png}
+    \caption{Training loss}
+  \end{subfigure}
+%
+\begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[totalheight=4cm]{circle_id/stiffrad/plotval_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+%
+\caption{\label{fig:stiffradmetrics} Metrics for stiffness radius identification.}
+\end{figure}
+%
+%
+\begin{figure}
+  \centering
+\begin{subfigure}[b]{0.95\textwidth}
+    \centering  
+    \includegraphics{circle_id/stiffrad/plotabserror.png}
+    \caption{\label{fig:stiffradabserror} Error in stiffness radius identification.}
+\end{subfigure}
+\begin{subfigure}[b]{0.95\textwidth}
+    \centering  
+    \includegraphics{circle_id/stiffrad/plotrelcomparison.png}
+    \caption{\label{fig:stiffradrelerror} Relative error in stiffness radius identification.}
+\end{subfigure}
+\caption{\label{fig:stiffraderror} Error in stiffness radius identification}
+\end{figure}
+%
+\section{Things to do}
+\begin{enumerate}
+\item{Checkpoint and save best weights instead of just running for $512$ epochs}
+\item{Use prior knowledge to improve performance. e.g. if we know that radius can lie between 1 pixel and 3 pixels we can use that information to improve performence.}
+\end{enumerate}
 \end{document}
