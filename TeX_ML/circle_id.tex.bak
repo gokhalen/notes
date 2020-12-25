@@ -24,7 +24,7 @@ We consider a dataset consisting of images of stiffness of the type shown in Fig
 
 We consider the following problems
 \begin{enumerate}
-\item{\textbf{Binary classification}: Given a stiffness image classify it into homogeneous ( no stiff circle, label '0') or having an stiff circle (label '1').}
+\item{\textbf{Binary classification}: Given a stiffness image classify it into homogneous ( no stiff circle, label '0') or having an stiff circle (label '1').}
 \item{\textbf{Predicting stiffness location:} Given a stiffness image containing a stiff circle find the x and y coordinates of the center of the stiff circle.}
 \item{\textbf{Predicting stiffness value:} Given a stiffness image containing a stiff circle find the value of the stiffness of the circle.}
 \item{\textbf{Predicting stiffness radius:} Given a stiffness image containing a stiff circle find the radius of the circle.}
@@ -326,6 +326,6 @@ The training and validation loss are shown in Figure (\ref{fig:stiffradmetrics})
 \section{Things to do}
 \begin{enumerate}
 \item{Checkpoint and save best weights instead of just running for $512$ epochs}
-\item{Use prior knowledge to improve performance. e.g. if we know that radius can lie between 1 pixel and 3 pixels, perhaps we can use that information to improve performance.}
+\item{Use prior knowledge to improve performance. e.g. if we know that radius can lie between 1 pixel and 3 pixels, perhaps we can use that information to improve performence.}
 \end{enumerate}
 \end{document}
