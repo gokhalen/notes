@@ -27,6 +27,8 @@ output=np.apply_along_axis(ff,1,aa)
 # [4,6,8]
 print('-'*60)
 
+sys.exit()
+
 # now for 3D
 print('3D example')
 aa = np.arange(2*3).reshape(2,3)
