@@ -1,0 +1,46 @@
+% Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\pdd}[2]{\frac{\partial}{\partial{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\begin{document}
+\title{Stiffness parameter identification using Convolutional Neural Networks in TensorFlow}
+\author{Nachiket Gokhale\footnote{Conversations with Paul Barbone, Arnab Majumdar and Mandar Kulkarni are acknowledged and much appreciated.}\\gokhalen@gmail.com}
+\date{\today}
+\maketitle
+\section{Introduction}
+\section{Binary classification}
+% https://stackoverflow.com/questions/31324218/scikit-learn-how-to-obtain-true-positive-true-negative-false-positive-and-fal
+
+%By definition a confusion matrix C is such that C[i, j] is equal to the number of observations known to be in group i but predicted to be in group j.
+
+%Thus in binary classification, the count of true negatives is C[0,0], false negatives is C[1,0], true positives is C[1,1] and false positives is C[0,1].
+
+% CM = confusion_matrix(y_true, y_pred)
+
+% TN = CM[0][0]
+% FN = CM[1][0]
+% TP = CM[1][1]
+% FP = CM[0][1]
+
+\section{Things to do}
+% Custom activation function
+% https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
+\begin{enumerate}
+\item{Checkpoint and save best weights instead of just running for $512$ epochs. https://stackoverflow.com/questions/42666046/loading-a-trained-keras-model-and-continue-training}
+\item{Also, checkpoint and restart}
+\item{}
+\item{Use prior knowledge to improve performance. e.g. if we know that radius can lie between 1 pixel and 3 pixels, perhaps we can use that information to improve performance. Similarly if we know that stiffness can lie between specifed ranges, then use that knowledge to constrain NN output}
+\end{enumerate}
+\end{document}
