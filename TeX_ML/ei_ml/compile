@@ -1,0 +1,5 @@
+#!/bin/bash
+pdflatex.exe ei_ml
+bibtex.exe   ei_ml
+pdflatex.exe ei_ml
+pdflatex.exe ei_ml

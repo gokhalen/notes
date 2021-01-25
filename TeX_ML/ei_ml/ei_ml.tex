@@ -1,0 +1,74 @@
+% Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee, PEB, AAO, Michael Richards, John W, Jaydeep K
+\documentclass[12pt]{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\pdd}[2]{\frac{\partial}{\partial{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+
+\begin{document}
+% bib
+\title{Shear modulus inclusion parameter identification using Convolutional Neural Networks in TensorFlow}
+\author{Nachiket Gokhale\footnote{Conversations with Paul Barbone, Arnab Majumdar, Michael Richards and Mandar Kulkarni are acknowledged and appreciated.}\\gokhalen@gmail.com}
+\date{\today}
+\maketitle
+\abstract{}
+\section{Introduction}
+The shear modulus of palpable nodules (which can be thought of as suspicious and perhaps cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus of soft tissue results in a high-contrast imaging method because suspicious growths will stand out clearly against the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other elastic properties) of soft tissue in various ways. Elasticity Imaging typically follows the following steps:
+%
+\begin{figure}
+   \centering
+    \includegraphics[totalheight=3cm]{Figures/shearmod.png}
+  \caption{\label{fig:shearmod} Shear moduli of different types of soft tissue. Adapted from Figure 1 in \cite{paper:sarv1998}.}
+\end{figure}
+%
+\begin{enumerate}
+\item{\textbf{Image acquisition:} Images of soft tissue undergoing deformation are acquired using various imaging modalities such as ultrasound or magnetic resonance imaging. While time dependent images can be acquired, we shall consider here only two images: a \textit{pre-deformation image} acquired before force is applied and a \textit{post-deformation image} acquired after force is applied. This process is shown in Figure (\ref{fig:prepostimage}) for ultrasound imaging.}
+\item{\textbf{Image registration:} The goal in this step is to find a map between the \textit{pre-deformation image} and the \textit{post-deformation image}. For every point in the \textit{pre-deformation image} we aim to find its location in the \textit{post-deformation image}. This gives us the \textit{displacement field} between the two images.}
+\item{\textbf{Inverse problem solution:}}
+\end{enumerate}
+%
+\begin{figure}
+   \centering
+    \includegraphics[totalheight=5cm]{Figures/prepostimage.png}
+  \caption{\label{fig:prepostimage} Schematic figure showing medical image acquisition when soft tissue is being deformed using ultrasound imaging.}
+\end{figure}
+%
+\section{Problem definition}
+\section{Binary classification}
+% https://stackoverflow.com/questions/31324218/scikit-learn-how-to-obtain-true-positive-true-negative-false-positive-and-fal
+
+%By definition a confusion matrix C is such that C[i, j] is equal to the number of observations known to be in group i but predicted to be in group j.
+
+%Thus in binary classification, the count of true negatives is C[0,0], false negatives is C[1,0], true positives is C[1,1] and false positives is C[0,1].
+
+% CM = confusion_matrix(y_true, y_pred)
+
+% TN = CM[0][0]
+% FN = CM[1][0]
+% TP = CM[1][1]
+% FP = CM[0][1]
+
+\section{Things to do}
+% Custom activation function
+% https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
+\begin{enumerate}
+\item{Checkpoint and save best weights instead of just running for $512$ epochs. https://stackoverflow.com/questions/42666046/loading-a-trained-keras-model-and-continue-training}
+\item{Also, checkpoint and restart}
+\item{}
+\item{Use prior knowledge to improve performance. e.g. if we know that radius can lie between 1 pixel and 3 pixels, perhaps we can use that information to improve performance. Similarly if we know that stiffness can lie between specifed ranges, then use that knowledge to constrain NN output}
+\end{enumerate}
+
+\bibliography{eibib}{}
+\bibliographystyle{plain}
+\end{document}
