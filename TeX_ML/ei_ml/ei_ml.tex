@@ -1,4 +1,4 @@
-% Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee, PEB, AAO, Michael Richards, John W, Jaydeep K
+% Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee, PEB, AAO, Michael Richards, John W, Jaydeep K, and Grace Gu
 \documentclass[12pt]{article}
 \newcommand{\beq}{\begin{equation}}
 \newcommand{\eeq}{\end{equation}}
@@ -15,16 +15,19 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{multirow}
-
+\usepackage{draftwatermark}
+\SetWatermarkText{Draft}
+\SetWatermarkScale{5}
+%
 \begin{document}
 % bib
-\title{Shear modulus inclusion parameter identification using Convolutional Neural Networks in TensorFlow}
-\author{Nachiket Gokhale\footnote{Conversations with Paul Barbone, Arnab Majumdar, Michael Richards and Mandar Kulkarni are acknowledged and appreciated.}\\gokhalen@gmail.com}
+\title{Initial results in elasticity imaging using Convolutional Neural Networks}
+\author{Nachiket Gokhale\footnote{Conversations with Paul Barbone, Arnab Majumdar, Michael Richards and Mandar Kulkarni are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com}
 \date{\today}
 \maketitle
-\abstract{}
+\abstract{We explore the application of Convolutional Neural Networks to image the shear modulus of an almost incompressible elastic medium using displacement and strain data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated as compared to the background of normal tissue. }
 \section{Introduction}
-The shear modulus of palpable nodules (which can be thought of as suspicious and perhaps cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus of soft tissue results in a high-contrast imaging method because suspicious growths will stand out clearly against the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other elastic properties) of soft tissue in various ways. Elasticity Imaging typically follows the following steps:
+The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus of soft tissue results in a high-contrast imaging method because suspicious growths will stand out clearly against the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other elastic properties) of soft tissue in various ways. Elasticity Imaging typically follows the following steps:
 %
 \begin{figure}
    \centering
@@ -43,6 +46,9 @@ The shear modulus of palpable nodules (which can be thought of as suspicious and
     \includegraphics[totalheight=5cm]{Figures/prepostimage.png}
   \caption{\label{fig:prepostimage} Schematic figure showing medical image acquisition when soft tissue is being deformed using ultrasound imaging.}
 \end{figure}
+%
+\section{Neural Networks}
+In recent years, Neural Networks have been applied to various applications such as image classificaton \cite{paper:hinton2017}, hand written digit recognition \cite{paper:kulkarni2018}, solving differential equations and symbolic integration \cite{misc:lample2019}, solving complex partial differential equations such as the Navier-Stokes equation \cite{misc:anandkumar2020}, self-driving cars \cite{misc:agnihotri2019,misc:nvidiaselfdriving2016}, chaos 
 %
 \section{Problem definition}
 \section{Binary classification}
@@ -67,6 +73,7 @@ The shear modulus of palpable nodules (which can be thought of as suspicious and
 \item{Also, checkpoint and restart}
 \item{}
 \item{Use prior knowledge to improve performance. e.g. if we know that radius can lie between 1 pixel and 3 pixels, perhaps we can use that information to improve performance. Similarly if we know that stiffness can lie between specifed ranges, then use that knowledge to constrain NN output}
+\item{Better results are obtained for larger inclusion with larger contrast}
 \end{enumerate}
 
 \bibliography{eibib}{}
