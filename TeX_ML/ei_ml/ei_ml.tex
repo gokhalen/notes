@@ -22,12 +22,12 @@
 \begin{document}
 % bib
 \title{Initial elasticity imaging results using a Convolutional Neural Network}
-\author{Nachiket Gokhale\footnote{Conversations with Paul Barbone, Arnab Majumdar, Mandar Kulkarni and Michael Richards are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com}
+\author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone for patiently answering many questions about finite elements. Conversations with Arnab Majumdar, Michael Richards and Mandar Kulkarni are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com}
 \date{\today}
 \maketitle
-\abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data to image the shear modulus of an almost incompressible elastic medium using displacement and strain data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated as compared to the background of normal tissue. Imaging the stiffness leads to high-contrast medical images. We present encouraging results which warrant further research and show the promise of this methodology.}
+\abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible elastic medium using displacement or strain field data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Therefore, imaging the stiffness leads to high-contrast medical images. Our prediction problem is as follows: Given displacement or strain fields, predict the shear modulus field. Our CNN is trained using 2400 training examples consist of displacement or strain fields and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
 \section{Introduction}
-The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus of soft tissue results in a high-contrast imaging method because suspicious growths will stand out clearly against the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other elastic properties) of soft tissue in various ways. Elasticity Imaging typically follows the following steps:
+The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus of soft tissue results in a high-contrast imaging method because suspicious growths will stand out clearly against the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other elastic properties) of soft tissue in various ways. Elasticity Imaging typically consists of  the following steps:
 %
 \begin{figure}
    \centering
@@ -80,6 +80,7 @@ In recent years, Neural Networks have been applied to various applications such 
 \item{Training multiple NNs on the same data set using different initializations for the weights. One can then average the prediction or average the weights.}
 \item{Handling noise: augmenting dataset by adding noise to displacement/strain fields}
 \item{Stiffness is always underpredicted. Smaller inclusions are not handled well. Larger inclusions are handled better.}
+\item{Actual material properties and breast/organ geometry}
 \item{Multiple displacement fields}
 \end{enumerate}
 \bibliography{eibib}{}
