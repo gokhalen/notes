@@ -79,7 +79,7 @@ In recent years, Neural Networks have been applied to various applications such 
 \item{Mapping medical images to shear modulus directly skipping registration.}
 \item{Training multiple NNs on the same data set using different initializations for the weights. One can then average the prediction or average the weights.}
 \item{Handling noise: augmenting dataset by adding noise to displacement/strain fields}
-\item{Stiffness is always underpredicted. Smaller inclusions are not handled well. Larger inclusions are handled better.}
+\item{Stiffness is always underpredicted. Smaller inclusions are not handled well. Larger inclusions are handled better. Maybe having material properties and displacements on the same mesh leads to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them.}
 \item{Actual material properties and breast/organ geometry}
 \item{Multiple displacement fields}
 \end{enumerate}
