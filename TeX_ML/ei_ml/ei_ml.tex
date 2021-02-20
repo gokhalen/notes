@@ -1,4 +1,4 @@
-% Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee, PEB, AAO, Michael Richards, John W, Jaydeep K, and Grace Gu, GR Gogate, Chaitanya Bapat, Ruhi
+% Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee, PEB, AAO, Michael Richards, John W, Jaydeep K, and Grace Gu, GR Gogate, Chaitanya Bapat, Hrishikesh, Shilpa
 \documentclass[12pt]{article}
 \newcommand{\beq}{\begin{equation}}
 \newcommand{\eeq}{\end{equation}}
@@ -16,6 +16,8 @@
 \usepackage{subcaption}
 \usepackage{multirow}
 \usepackage{draftwatermark}
+% usually hyperref has to be the last package imported
+\usepackage{hyperref}
 \SetWatermarkText{Draft}
 \SetWatermarkScale{5}
 %
@@ -25,7 +27,7 @@
 \author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone for patiently answering many questions about finite elements. Conversations with Arnab Majumdar, Michael Richards and Mandar Kulkarni are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com}
 \date{\today}
 \maketitle
-\abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible elastic medium using displacement or strain field data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Therefore, imaging the stiffness leads to high-contrast medical images. Our prediction problem is as follows: Given displacement or strain fields, predict the shear modulus field. Our CNN is trained using 2400 training examples consist of displacement or strain fields and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
+\abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible elastic medium in plane strain using displacement or strain field data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Therefore, imaging the stiffness leads to high-contrast medical images. Our prediction problem is as follows: Given displacement or strain fields, predict the shear modulus field. Our CNN is trained using 2400 training examples consist of displacement or strain fields and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
 \section{Introduction}
 The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus of soft tissue results in a high-contrast imaging method because suspicious growths will stand out clearly against the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other elastic properties) of soft tissue in various ways. See \cite{paper:gao1996,paper:parker2010,book:alamgarra2019,bookchap:oberaibarbone2019} for a comprehensive reviews of the field.
 %
@@ -48,16 +50,29 @@ Elasticity Imaging typically consists of  the steps of image acquisition, image 
 \subsubsection{Inverse problem solution:} The goal in this step is to infer the spatial distribution of the shear modulus from the displacement field. This is called an \textit{inverse problem} because the typical boundary value problem in linear elasticity (referred to as the \textit{forward problem}) is to determine the displacement field given the shear-modulus field. The approaches for inverse problem solution can be divided into two categories: direct and iterative.
 \subsubsection{Direct approach} Direct approaches involve solving a single partial differential equation (pde) to obtain the distribution of shear modulus directly: see \cite{paper:raghavan1994,paper:barboneadjwt,paper:albocher}. The coefficients of this pde depend on the measured displacement field. Such approaches are fast and work well when the measured strain field is completely known and has low noise.
 \subsubsection{Iterative approach} Iterative approaches \cite{paper:oberai2003,paper:gokhale2008,paper:kalle1996,paper:doyley,paper:goenezen2011} involve guessing a distribution for the shear modulus, solving a linear elasticity forward problem to obtain the predicted displacements, comparing the predicted displacements to the measured displacements and updating the guessed shear modulus distribution using a suitable optimization procedure such as a modified Newton Raphson scheme as in \cite{paper:doyley} or the BFGS scheme as in \cite{paper:gokhale2008,paper:goenezen2011}. Such approaches are typically slower than direct methods, since the require the solution of $\approx$ 25-100 forward problems, but have the ability to handle incomplete data and complex material models.
+\subsection{Solving the inverse problem with CNNs}
+We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer, can accomodate complex constitutive relations, can work with incomplete data (e.g. only a single component of a displacement field) and can work with noisy data.
 \section{Neural networks and problem setup}
 In recent years, neural networks have been applied to various applications such as image classificaton \cite{paper:hinton2017}, hand written digit recognition \cite{paper:kulkarni2018}, solving differential equations and symbolic integration \cite{misc:lample2019}, solving complex partial differential equations such as the Navier-Stokes equation \cite{misc:anandkumar2020}, self-driving cars \cite{misc:agnihotri2019,misc:nvidiaselfdriving2016}, chaos \cite{paper:pathak2018}, natural language processing \cite{misc:googlenlp} and face recognition \cite{conf:taigman2014}. Several effective Machine Learning frameworks such as Google's TensorFlow \cite{misc:tensorflow}, Facebook's PyTorch \cite{incollect:pytorch}, Scikit-Learn \cite{paper:scikit-learn} are freely available. See \cite{misc:compdeep} for a complete list. The interested reader is referred to \cite{book:aggarwal,book:goodfellow,book:chollet,misc:cs231n,misc:andrewng,misc:udemy} for further information about neural networks.
 \subsection{Neural networks and elasticity imaging}
-Given the success achieved by neural networks on the wide variety of applications cited, it is natural to explore the application of neural networks to the inverse problem of elasticity imaging and several recent efforts \cite{paper:pateloberai2019,misc:gu2020,paper:hoeriginsana2016} have done so. In \cite{paper:pateloberai2019}, the authors use a convolutional neural network to classify specimens into elastically heterogeneous or elastically nonlinear. In \cite{paper:hoeriginsana2016}, the authors use a neural network to estimate strains and stress and then calculate elastic parameters. In \cite{misc:gu2020}, the authors use a neural network which predicts elasticity distributions using residual force maps to update the weights of the neural network. In this work we compute the shear modulus field from the displacement or strain field using a CNN.
-
-Add figure of CNN architecture here. Cite udemy
-
+Given the success achieved by neural networks on the wide variety of applications cited, it is natural to explore the application of neural networks to the inverse problem of elasticity imaging and several recent efforts \cite{paper:pateloberai2019,misc:gu2020,paper:hoeriginsana2016} have done so. In \cite{paper:pateloberai2019}, the authors use a convolutional neural network to classify specimens into elastically heterogeneous or elastically nonlinear. In \cite{paper:hoeriginsana2016}, the authors use a neural network to estimate strains and stress and then calculate elastic parameters. In \cite{misc:gu2020}, the authors use a neural network which predicts elasticity distributions using residual force maps to update the weights of the neural network. In contrast, in this work we compute the shear modulus field from the displacement or strain field using a CNN.\\ The typical architecture of the CNN we use in this work is shown in Figure (\ref{fig:typical_cnn}). This CNN was implemented in TensorFlow \cite{misc:tensorflow}. The first dimension '?' represents the number of examples to be processed for training, validation or evaluation. Thus, the first training example is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy notation). The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of independent fields in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam}. No regularization is used. The activation for the first dense layer is \textit{relu} and for the second layer it is \textit{linear}. Each CNN has approximately $3.35$ million trainable parameters. 
+%
+\begin{figure} 
+   \centering
+    \includegraphics[totalheight=9cm]{Figures/typical_cnn.png}
+  \caption{\label{fig:typical_cnn}Typical CNN architecture used in this work. This architecure is essentially the same the one used in the Deep Learning example in \cite{misc:udemy}.}
+\end{figure}
+%
 %
 \subsection{Problem setup}
-The displacement and strain data required for the CNN is generated using a linear finite element solver named FyPy (Fynite Elements in Python). 4000 displacement and strain images are generated and are split into 2400 training examples, 800 validation examples and 800 test examples. The problem geometry is shown below. There are no homogeneous examples. 
+The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $2.0$ to $5.0$. There are no homogeneous examples \footnote{In numerical experiments the \textit{binary classification} problem of detecting whether an elastic domain contains and inclusion or not can be solved extremely accurately. Thus it is not necessary to include homogeneous examples in this work.}. The radius of the inclusion is a random number randing from $0.05$ to $0.15$. $4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. 
+%
+\begin{figure} 
+   \centering
+    \includegraphics[totalheight=9cm]{Figures/bc.png}
+  \caption{\label{fig:bc}Boundary conditions and material properties used in this work. }
+\end{figure}
+%
 % https://stackoverflow.com/questions/31324218/scikit-learn-how-to-obtain-true-positive-true-negative-false-positive-and-fal
 
 %By definition a confusion matrix C is such that C[i, j] is equal to the number of observations known to be in group i but predicted to be in group j.
@@ -70,7 +85,8 @@ The displacement and strain data required for the CNN is generated using a linea
 % FN = CM[1][0]
 % TP = CM[1][1]
 % FP = CM[0][1]
-
+\section{Movie test}
+\href{run:movies/movie.mp4}{\includegraphics[height=0.7\textwidth]{movies/mucomp00.png}}
 \section{Conclusions and future work}
 % Custom activation function
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
@@ -92,7 +108,7 @@ The displacement and strain data required for the CNN is generated using a linea
 \bibliography{eibib}{}
 \bibliographystyle{plain}
 \appendix
-\section{Hello}
+\section{Multiple inclusions}
 \subsection{Hello 2}
-\section{Hello 2} 
+\section{Parameter identification} 
 \end{document}

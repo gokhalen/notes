@@ -1,4 +1,10 @@
 __pycache__/
+movies/
 *.pyc
 *.pdf
 *~*
+*.bbl
+*.blg
+*.mp4
+*.avi
+
