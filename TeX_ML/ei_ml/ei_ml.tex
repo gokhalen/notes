@@ -7,13 +7,16 @@
 \newcommand{\nn}{\nonumber}
 \newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \newcommand{\pdd}[2]{\frac{\partial}{\partial{#2}}{(#1)} }
+\newcommand{\nhgscalefactor}{0.22}
+\newcommand{\nhgfigheight}{3.8cm}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{cite}
 \usepackage{url}
 \usepackage{graphicx}
-\usepackage{caption}
+%\usepackage{caption}
 \usepackage{subcaption}
+%\usepackage{subfig}
 \usepackage{multirow}
 \usepackage{draftwatermark}
 % usually hyperref has to be the last package imported
@@ -90,8 +93,8 @@ The typical architecture of the CNN we use in this work is shown in Figure (\ref
 \end{figure}
 %
 %
-\subsection{Problem setup}
-The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $2.0$ to $5.0$. There are no homogeneous examples \footnote{In numerical experiments the \textit{binary classification} problem of detecting whether an elastic domain contains an inclusion can be solved extremely accurately using displacement or strain field data. Thus it is not necessary to include homogeneous examples in this work. See Appendix (\ref{sect:binary}).}. The radius of the inclusion is a random number randing from $0.05$ to $0.15$. $4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield 40dB noise
+\subsection{\label{sect:probsetup}Problem setup}
+The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $2.0$ to $5.0$. There are no homogeneous examples. The radius of the inclusion is a random number randing from $0.05$ to $0.15$. $4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise
 \begin{equation}
   \label{eqn:snr}
   SNR_{dB} = 20\log_{10}\Big(\frac{\|signal\|}{\|noise\|}\Big)
@@ -105,46 +108,64 @@ The displacement or strain field data required for the CNN is generated using a 
 \end{figure}
 %
 \section{Imaging one inclusion}
-\subsection{Case 1: Using $\epsilon_{xx},\epsilon_{yy}$ and $\epsilon_{xy}$}
+\subsection{Case 1: Using $\epsilon_{xx}$ and $\epsilon_{yy}$}
 % loss and val_loss Curves
-\subsection{Case 2: Using $\epsilon_{xx},\epsilon_{yy}$ and $\epsilon_{xy}$ with noise}
-\subsection{Case 3: Using $\epsilon_{yy}$ only}
+\subsection{Case 2: Using $\epsilon_{yy}$ only}
 % loss and val_loss Curves
-\subsection{Case 4: Using $\epsilon_{yy}$ only with noise}
-\subsection{Case 5: Using $u_x$ and $u_y$}
+\subsection{Case 3: Using $u_x$ and $u_y$}
 % loss and val_loss Curves
-\subsection{Case 6: Using $u_x$ and $u_y$ with noise}
-\subsection{Case 7: Using $u_y$ only}
+\subsection{Case 4: Using $u_y$ only}
 % loss and val_loss Curves
-\subsection{Case 8: Using $u_y$ with noise}
+\pagebreak
+\begin{figure}
+  \centering
+  %
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+    \caption{True}
+  \end{subfigure}
+  %
+   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+    \caption{$\epsilon_{xx}+\epsilon_{yy}$}
+   \end{subfigure}
+   %
+   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+    \caption{(b) + noise}
+   \end{subfigure}
+   %
+   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+    \caption{$\epsilon_{yy}$}
+   \end{subfigure}
+   %
+   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+     \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+     \caption{$\epsilon_{yy}$+noise}
+   \end{subfigure}
+   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+     \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+     \caption{$u_x+u_y$}
+   \end{subfigure}
+   %
+   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+     \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+     \caption{$u_y$}
+   \end{subfigure}
+   %
+   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+     \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+     \caption{$u_y$+noise}
+   \end{subfigure}
+  \caption{\label{app:eyy:curves} Optmization history during the training phase for binary classification using $\epsilon_{yy}$ only.}
+\end{figure}
+\clearpage
+\newpage
 %
 \section{Imaging multiple inclusions}
-\subsection{Case 1: Using $\epsilon_{xx},\epsilon_{yy}$ and $\epsilon_{xy}$}
-% loss and val_loss Curves
-\subsection{Case 2: Using $\epsilon_{xx},\epsilon_{yy}$ and $\epsilon_{xy}$ with noise}
-\subsection{Case 3: Using $\epsilon_{yy}$ only}
-% loss and val_loss Curves
-\subsection{Case 4: Using $\epsilon_{yy}$ only with noise}
-\subsection{Case 5: Using $u_x$ and $u_y$}
-% loss and val_loss Curves
-\subsection{Case 6: Using $u_x$ and $u_y$ with noise}
-\subsection{Case 7: Using $u_y$ only}
-% loss and val_loss Curves
-\subsection{Case 8: Using $u_y$ with noise}
 %
 %
-% https://stackoverflow.com/questions/31324218/scikit-learn-how-to-obtain-true-positive-true-negative-false-positive-and-fal
-
-%By definition a confusion matrix C is such that C[i, j] is equal to the number of observations known to be in group i but predicted to be in group j.
-
-%Thus in binary classification, the count of true negatives is C[0,0], false negatives is C[1,0], true positives is C[1,1] and false positives is C[0,1].
-
-% CM = confusion_matrix(y_true, y_pred)
-
-% TN = CM[0][0]
-% FN = CM[1][0]
-% TP = CM[1][1]
-% FP = CM[0][1]
 \section{Movie test}
 \href{run:movies/movie.mp4}{\includegraphics[height=0.7\textwidth]{movies/mucomp00.png}}
 \section{Conclusions and future work}
@@ -152,8 +173,6 @@ The displacement or strain field data required for the CNN is generated using a 
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
 \begin{enumerate}
 \item{Checkpoint and save best weights instead of just running for $512$ epochs. https://stackoverflow.com/questions/42666046/loading-a-trained-keras-model-and-continue-training}
-\item{Also, checkpoint and restart}
-\item{}
 \item{Use prior knowledge to improve performance. e.g. if we know that radius can lie between 1 pixel and 3 pixels, perhaps we can use that information to improve performance. Similarly if we know that stiffness can lie between specifed ranges, then use that knowledge to constrain NN output}
 \item{Better results are obtained for larger inclusion with larger contrast}
 \item{Larger datasets: 100,000 or so datasets}
@@ -163,24 +182,54 @@ The displacement or strain field data required for the CNN is generated using a 
 \item{Handling noise: augmenting dataset by adding noise to displacement/strain fields}
 \item{Stiffness is always underpredicted. Smaller inclusions are not handled well. Larger inclusions are handled better. Maybe having material properties and displacements on the same mesh leads to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them.}
 \item{Actual material properties and breast/organ geometry}
-\item{Multiple displacement fields: In \cite{paper:barbonegokhale,paper:barbonebamber} the authors show that a single strain or displacement field is not sufficent to predict the shear modulus field uniquely and multiple displacement fields are required for unique prediction of the shear modulus field. The use of multiple displacement fields can be considered within our current framework. This would involve increasing the number of channels in a dataset. See Section (\ref{sect:cnnarch}) for a detailed discussion.} 
+\item{Multiple displacement fields: In \cite{paper:barbonegokhale,paper:barbonebamber} the authors show that a single strain or displacement field is not sufficent to predict the shear modulus field uniquely and multiple displacement fields are required for unique prediction of the shear modulus field. The use of multiple displacement fields can be considered within our current framework. This would involve increasing the number of channels in a dataset. See Section (\ref{sect:cnnarch}) for more information on channels.} 
 \item{Software and performance issues: The finite element solver and associated scripts for generating the data were written in Python 3.8. Python is slow and much better performance could be obtained by writing the solver in C/C++/Fortran or Julia or using open source solvers like FEniCS \cite{paper:fenics} or deal.II \cite{misc:deal.ii}. Each FE input file is 3.3MB and output file is 1.1MB and total dataset size $\approx$  20GB. There was no effort made to minimize the size of input and output files. Simple text based JSON files were used. If one wants increase the number of training examples by a factor of thousand 17TB of data would be required. Optimized data structures and hardware supporting fast disk access (SSDs) will be necessary for scaling to a large data sets. The use of GPU clusters to process large amounts of data may also need to be considered. }
 \end{enumerate}
 \bibliography{eibib}{}
 \bibliographystyle{plain}
-\appendix
-\section{\label{sect:binary}Binary classification}
-\subsection{Case 1: Using $\epsilon_{xx},\epsilon_{yy}$ and $\epsilon_{xy}$}
-% loss and val_loss Curves
-\subsection{Case 2: Using $\epsilon_{xx},\epsilon_{yy}$ and $\epsilon_{xy}$ with noise}
-\subsection{Case 3: Using $\epsilon_{yy}$ only}
-% loss and val_loss Curves
-\subsection{Case 4: Using $\epsilon_{yy}$ only with noise}
-\subsection{Case 5: Using $u_x$ and $u_y$}
-% loss and val_loss Curves
-\subsection{Case 6: Using $u_x$ and $u_y$ with noise}
-\subsection{Case 7: Using $u_y$ only}
-% loss and val_loss Curves
-\subsection{Case 8: Using $u_y$ with noise}
-%
 \end{document}
+
+
+% Document ends here
+
+\appendix
+
+
+\section{\label{sect:binary}Binary classification}
+In this section, we consider the problem of identifying whether or not there is an inclusion in an elastic domain from given one component of strain or displacement fields. The CNN used in this section is essentially the same the one described in Section (\ref{sect:cnnarch}) with the following changes. The dense output layer contains only $1$ node, its activation is \textit{sigmoid} and the loss function is \textit{binary cross entropy}. The geometry of the examples is as described in Section (\ref{sect:probsetup}) and Figure (\ref{fig:bc}). The training set consists of $1024$ examples out of which $200$ are homogenous with shear modulus of $1$ unit and the rest contain a single inclusion. The shear modulus of the single inclusion is a constant and is a random number between $2.0$ and $5.0$. The location of the inclusion is random and its radius is a random number between $0.05$ and $0.15$. The examples with the inclusion present are labeled '$1$' and the examples without an inclusion are labeled '$0$'. The validation and test data sets contain $204$ examples each out of which $40$ are homogeneous and the rest have an inclusion.
+% loss and val_loss Curves
+\subsection{Case 1: Using $\epsilon_{yy}$ with no noise}
+The training history for this case is shown in Figure (\ref{app:eyy:curves}).
+% figures for loss,val_loss,val_accuracy
+\begin{figure}
+  \centering
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=4cm]{Figures/Appendix/eyy/binary_strainyy_plot_loss.png}
+    \caption{True}
+  \end{subfigure}
+  %
+   \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=4cm]{Figures/Appendix/eyy/binary_strainyy_plot_accuracy.png}
+    \caption{Training accuracy vs epochs}
+   \end{subfigure}
+   %
+   \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=4cm]{Figures/Appendix/eyy/binary_strainyy_plot_val_loss.png}
+    \caption{Validation loss function vs epochs}
+   \end{subfigure}
+   %
+   \begin{subfigure}[b]{0.45\linewidth}
+     \includegraphics[totalheight=4cm]{Figures/Appendix/eyy/binary_strainyy_plot_val_accuracy.png}
+     \caption{Validation accuracy vs epochs}
+   \end{subfigure}
+   %
+  \caption{\label{app:eyy:curves} Optmization history during the training phase for binary classification using $\epsilon_{yy}$ only.}
+ \end{figure}
+% loss and val_loss Curves
+\subsection{Case 2: Using $\epsilon_{yy}$ with noise}
+\subsection{Case 3: Using $u_y$ with no noise}
+% loss and val_loss Curves
+\subsection{Case 4: Using $u_y$ with noise}
+%
+
