@@ -1,5 +1,19 @@
 % Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee, PEB, AAO, Michael Richards, John W, Jaydeep K, and Grace Gu, GR Gogate, Chaitanya Bapat, Shekhar Divekar, Hrishikesh, Shilpa, maybe Prem Andrade, Aaron Ashwin
 \documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{draftwatermark}
+\usepackage{pgffor}
+% usually hyperref has to be the last package imported
+\usepackage{hyperref}
+\SetWatermarkText{Draft}
+\SetWatermarkScale{5}
+%
 \newcommand{\beq}{\begin{equation}}
 \newcommand{\eeq}{\end{equation}}
 \newcommand{\ber}{\begin{eqnarray}}
@@ -7,23 +21,61 @@
 \newcommand{\nn}{\nonumber}
 \newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \newcommand{\pdd}[2]{\frac{\partial}{\partial{#2}}{(#1)} }
+% define variables for \mupics command
 \newcommand{\nhgscalefactor}{0.22}
-\newcommand{\nhgfigheight}{3.8cm}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{cite}
-\usepackage{url}
-\usepackage{graphicx}
-%\usepackage{caption}
-\usepackage{subcaption}
-%\usepackage{subfig}
-\usepackage{multirow}
-\usepackage{draftwatermark}
-% usually hyperref has to be the last package imported
-\usepackage{hyperref}
-\SetWatermarkText{Draft}
-\SetWatermarkScale{5}
-%
+\newcommand{\nhgfigheight}{4.5cm}
+
+\newcommand{\mupics}[1]{
+  % 1
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/mutrue.png}
+    \caption{True}
+  \end{subfigure}
+  \hfill
+  % 2
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muexxeyy.png}
+    \caption{$\epsilon_{xx}$ \& $\epsilon_{yy}$}
+  \end{subfigure}
+  \hfill
+  % 3
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muexxeyynoise.png}
+    \caption{(b)+noise}
+  \end{subfigure}
+  \hfill
+  % 4
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/mueyy.png}
+    \caption{$\epsilon_{yy}$}
+  \end{subfigure}
+  % 5
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/mueyynoise.png}
+    \caption{$\epsilon_{yy}$ + noise}
+  \end{subfigure}
+  \hfill
+  % 6
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muuxuy.png}
+    \caption{$u_{x}$ \& $u_y$}
+  \end{subfigure}
+  \hfill
+  % 7
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muuy.png}
+    \caption{$u_y$}
+  \end{subfigure}
+  \hfill
+  % 8
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muuynoise.png}
+    \caption{$u_y$+noise}
+  \end{subfigure}
+}
+
+
+
 \begin{document}
 % bib
 \title{Elasticity imaging using a Convolutional Neural Network}
@@ -94,7 +146,7 @@ The typical architecture of the CNN we use in this work is shown in Figure (\ref
 %
 %
 \subsection{\label{sect:probsetup}Problem setup}
-The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $2.0$ to $5.0$. There are no homogeneous examples. The radius of the inclusion is a random number randing from $0.05$ to $0.15$. $4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise
+The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. Both displacements and material properties are interpolated using bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $2.0$ to $5.0$. There are no homogeneous examples. The radius of the inclusion is a random number randing from $0.05$ to $0.15$. $4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise.
 \begin{equation}
   \label{eqn:snr}
   SNR_{dB} = 20\log_{10}\Big(\frac{\|signal\|}{\|noise\|}\Big)
@@ -121,46 +173,54 @@ The displacement or strain field data required for the CNN is generated using a 
   \centering
   %
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex1/mu1.png}
     \caption{True}
   \end{subfigure}
   %
    \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex1/mu2.png}
     \caption{$\epsilon_{xx}+\epsilon_{yy}$}
    \end{subfigure}
    %
    \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex1/mu3.png}
     \caption{(b) + noise}
    \end{subfigure}
    %
    \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex1/mu4.png}
     \caption{$\epsilon_{yy}$}
    \end{subfigure}
    %
    \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-     \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+     \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex1/mu5.png}
      \caption{$\epsilon_{yy}$+noise}
    \end{subfigure}
    \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-     \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+     \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex1/mu6.png}
      \caption{$u_x+u_y$}
    \end{subfigure}
    %
    \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-     \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+     \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex1/mu7.png}
      \caption{$u_y$}
    \end{subfigure}
    %
    \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-     \includegraphics[totalheight=\nhgfigheight]{Figures/strain/ex1/mucomp00.png}
+     \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex1/mu8.png}
      \caption{$u_y$+noise}
    \end{subfigure}
   \caption{\label{app:eyy:curves} Optmization history during the training phase for binary classification using $\epsilon_{yy}$ only.}
 \end{figure}
 \clearpage
+\begin{figure}
+  \mupics{1}
+  \caption{Testing mupics}
+\end{figure}
+\begin{figure}
+  \mupics{1}
+  \caption{Testing mupics2}
+\end{figure}
 \newpage
 %
 \section{Imaging multiple inclusions}
@@ -168,20 +228,24 @@ The displacement or strain field data required for the CNN is generated using a 
 %
 \section{Movie test}
 \href{run:movies/movie.mp4}{\includegraphics[height=0.7\textwidth]{movies/mucomp00.png}}
-\section{Conclusions and future work}
+\section{Concluding remarks}
 % Custom activation function
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
+A CNN capable of predicting shear modulus fields from displacement or strain fields (or components thereof) was presented. Results which warrant further research were presented. Directions for further work are discussed below. 
+\subsection{Future work}
 \begin{enumerate}
-\item{Checkpoint and save best weights instead of just running for $512$ epochs. https://stackoverflow.com/questions/42666046/loading-a-trained-keras-model-and-continue-training}
-\item{Use prior knowledge to improve performance. e.g. if we know that radius can lie between 1 pixel and 3 pixels, perhaps we can use that information to improve performance. Similarly if we know that stiffness can lie between specifed ranges, then use that knowledge to constrain NN output}
-\item{Better results are obtained for larger inclusion with larger contrast}
-\item{Larger datasets: 100,000 or so datasets}
-\item{Better NN architectures. Shallower or deeper.}
-\item{Mapping medical images to shear modulus directly skipping registration.}
-\item{Training multiple NNs on the same data set using different initializations for the weights. One can then average the prediction or average the weights.}
-\item{Handling noise: augmenting dataset by adding noise to displacement/strain fields}
-\item{Stiffness is always underpredicted. Smaller inclusions are not handled well. Larger inclusions are handled better. Maybe having material properties and displacements on the same mesh leads to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them.}
-\item{Actual material properties and breast/organ geometry}
+\item{Addition of homogeneous examples to the dataset would be a good test for the algorithm proposed.}
+\item{Training with random data}
+\item{In this work, we have only constrained the predicted shear modulus to be greater than zero. This is a basic physical constraint. Better results may be obtained if one knows the background shear modulus and uses this fact to constrain the predicted shear modulus to be greater than the background shear modulus.}
+\item{It is seen that better results are obtained for larger inclusion with larger contrast. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions.}
+\item{We have not visualized the filters produced for the first two layers of the CNN. Visualizing the filters could yield additional insights as in \cite{paper:pateloberai2019}.}
+\item{A simple discrete $L^2$ norm was used to evaluate the loss function for the neural network. This is the \textit{mean squared error} in TensorFlow. The effect of other norms such as a discrete $H^1$ norm will be interesting to evaluate.}
+\item{Investigating different network architectures with the aim of yielding better results will be worth investigation. More CNN layers (or less), deeper (or shallower) networks, should be investigated. Other hyperparameters such as the kernel size for the CNN layers can be varied as well.}
+\item{Medical image registration to obtain a displacement field is an difficult process. If one could train neural networks to work directly with medical images instead of the computed displacement field, it would be an important advance. This would involve training the CNN by computing thousands of displacement fields by hand and solving an inverser problem and using the predicted shear modulus field as labeled data as input to the CNN.}
+\item{Since the initial choices for the CNN weights are random, one can train the network multiple times and get different values for the network weights. Having thus obtained many CNNs with different weight, we are led to the following two options. One, one can average the weights of the CNNs to obtain an averaged network. Two, one can make multiple predictions with the different CNNs and then average the result. These options should be investigated.}
+\item{It would be interesting to consider a multiscale/hierarchical neural network. This neural network would first make a prediction of the average shear modulus field using only a few weights. In the next step, more nodes would be introduced and, say, 9 nodes would be introduced to make a prediction of the shear modulus field. The number of layers and neurons would be increased and the weights would be initialized for the first simple neural network. This process can continue until a neural network which can make detailed predictions of the stiffness field can be obtained. }
+\item{In this work, CNNs were trained on noiseless data and then used to make predictions on noisy data. Another option could be to increase the number of training set examples by adding noise to them. While this will dramatically increase the size of the training set, it deserves consideration.}
+\item{Extending this work to actual material properties and complex three dimensional organ geometries will be interesting. }
 \item{Multiple displacement fields: In \cite{paper:barbonegokhale,paper:barbonebamber} the authors show that a single strain or displacement field is not sufficent to predict the shear modulus field uniquely and multiple displacement fields are required for unique prediction of the shear modulus field. The use of multiple displacement fields can be considered within our current framework. This would involve increasing the number of channels in a dataset. See Section (\ref{sect:cnnarch}) for more information on channels.} 
 \item{Software and performance issues: The finite element solver and associated scripts for generating the data were written in Python 3.8. Python is slow and much better performance could be obtained by writing the solver in C/C++/Fortran or Julia or using open source solvers like FEniCS \cite{paper:fenics} or deal.II \cite{misc:deal.ii}. Each FE input file is 3.3MB and output file is 1.1MB and total dataset size $\approx$  20GB. There was no effort made to minimize the size of input and output files. Simple text based JSON files were used. If one wants increase the number of training examples by a factor of thousand 17TB of data would be required. Optimized data structures and hardware supporting fast disk access (SSDs) will be necessary for scaling to a large data sets. The use of GPU clusters to process large amounts of data may also need to be considered. }
 \end{enumerate}
