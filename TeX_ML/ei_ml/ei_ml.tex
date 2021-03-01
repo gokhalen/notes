@@ -1,4 +1,5 @@
 % Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee, PEB, AAO, Michael Richards, John W, Jaydeep K, and Grace Gu, GR Gogate, Chaitanya Bapat, Shekhar Divekar, Hrishikesh, Shilpa, maybe Prem Andrade, Aaron Ashwin
+% Check movies before sending out
 \documentclass[12pt]{article}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -12,7 +13,7 @@
 % usually hyperref has to be the last package imported
 \usepackage{hyperref}
 \SetWatermarkText{Draft}
-\SetWatermarkScale{5}
+\SetWatermarkScale{10}
 %
 \newcommand{\beq}{\begin{equation}}
 \newcommand{\eeq}{\end{equation}}
@@ -67,74 +68,71 @@
   }
 }
 %
-\newcommand{\mupics}[1]{
+\newcommand{\mupics}[2]{
   % 1
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/mutrue.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mutrue.png}
     \caption{True}
   \end{subfigure}
   \hfill
   % 2
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muexxeyy.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muexxeyy.png}
     \caption{$\epsilon_{xx}$ \& $\epsilon_{yy}$}
   \end{subfigure}
   \hfill
   % 3
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muexxeyynoise.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muexxeyynoise.png}
     \caption{(b)+noise}
   \end{subfigure}
   \hfill
   % 4
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/mueyy.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mueyy.png}
     \caption{$\epsilon_{yy}$}
   \end{subfigure}
   % 5
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/mueyynoise.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mueyynoise.png}
     \caption{$\epsilon_{yy}$ + noise}
   \end{subfigure}
   \hfill
   % 6
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muuxuy.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuxuy.png}
     \caption{$u_{x}$ \& $u_y$}
   \end{subfigure}
   \hfill
   % 7
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muuy.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuy.png}
     \caption{$u_y$}
   \end{subfigure}
   \hfill
   % 8
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/muuynoise.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuynoise.png}
     \caption{$u_y$+noise}
   \end{subfigure}
 }
-
-
-
 \begin{document}
 % bib
 \title{Elasticity imaging using a Convolutional Neural Network}
-\author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone (Professor, Mechanical Engineering, Boston University, Boston MA, USA.) for patiently answering many questions about finite elements. Conversations with Arnab Majumdar (ArcVisions, Kolkata, India), Michael Richards ( University of Rochester, NY, USA) and Mandar Kulkarni (CGG Veritas, Houston, TX, USA) are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com}
+\author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone (Professor, Mechanical Engineering, Boston University, Boston MA, USA.) for patiently answering many questions about finite elements. Conversations with Arnab Majumdar (ArcVisions, Kolkata, India), Michael Richards (University of Rochester, NY, USA) and Mandar Kulkarni (CGG Veritas, Houston, TX, USA) are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com}
 \date{\today}
 \maketitle
 \abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible elastic medium in plane strain using displacement or strain field data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Therefore, imaging the stiffness leads to high-contrast medical images. Our prediction problem is as follows: \textit{Given displacement or strain fields, predict the shear modulus field}. Our CNN is trained using 2400 training examples consist of displacement or strain fields and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
 \section{Introduction}
 The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus of soft tissue results in a high-contrast imaging method because suspicious growths will stand out clearly against the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other elastic properties) of soft tissue in various ways. See \cite{paper:gao1996,paper:parker2010,book:alamgarra2019,bookchap:oberaibarbone2019} for a comprehensive reviews of the field.
 %
-\begin{figure}
+\begin{figure}[h]
    \centering
     \includegraphics[totalheight=3cm]{Figures/shearmod.png}
   \caption{\label{fig:shearmod} Shear moduli of different types of soft tissue. Adapted from Figure 1 in \cite{paper:sarv1998}.}
 \end{figure}
 %
-\begin{figure}
+\begin{figure}[h]
    \centering
     \includegraphics[totalheight=5cm]{Figures/prepostimage.png}
   \caption{\label{fig:prepostimage} Schematic figure showing medical image acquisition when soft tissue is being deformed using ultrasound imaging. The image taken on the left is referred to as the \textit{pre-deformation} image and the image on the right is the \textit{post-deformation image}.}
@@ -154,14 +152,14 @@ In recent years, neural networks have been applied to various applications such 
 \subsection{Neural networks and elasticity imaging}
 Given the success achieved by neural networks on the wide variety of applications cited, it is natural to explore the application of neural networks to the inverse problem of elasticity imaging and several recent efforts \cite{paper:pateloberai2019,misc:gu2020,paper:hoeriginsana2016} have done so. In \cite{paper:pateloberai2019}, the authors use a convolutional neural network to classify specimens into elastically heterogeneous or elastically nonlinear. In \cite{paper:hoeriginsana2016}, the authors use a neural network to estimate strains and stress and then calculate elastic parameters. In \cite{misc:gu2020}, the authors use a neural network which predicts elasticity distributions using residual force maps to update the weights of the neural network. \\In contrast, in this work we compute the shear modulus field from the displacement or strain field using a CNN. There are no physical constraints involved in our work. It is purely a mapping problem from the space of displacement or strain fields to the space of the shear modulus fields. The input data for our CNN is a set of strain or displacement fields or components thereof. For each input there is a corresponding target shear modulus field. The CNN predicts shear modulus fields compares them with the target fields to compute the loss function and its gradient. Thus the CNN learns weights for its filters and other parameters. Using this learned information the CNN is able to predict a shear modulus field from the input data of strain or displacement fields. See Figure (\ref{fig:schematic_inv}).
 %
-\begin{figure}
+\begin{figure}[h]
    \centering
     \includegraphics[totalheight=5cm]{Figures/schematic_inv/schematic_inv.png}
   \caption{\label{fig:schematic_inv} Solving the inverse problem using CNNs. The displacement or strain field (or components thereof) are mapped by the CNN into a shear modulus field.}
 \end{figure}
 %
 \subsection{\label{sect:cnnarch} CNN architecture used in this work}
-The typical architecture of the CNN we use in this work is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}). This CNN was implemented in TensorFlow \cite{misc:tensorflow}. The first dimension '?' represents the number of examples to be processed for training, validation or evaluation. Thus, the first training example is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of independent fields in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam}. No regularization is used.  Each CNN has approximately $3.35$ million trainable parameters.
+The typical architecture of the CNN we use in this work is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}). This CNN was implemented in TensorFlow \cite{misc:tensorflow}. The first dimension '?' represents the number of examples to be processed for training, validation or evaluation. Thus, the first training example is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of independent fields in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam}. No regularization is used.  Each CNN has approximately $3.35$ million trainable parameters. The \textit{softplus} activation function is used to prevent negative values for the shear modulus. After training, the model with the best validation loss is chosen to make predictions. 
 \begin{table}
   \centering
  \begin{tabular}{|c|c|}
@@ -186,7 +184,7 @@ The typical architecture of the CNN we use in this work is shown in Figure (\ref
  \caption{\label{tab:cnnparams} CNN parameters for the network in Figure (\ref{fig:typical_cnn}).}
 \end{table}
 %
-\begin{figure} 
+\begin{figure}[h] 
    \centering
     \includegraphics[totalheight=9cm]{Figures/typical_cnn.png}
     \caption{\label{fig:typical_cnn}Typical CNN architecture used in this work. This architecure is essentially the same the one used in the Deep Learning example in \cite{misc:udemy}.}
@@ -203,7 +201,7 @@ $4000$ displacement and strain images are generated and are split into $2400$ tr
 The norm $\|\cdot\|_{L^2}$ in the above equation is a discrete $L^2$ norm. 
 % Noise details
 %
-\begin{figure} 
+\begin{figure}[h] 
    \centering
     \includegraphics[totalheight=9cm]{Figures/bc.png}
   \caption{\label{fig:bc}Boundary conditions and material properties used in this work. }
@@ -264,204 +262,449 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 \end{table}
 %
 % Training loss, val_loss for exxeyy
-\begin{figure}
+\begin{figure}[h]
   %
   \centering
   \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/training/exxeyy/field_strainxxyy_plot_loss.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/exxeyy/field_strainxxyy_plot_loss.png}
     \caption{Training loss}
   \end{subfigure}
   %
   \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/training/exxeyy/field_strainxxyy_plot_val_loss.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/exxeyy/field_strainxxyy_plot_val_loss.png}
     \caption{Validation loss}
   \end{subfigure}
   %
-\caption{\label{fig:oneinc:trainexxeyy} Training and validation loss for CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$.}
+\caption{\label{fig:oneinc:trainexxeyy} Training and validation loss for CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging one inclusion.}
 \end{figure}
 % Training loss, val_loss for eyy
-\begin{figure}
+\begin{figure}[h]
   %
   \centering
   \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/training/eyy/field_strainyy_plot_loss.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/eyy/field_strainyy_plot_loss.png}
     \caption{Training loss}
   \end{subfigure}
   %
   \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/training/eyy/field_strainyy_plot_val_loss.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/eyy/field_strainyy_plot_val_loss.png}
     \caption{Validation loss}
   \end{subfigure}
   %
-\caption{\label{fig:oneinc:traineyy} Training and validation loss for CNN $\epsilon_{yy}$.}
+\caption{\label{fig:oneinc:traineyy} Training and validation loss for CNN $\epsilon_{yy}$ for imaging one inclusion.}
 \end{figure} 
 % Training loss, val_loss for uxuy
-\begin{figure}
+\begin{figure}[h]
   %
   \centering
   \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/training/uxuy/field_images_plot_loss.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/uxuy/field_images_plot_loss.png}
     \caption{Training loss}
   \end{subfigure}
   %
   \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/training/uxuy/field_images_plot_val_loss.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/uxuy/field_images_plot_val_loss.png}
     \caption{Validation loss}
   \end{subfigure}
   %
-  \caption{\label{fig:oneinc:trainuxuy} Training and validation loss for CNN $u_x$ \& $u_y$.}
+  \caption{\label{fig:oneinc:trainuxuy} Training and validation loss for CNN $u_x$ \& $u_y$ for imaging one inclusion.}
 \end{figure}
 % Training loss, val_loss for uy
-\begin{figure}
+\begin{figure}[h]
   %
   \centering
   \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/training/uy/field_imagesy_plot_loss.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/uy/field_imagesy_plot_loss.png}
     \caption{Training loss}
   \end{subfigure}
   %
   \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final/training/uy/field_imagesy_plot_val_loss.png}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/uy/field_imagesy_plot_val_loss.png}
     \caption{Validation loss}
   \end{subfigure}
   %
-  \caption{\label{fig:oneinc:trainuy} Training and validation loss for CNN $u_y$.}
+  \caption{\label{fig:oneinc:trainuy} Training and validation loss for CNN $u_y$ for imaging one inclusion.}
 \end{figure}
 %
 % Figure 1
 \begin{figure}[h]
-  \mupics{1}
+  \mupics{1}{1}
   \caption{\label{fig:oneinc:1}Imaging one inclusion: result 1.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 2
 \begin{figure}[h]
-  \mupics{2}
+  \mupics{1}{2}
   \caption{\label{fig:oneinc:2}Imaging one inclusion: result 2.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 3
 \begin{figure}[h]
-  \mupics{3}
+  \mupics{1}{3}
   \caption{\label{fig:oneinc:3}Imaging one inclusion: result 3.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 4
 \begin{figure}[h]
-  \mupics{4}
+  \mupics{1}{4}
   \caption{\label{fig:oneinc:4}Imaging one inclusion: result 4.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 5
 \begin{figure}[h]
-  \mupics{5}
+  \mupics{1}{5}
   \caption{\label{fig:oneinc:5}Imaging one inclusion: result 5.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 6
 \begin{figure}[h]
-  \mupics{6}
+  \mupics{1}{6}
   \caption{\label{fig:oneinc:6}Imaging one inclusion: result 6.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 7
 \begin{figure}[h]
-  \mupics{7}
+  \mupics{1}{7}
   \caption{\label{fig:oneinc:7}Imaging one inclusion: result 7.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 8
 \begin{figure}[h]
-  \mupics{8}
+  \mupics{1}{8}
   \caption{\label{fig:oneinc:8}Imaging one inclusion: result 8.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 9
 \begin{figure}[h]
-  \mupics{9}
+  \mupics{1}{9}
   \caption{\label{fig:oneinc:9}Imaging one inclusion: result 9.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 10
 \begin{figure}[h]
-  \mupics{10}
+  \mupics{1}{10}
   \caption{\label{fig:oneinc:10}Imaging one inclusion: result 10.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 11
 \begin{figure}[h]
-  \mupics{11}
+  \mupics{1}{11}
   \caption{\label{fig:oneinc:11}Imaging one inclusion: result 11.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 12
 \begin{figure}[h]
-  \mupics{12}
+  \mupics{1}{12}
   \caption{\label{fig:oneinc:12}Imaging one inclusion: result 12.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 13
 \begin{figure}[h]
-  \mupics{13}
+  \mupics{1}{13}
   \caption{\label{fig:oneinc:13}Imaging one inclusion: result 13.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 14
 \begin{figure}[h]
-  \mupics{14}
+  \mupics{1}{14}
   \caption{\label{fig:oneinc:14}Imaging one inclusion: result 14.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 15
 \begin{figure}[h]
-  \mupics{15}
+  \mupics{1}{15}
   \caption{\label{fig:oneinc:15}Imaging one inclusion: result 15.}
 \end{figure}
 \newpage
+\clearpage
 % Figure 16
 \begin{figure}[h]
-  \mupics{16}
+  \mupics{1}{16}
   \caption{\label{fig:oneinc:16}Imaging one inclusion: result 16.}
 \end{figure}
 \newpage
+\clearpage
 %
 % Movies
 \begin{table}
   \centering
-  \begin{tabular}{|c|c|c|}
+  \begin{tabular}{|c|c|c|c|}
     \hline
-    Problem data & CNN used & Animation \\
+    Problem data & CNN used & Low res. movie  & High res. movie\\
     \hline
-    Noiseless $\epsilon_{xx}$ \& $\epsilon_{yy}$ & CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ & \href{run:movies/one/field\_strainxxyy\_noise\_0.0\_movie.mp4}{Click here}\\
+    Noiseless $\epsilon_{xx}$ \& $\epsilon_{yy}$ & CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ &
+    \href{run:movies/one/field\_strainxxyy\_noise\_0.0\_movie.mp4}{Click here} & 
+    \href{run:movies\_hi\_res/one/field\_strainxxyy\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
     \hline
-    Noisy $\epsilon_{xx}$ \& $\epsilon_{yy}$ & CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ & \href{run:movies/one/field\_strainxxyy\_noise\_0.02\_movie.mp4}{Click here}\\
+    Noisy $\epsilon_{xx}$ \& $\epsilon_{yy}$ & CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ &
+    \href{run:movies/one/field\_strainxxyy\_noise\_0.02\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/one/field\_strainxxyy\_noise\_0.02\_movie\_hires.mp4}{Click here}\\ 
     \hline
-    Noiseless $\epsilon_{yy}$ & CNN $\epsilon_{yy}$ & \href{run:movies/one/field\_strainyy\_noise\_0.0\_movie.mp4}{Click here}\\
+    Noiseless $\epsilon_{yy}$ & CNN $\epsilon_{yy}$ &
+    \href{run:movies/one/field\_strainyy\_noise\_0.0\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/one/field\_strainyy\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
     \hline
-    Noisy $\epsilon_{yy}$ & CNN $\epsilon_{yy}$ & \href{run:movies/one/field\_strainyy\_noise\_0.02\_movie.mp4}{Click here}\\
+    Noisy $\epsilon_{yy}$ & CNN $\epsilon_{yy}$ &
+    \href{run:movies/one/field\_strainyy\_noise\_0.02\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/one/field\_strainyy\_noise\_0.02\_movie\_hires.mp4}{Click here}\\
     \hline
-    Noiseless $u_x$ \& $u_y$ & CNN $u_x$ \& $u_y$ & \href{run:movies/one/field\_images\_noise\_0.0\_movie.mp4}{Click here}\\
+    Noiseless $u_x$ \& $u_y$ & CNN $u_x$ \& $u_y$ &
+    \href{run:movies/one/field\_images\_noise\_0.0\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/one/field\_images\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
     \hline
-    Noiseless $u_y$ & CNN $u_y$ & \href{run:movies/one/field\_imagesy\_noise\_0.0\_movie.mp4}{Click here}\\
+    Noiseless $u_y$ & CNN $u_y$ &
+    \href{run:movies/one/field\_imagesy\_noise\_0.0\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/one/field\_imagesy\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
     \hline
-    Noisy $u_y$ & CNN $u_y$ & \href{run:movies/one/field\_imagesy\_noise\_0.02\_movie.mp4}{Click here}\\
+    Noisy $u_y$ & CNN $u_y$ &
+    \href{run:movies/one/field\_imagesy\_noise\_0.02\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/one/field\_imagesy\_noise\_0.02\_movie\_hires.mp4}{Click here}\\
     \hline
-
   \end{tabular}
-  \caption{\label{fig:oneinc:movie} Imaging one inclusion: animations. The true shear modulus field is on the left and the predicted field is on the right. Require Adobe Acrobat or a PDF viewer supporting the \textbackslash{href} command. The system video file player, such as VLC, should be capable of playing mp4 files.}
+  \caption{\label{fig:oneinc:movie} Imaging one inclusion: movies. The true shear modulus field is on the left and the predicted field is on the right. Requires Adobe Acrobat or a PDF viewer supporting the \textbackslash{href} command. The system video file player, such as VLC, should be capable of playing mp4 files.}
 \end{table}
-\section{Imaging multiple inclusions}
+\section{Imaging up to three inclusions}
+In this section, we evaluate the ability of the CNN to learn from fields containing multiple (up to $3$) inclusions. The CNN architecture is exactly as described in Section (\ref{sect:cnnarch}). The problem setup is the same as described in Section (\ref{sect:probsetup}) with the following differences. There can be either $1$, $2$ or $3$ inclusions in the domain and their radius ranges from $0.1$ units to $0.15$ units. Figures (\ref{fig:threeinc:1}-\ref{fig:threeinc:16}) show the results obtained. Training curves are presented in Figures (\ref{fig:oneinc:trainexxeyy3}-\ref{fig:oneinc:trainuy3}).
 %
+% Training loss, val_loss for exxeyy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/exxeyy/field_strainxxyy_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/exxeyy/field_strainxxyy_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:oneinc:trainexxeyy3} Training and validation loss for CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging up to 3 inclusions.}
+\end{figure}
+% Training loss, val_loss for eyy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/eyy/field_strainyy_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/eyy/field_strainyy_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:oneinc:traineyy3} Training and validation loss for CNN $\epsilon_{yy}$ for imaging up to 3 inclusions.}
+\end{figure} 
+% Training loss, val_loss for uxuy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/uxuy/field_images_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/uxuy/field_images_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+  \caption{\label{fig:oneinc:trainuxuy3} Training and validation loss for CNN $u_x$ \& $u_y$ for imaging up to 3 inclusions.}
+\end{figure}
+% Training loss, val_loss for uy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/uy/field_imagesy_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/uy/field_imagesy_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+  \caption{\label{fig:oneinc:trainuy3} Training and validation loss for CNN $u_y$ for imaging up to 3 inclusions.}
+\end{figure}
 %
+% Figure 1
+\begin{figure}[h]
+  \mupics{3}{1}
+  \caption{\label{fig:threeinc:1}Imaging up to 3 inclusions: result 1.}
+\end{figure}
+\newpage
 \clearpage
+% Figure 2
+\begin{figure}[h]
+  \mupics{3}{2}
+  \caption{\label{fig:threeinc:2}Imaging up to 3 inclusions: result 2.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 3
+\begin{figure}[h]
+  \mupics{3}{3}
+  \caption{\label{fig:threeinc:3}Imaging up to 3 inclusions: result 3.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 4
+\begin{figure}[h]
+  \mupics{3}{4}
+  \caption{\label{fig:threeinc:4}Imaging up to 3 inclusions: result 4.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 5
+\begin{figure}[h]
+  \mupics{3}{5}
+  \caption{\label{fig:threeinc:5}Imaging up to 3 inclusions: result 5.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 6
+\begin{figure}[h]
+  \mupics{3}{6}
+  \caption{\label{fig:threeinc:6}Imaging up to 3 inclusions: result 6.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 7
+\begin{figure}[h]
+  \mupics{3}{7}
+  \caption{\label{fig:threeinc:7}Imaging up to 3 inclusions: result 7.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 8
+\begin{figure}[h]
+  \mupics{3}{8}
+  \caption{\label{fig:threeinc:8}Imaging up to 3 inclusions: result 8.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 9
+\begin{figure}[h]
+  \mupics{3}{9}
+  \caption{\label{fig:threeinc:9}Imaging up to 3 inclusions: result 9.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 10
+\begin{figure}[h]
+  \mupics{3}{10}
+  \caption{\label{fig:threeinc:10}Imaging up to 3 inclusions: result 10.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 11
+\begin{figure}[h]
+  \mupics{3}{11}
+  \caption{\label{fig:threeinc:11}Imaging up to 3 inclusions: result 11.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 12
+\begin{figure}[h]
+  \mupics{3}{12}
+  \caption{\label{fig:threeinc:12}Imaging up to 3 inclusions: result 12.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 13
+\begin{figure}[h]
+  \mupics{3}{13}
+  \caption{\label{fig:threeinc:13}Imaging up to 3 inclusions: result 13.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 14
+\begin{figure}[h]
+  \mupics{3}{14}
+  \caption{\label{fig:threeinc:14}Imaging up to 3 inclusions: result 14.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 15
+\begin{figure}[h]
+  \mupics{3}{15}
+  \caption{\label{fig:threeinc:15}Imaging up to 3 inclusions: result 15.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 16
+\begin{figure}[h]
+  \mupics{3}{16}
+  \caption{\label{fig:threeinc:16}Imaging up to 3 inclusions: result 16.}
+\end{figure}
+\newpage
+\clearpage
+%
+%
+% Movies
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    Problem data & CNN used & Low res. movie  & High res. movie\\
+    \hline
+    Noiseless $\epsilon_{xx}$ \& $\epsilon_{yy}$ & CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ &
+    \href{run:movies/three/field\_strainxxyy\_noise\_0.0\_movie.mp4}{Click here} & 
+    \href{run:movies\_hi\_res/three/field\_strainxxyy\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
+    \hline
+    Noisy $\epsilon_{xx}$ \& $\epsilon_{yy}$ & CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ &
+    \href{run:movies/three/field\_strainxxyy\_noise\_0.02\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/three/field\_strainxxyy\_noise\_0.02\_movie\_hires.mp4}{Click here}\\ 
+    \hline
+    Noiseless $\epsilon_{yy}$ & CNN $\epsilon_{yy}$ &
+    \href{run:movies/three/field\_strainyy\_noise\_0.0\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/three/field\_strainyy\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
+    \hline
+    Noisy $\epsilon_{yy}$ & CNN $\epsilon_{yy}$ &
+    \href{run:movies/three/field\_strainyy\_noise\_0.02\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/three/field\_strainyy\_noise\_0.02\_movie\_hires.mp4}{Click here}\\
+    \hline
+    Noiseless $u_x$ \& $u_y$ & CNN $u_x$ \& $u_y$ &
+    \href{run:movies/three/field\_images\_noise\_0.0\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/three/field\_images\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
+    \hline
+    Noiseless $u_y$ & CNN $u_y$ &
+    \href{run:movies/three/field\_imagesy\_noise\_0.0\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/three/field\_imagesy\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
+    \hline
+    Noisy $u_y$ & CNN $u_y$ &
+    \href{run:movies/three/field\_imagesy\_noise\_0.02\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/three/field\_imagesy\_noise\_0.02\_movie\_hires.mp4}{Click here}\\
+    \hline
+  \end{tabular}
+  \caption{\label{fig:threeinc:movie} Imaging up to 3 inclusions: movies. The true shear modulus field is on the left and the predicted field is on the right. Requires Adobe Acrobat or a PDF viewer supporting the \textbackslash{href} command. The system video file player, such as VLC, should be capable of playing mp4 files.}
+\end{table}
 \section{Concluding remarks}
 % Custom activation function
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
-A CNN capable of predicting shear modulus fields from displacement or strain fields (or components thereof) was presented. Results which warrant further research were presented. Broadly speaking, the CNN has difficulty reconstructing small inclusions. Directions for further work are discussed below. 
+A CNN capable of predicting shear modulus fields from displacement or strain fields (or components thereof) was presented. Results which warrant further research were presented. Directions for further work are discussed below. 
 \subsection{Future work}
 \begin{enumerate}
 \item{Addition of homogeneous examples to the dataset would be a good test for the algorithm proposed.}
-\item{Training the CNN with displacement of strain data generated using random values for the shear modulus at each node and seeing it it learns the inverse operator from the displacement (or strain) fields to shear modulus fields would be interesting. }
+\item{Training the CNN with displacement or strain data generated using random values for the shear modulus at each node and seeing it it learns the inverse operator from the displacement (or strain) fields to shear modulus fields would be interesting. }
 \item{In this work, we have only constrained the predicted shear modulus to be greater than zero. This constraint is rooted in physics: for normal, non-exotic materials the shear modulus is non-negative. Better results may be obtained if one knows the background shear modulus and uses this fact to constrain the predicted shear modulus to be greater than the background shear modulus.}
 \item{It is seen that better results are obtained for larger inclusion with larger contrast. Stiffness of smaller inclusions is underpredicted. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions.}
 \item{We have not visualized the filters produced for the first two layers of the CNN. Visualizing the filters could yield additional insights as in \cite{paper:pateloberai2019}.}
@@ -476,6 +719,7 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \item{Multiple displacement fields: In \cite{paper:barbonegokhale,paper:barbonebamber} the authors show that a single strain or displacement field is not sufficent to predict the shear modulus field uniquely and multiple displacement fields are required for unique prediction of the shear modulus field. The use of multiple displacement fields can be considered within our current framework. This would involve increasing the number of channels in a dataset. See Section (\ref{sect:cnnarch}) for more information on channels.} 
 \item{Software and performance issues: The finite element solver and associated scripts for generating the data were written in Python 3.8. Python is slow and much better performance could be obtained by writing the solver in C/C++/Fortran or Julia or using open source solvers like FEniCS \cite{paper:fenics} or deal.II \cite{misc:deal.ii}. Each FE input file is 3.3MB and output file is 1.1MB and total dataset size is $\approx$  20GB. There was no effort made to minimize the size of input and output files. Simple text based JSON files were used. If one wants increase the number of training examples by a factor of thousand 17TB of data would be required. Optimized data structures and hardware supporting fast disk access (SSDs) will be necessary for scaling to a large data sets. The use of GPU clusters to process large amounts of data may also need to be considered. }
 \item{Assuming that inclusions are roughly circular, several auxillary problems may be considered. Given displacement field, strain fields or shear modulus fields (computed by any inversion procedure) one may train a CNN to compute : 1) Whether or not an inclusion or inclusions exist  in the domain. This is the \textit{binary classificaton problem} 2) The number of inclusions in the problem 3) The shear modulus of each inclusion 4) The location of the center of each inclusion 5) The radius of each inclusion. }
+\item{It is seen that using multiple components of the strain or displacement field does not necessarily result in better results than using a single component of the the strain or displacement field. This is unlike what is seen for traditional direct or iterative methods.}
 \end{enumerate}
 \clearpage
 \bibliography{eibib}{}
@@ -486,7 +730,6 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 % Document ends here
 
 \appendix
-
 
 \section{\label{sect:binary}Binary classification}
 In this section, we consider the problem of identifying whether or not there is an inclusion in an elastic domain from given one component of strain or displacement fields. The CNN used in this section is essentially the same the one described in Section (\ref{sect:cnnarch}) with the following changes. The dense output layer contains only $1$ node, its activation is \textit{sigmoid} and the loss function is \textit{binary cross entropy}. The geometry of the examples is as described in Section (\ref{sect:probsetup}) and Figure (\ref{fig:bc}). The training set consists of $1024$ examples out of which $200$ are homogenous with shear modulus of $1$ unit and the rest contain a single inclusion. The shear modulus of the single inclusion is a constant and is a random number between $2.0$ and $5.0$. The location of the inclusion is random and its radius is a random number between $0.05$ and $0.15$. The examples with the inclusion present are labeled '$1$' and the examples without an inclusion are labeled '$0$'. The validation and test data sets contain $204$ examples each out of which $40$ are homogeneous and the rest have an inclusion.
