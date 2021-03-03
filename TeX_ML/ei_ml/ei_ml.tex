@@ -1,4 +1,4 @@
-% Send to Mandar,Jayesh,Arnab,Deepak and perhaps Rahee, PEB, AAO, Michael Richards, John W, Jaydeep K, and Grace Gu, GR Gogate, Chaitanya Bapat, Shekhar Divekar, Hrishikesh, Shilpa, maybe Prem Andrade, Aaron Ashwin
+% Send to Mandar,Jayesh,Arnab,Deepak and perhaps Xtof, Rahee, PEB, AAO, Michael Richards, John W, Jaydeep K, and Grace Gu, GR Gogate, Chaitanya Bapat, Shekhar Divekar, Hrishikesh, Shilpa, maybe Prem Andrade, Aaron Ashwin
 % Check movies before sending out
 \documentclass[12pt]{article}
 \usepackage{amsmath}
@@ -26,49 +26,49 @@
 \newcommand{\nhgscalefactor}{0.2}
 \newcommand{\nhgfigheight}{4.0cm}
 
-\def\nhgvala{true}
-\def\nhgvalb{exxeyy}
-\def\nhgvalc{exxeyynoise}
-\def\nhgvald{eyy}
-\def\nhgvale{eyynoise}
-\def\nhgvalf{uxuy}
-\def\nhgvalg{uy}
-\def\nhgvalh{uynoise}
-\newcommand{\nhgcapmap}[1]{
+%\def\nhgvala{true}
+%\def\nhgvalb{exxeyy}
+%\def\nhgvalc{exxeyynoise}
+%\def\nhgvald{eyy}
+%\def\nhgvale{eyynoise}
+%\def\nhgvalf{uxuy}
+%\def\nhgvalg{uy}
+%\def\nhgvalh{uynoise}
+%\newcommand{\nhgcapmap}[1]{
 % https://tex.stackexchange.com/questions/584836/if-statements-in-latex?noredirect=1#comment1470068_584836  
-  \edef\temparg{#1}
-  \ifx\temparg\nhgvala  True  \fi
-  \ifx\temparg\nhgvalb  $\epsilon_{xx}$ \& $\epsilon_{yy}$  \fi
-  \ifx\temparg\nhgvalc  (b) + noise \fi
-  \ifx\temparg\nhgvald  $\epsilon_{yy}$ \fi
-  \ifx\temparg\nhgvale  $\epsilon_{yy}$ + noise\fi
-  \ifx\temparg\nhgvalf  $u_x+u_y$ \fi
-  \ifx\temparg\nhgvalg  $u_y$ \fi
-  \ifx\temparg\nhgvalh  $u_y$ + noise\fi
-}
+%  \edef\temparg{#1}
+%  \ifx\temparg\nhgvala  True  \fi
+%  \ifx\temparg\nhgvalb  $\epsilon_{xx}$ \& $\epsilon_{yy}$  \fi
+%  \ifx\temparg\nhgvalc  (b) + noise \fi
+%  \ifx\temparg\nhgvald  $\epsilon_{yy}$ \fi
+%  \ifx\temparg\nhgvale  $\epsilon_{yy}$ + noise\fi
+%  \ifx\temparg\nhgvalf  $u_x+u_y$ \fi
+%  \ifx\temparg\nhgvalg  $u_y$ \fi
+%  \ifx\temparg\nhgvalh  $u_y$ + noise\fi
+% }
 %
-\newcommand{\nhghfill}[1]{
-  \edef\temparg{#1}
-  \ifx\temparg\nhgvala\hfill\fi
-  \ifx\temparg\nhgvalb\hfill\fi
-  \ifx\temparg\nhgvalc\hfill\fi
-  \ifx\temparg\nhgvald\fi
-  \ifx\temparg\nhgvale\hfill\fi
-  \ifx\temparg\nhgvalf\hfill\fi
-  \ifx\temparg\nhgvalg\hfill\fi
-  \ifx\temparg\nhgvalh\fi
-}
-\newcommand{\nhgmupics}[1]{
-  \foreach \myvar in {\nhgvala,\nhgvalb,\nhgvalc,\nhgvald,\nhgvale,\nhgvalf,\nhgvalg,\nhgvalh}{
-    \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-      \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/mu\myvar.png}
-      \caption{\nhgcapmap{\myvar}}
-    \end{subfigure}
-    \nhghfill{\myvar}
-  }
-}
+%\newcommand{\nhghfill}[1]{
+%  \edef\temparg{#1}
+%  \ifx\temparg\nhgvala\hfill\fi
+%  \ifx\temparg\nhgvalb\hfill\fi
+%  \ifx\temparg\nhgvalc\hfill\fi
+%  \ifx\temparg\nhgvald\fi
+%  \ifx\temparg\nhgvale\hfill\fi
+%  \ifx\temparg\nhgvalf\hfill\fi
+%  \ifx\temparg\nhgvalg\hfill\fi
+%  \ifx\temparg\nhgvalh\fi
+%}
+%\newcommand{\nhgmupics}[1]{
+%  \foreach \myvar in {\nhgvala,\nhgvalb,\nhgvalc,\nhgvald,\nhgvale,\nhgvalf,\nhgvalg,\nhgvalh}{
+%    \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+%      \includegraphics[totalheight=\nhgfigheight]{Figures/final/ex#1/mu\myvar.png}
+%      \caption{\nhgcapmap{\myvar}}
+%    \end{subfigure}
+%    \nhghfill{\myvar}
+%  }
+%}
 %
-\newcommand{\mupics}[2]{
+\newcommand{\mupics}[3]{
   % 1
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mutrue.png}
@@ -192,7 +192,7 @@ The typical architecture of the CNN we use in this work is shown in Figure (\ref
 %
 %
 \subsection{\label{sect:probsetup}Problem setup}
-The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. Both displacements and material properties are interpolated using bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $2.0$ to $5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$.\\
+The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The reader is referred to \cite{book:hugheslinear,book:fishbelytschko} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated using bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $2.0$ to $5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$.\\
 $4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise. We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
 \begin{equation}
   \label{eqn:snr}
@@ -328,112 +328,112 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 %
 % Figure 1
 \begin{figure}[h]
-  \mupics{1}{1}
+  \mupics{1}{1}{fig:oneinc:1}
   \caption{\label{fig:oneinc:1}Imaging one inclusion: result 1. These results show that the shear modulus of small inclusions is underpredicted. Result (d) is more accurate than result (a) inspite of using only $\epsilon_{yy}$. There are areas of low shear modulus adjacent to the inclusion especially in figures (b) and (c).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 2
 \begin{figure}[h]
-  \mupics{1}{2}
+  \mupics{1}{2}{fig:oneinc:2}
   \caption{\label{fig:oneinc:2}Imaging one inclusion: result 2. These results show that the shear modulus of larger inclusions is overpredicted using strain data. There are areas of low shear modulus adjacent to the inclusion especially in figures (b) and (c).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 3
 \begin{figure}[h]
-  \mupics{1}{3}
+  \mupics{1}{3}{fig:oneinc:3}
   \caption{\label{fig:oneinc:3}Imaging one inclusion: result 3. Again, these results show that the shear modulus of small inclusions is underpredicted. There are areas of low shear modulus adjacent to the inclusion especially in figures (b) and (c). }
 \end{figure}
 \newpage
 \clearpage
 % Figure 4
 \begin{figure}[h]
-  \mupics{1}{4}
+  \mupics{1}{4}{fig:oneinc:4}
   \caption{\label{fig:oneinc:4}Imaging one inclusion: result 4. Shear modulus of larger inclusions is over predicted. There are areas of low shear modulus adjacent to the inclusion especially in figures (b) and (c).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 5
 \begin{figure}[h]
-  \mupics{1}{5}
+  \mupics{1}{5}{fig:oneinc:5}
   \caption{\label{fig:oneinc:5}Imaging one inclusion: result 5. Shear modulus of medium sized inclusion seems to be predicted reasobably accurately. There are areas of low shear modulus adjacent to the inclusion especially in figures (b) and (c).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 6
 \begin{figure}[h]
-  \mupics{1}{6}
+  \mupics{1}{6}{fig:oneinc:6}
   \caption{\label{fig:oneinc:6}Imaging one inclusion: result 6. Shear modulus of small inclusions is severely underpredicted.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 7
 \begin{figure}[h]
-  \mupics{1}{7}
+  \mupics{1}{7}{fig:oneinc:7}
   \caption{\label{fig:oneinc:7}Imaging one inclusion: result 7. Shear modulus of this inclusion is slightly overpredicted. There are areas of low shear modulus adjacent to the inclusion especially in figures (b),(c),(g) and (h).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 8
 \begin{figure}[h]
-  \mupics{1}{8}
+  \mupics{1}{8}{fig:oneinc:8}
   \caption{\label{fig:oneinc:8}Imaging one inclusion: result 8. Shear modulus of this small inclusion is severely underpredicted.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 9
 \begin{figure}[h]
-  \mupics{1}{9}
+  \mupics{1}{9}{fig:oneinc:9}
   \caption{\label{fig:oneinc:9}Imaging one inclusion: result 9. There appear to be patches of low shear modulus around the predicted inclusions in all reconstructions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 10
 \begin{figure}[h]
-  \mupics{1}{10}
+  \mupics{1}{10}{fig:oneinc:10}
   \caption{\label{fig:oneinc:10}Imaging one inclusion: result 10. Shear modulus of this small inclusion is under predicted. Surprisingly it is result (d) in which only $\epsilon_{yy}$ is used which is the best.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 11
 \begin{figure}[h]
-  \mupics{1}{11}
+  \mupics{1}{11}{fig:oneinc:11}
   \caption{\label{fig:oneinc:11}Imaging one inclusion: result 11. Inclusions to the side of the domain seem to be detected fairly well. All the results, especially (b) and (c), show regions of low shear modulus adjacent to regions of high shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 12
 \begin{figure}[h]
-  \mupics{1}{12}
+  \mupics{1}{12}{fig:oneinc:12}
   \caption{\label{fig:oneinc:12}Imaging one inclusion: result 12. This inclusion is detected fairly accurately. The shear modulus is slightly over-predicted. Figures (b) and (c), show regions of low shear modulus adjacent to regions of high shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 13
 \begin{figure}[h]
-  \mupics{1}{13}
+  \mupics{1}{13}{fig:oneinc:13}
   \caption{\label{fig:oneinc:13}Imaging one inclusion: result 13. There are pronounced regions of low shear modulus next to regions in figures (b) and (c). Surprisingly the best reconstruction is obtained in (d) where only $\epsilon_{yy}$ is used.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 14
 \begin{figure}[h]
-  \mupics{1}{14}
+  \mupics{1}{14}{fig:oneinc:14}
   \caption{\label{fig:oneinc:14}Imaging one inclusion: result 14. Medium sized inclusions are detected fairly well. Surprisingly the best reconstruction is obtained in (d) where only $\epsilon_{yy}$ is used.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 15
 \begin{figure}[h]
-  \mupics{1}{15}
+  \mupics{1}{15}{fig:oneinc:15}
   \caption{\label{fig:oneinc:15}Imaging one inclusion: result 15. Medium sized inclusions are detected fairly well. Surprisingly the best reconstruction is obtained in (d) where only $\epsilon_{yy}$ is used. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 16
 \begin{figure}[h]
-  \mupics{1}{16}
+  \mupics{1}{16}{fig:oneinc:16}
   \caption{\label{fig:oneinc:16}Imaging one inclusion: result 16. Medium sized inclusions are detected fairly well.  There are pronounced regions of low shear modulus next to regions in figures (b) and (c). Surprisingly the best reconstruction is obtained in (d) where only $\epsilon_{yy}$ is used.}
 \end{figure}
 \newpage
@@ -477,7 +477,7 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
   \end{tabular}
   \caption{\label{fig:oneinc:movie} Imaging one inclusion: movies. The true shear modulus field is on the left and the predicted field is on the right. Requires Adobe Acrobat or a PDF viewer supporting the \textbackslash{href} command. The system video file player, such as VLC, should be capable of playing mp4 files.}
 \end{table}
-\section{Imaging up to three inclusions}
+\section{\label{sect:threeinc}Imaging up to three inclusions}
 In this section, we evaluate the ability of the CNN to learn from fields containing multiple (up to $3$) inclusions. The CNN architecture is exactly as described in Section (\ref{sect:cnnarch}). The problem setup is the same as described in Section (\ref{sect:probsetup}) with the following differences. There can be either $1$, $2$ or $3$ inclusions in the domain and their radius ranges from $0.1$ units to $0.15$ units. Figures (\ref{fig:threeinc:1}-\ref{fig:threeinc:16}) show the results obtained. Training curves are presented in Figures (\ref{fig:oneinc:trainexxeyy3}-\ref{fig:oneinc:trainuy3}).
 %
 % Training loss, val_loss for exxeyy
@@ -547,112 +547,112 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
 %
 % Figure 1
 \begin{figure}[h]
-  \mupics{3}{1}
+  \mupics{3}{1}{}
   \caption{\label{fig:threeinc:1}Imaging up to 3 inclusions: result 1. Fairly accurate results are obtained. Shear modulus is overpredicted in all reconstructions. The CNN was able to correctly predict only one inclusion even though the training set consists of examples with $1,2$ and $3$ inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 2
 \begin{figure}[h]
-  \mupics{3}{2}
+  \mupics{3}{2}{}
   \caption{\label{fig:threeinc:2}Imaging up to 3 inclusions: result 2. The number of inclusions is correctly predicted. While the shear moduli of the inclusions are sligtly overpredicted, the CNN is able to predict the relative shear moduli correctly. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 3
 \begin{figure}[h]
-  \mupics{3}{3}
+  \mupics{3}{3}{}
   \caption{\label{fig:threeinc:3}Imaging up to 3 inclusions: result 3. The number and location of the inclusion is correctly predicted. The CNN is able to predict the relative shear modulus correctly. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 4
 \begin{figure}[h]
-  \mupics{3}{4}
+  \mupics{3}{4}{}
   \caption{\label{fig:threeinc:4}Imaging up to 3 inclusions: result 4. The number and locations of inclusions is correctly predicted.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 5
 \begin{figure}[h]
-  \mupics{3}{5}
+  \mupics{3}{5}{}
   \caption{\label{fig:threeinc:5}Imaging up to 3 inclusions: result 5. The number and locations of the inclusions are correctly predicted. The CNN is able to predict the relative shear modulus correctly. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus. While both the inclusions have approximately the same shear modulus in this figure, the shear modulus inclusion with the higher shear modulus is significatly overpredicted.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 6
 \begin{figure}[h]
-  \mupics{3}{6}
+  \mupics{3}{6}{}
   \caption{\label{fig:threeinc:6}Imaging up to 3 inclusions: result 6. The number and location of the inclusion is correctly predicted. The shear modulus is most accurately predicted in (h).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 7
 \begin{figure}[h]
-  \mupics{3}{7}
+  \mupics{3}{7}{}
   \caption{\label{fig:threeinc:7}Imaging up to 3 inclusions: result 7. There are two inclusions overlapping in (a). An effective inclusion is predicted in the reconstructions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 8
 \begin{figure}[h]
-  \mupics{3}{8}
+  \mupics{3}{8}{}
   \caption{\label{fig:threeinc:8}Imaging up to 3 inclusions: result 8. There are two distinct inclusions in (a). The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 9
 \begin{figure}[h]
-  \mupics{3}{9}
+  \mupics{3}{9}{}
   \caption{\label{fig:threeinc:9}Imaging up to 3 inclusions: result 9. The number of inclusions is correctly predicted. The relative contrast is captured best in (h).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 10
 \begin{figure}[h]
-  \mupics{3}{10}
+  \mupics{3}{10}{}
   \caption{\label{fig:threeinc:10}Imaging up to 3 inclusions: result 10. The number of inclusions is correctly predicted. The shear modulus is overpredicted.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 11
 \begin{figure}[h]
-  \mupics{3}{11}
+  \mupics{3}{11}{}
   \caption{\label{fig:threeinc:11}Imaging up to 3 inclusions: result 11. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 12
 \begin{figure}[h]
-  \mupics{3}{12}
+  \mupics{3}{12}{}
   \caption{\label{fig:threeinc:12}Imaging up to 3 inclusions: result 12. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions. The relative contrast is slightly incorrect. The middle (vertically) inclusion should have the highest shear modulus. However, the CNN predicts the lowest inclusion to have the highest shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 13
 \begin{figure}[h]
-  \mupics{3}{13}
+  \mupics{3}{13}{}
   \caption{\label{fig:threeinc:13}Imaging up to 3 inclusions: result 13. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 14
 \begin{figure}[h]
-  \mupics{3}{14}
+  \mupics{3}{14}{}
   \caption{\label{fig:threeinc:14}Imaging up to 3 inclusions: result 14. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly. The inclusions have approximately the same shear modulus and so do the reconstructions. The lowermost inclusion has the highest shear modulus and so do the lowermost reconstructed inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 15
 \begin{figure}[h]
-  \mupics{3}{15}
+  \mupics{3}{15}{}
   \caption{\label{fig:threeinc:15}Imaging up to 3 inclusions: result 15. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 16
 \begin{figure}[h]
-  \mupics{3}{16}
+  \mupics{3}{16}{}
   \caption{\label{fig:threeinc:16}Imaging up to 3 inclusions: result 16. Two out of three inclusions are predicted correctly. The third inclusion, having low shear modulus is very hard to spot. This is consistent with what was seen in Section (\ref{sect:oneinc}). Inclusions with low shear modulus are hard to reconstruct.}
 \end{figure}
 \newpage
@@ -697,6 +697,8 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
   \end{tabular}
   \caption{\label{fig:threeinc:movie} Imaging up to 3 inclusions: movies. The true shear modulus field is on the left and the predicted field is on the right. Requires Adobe Acrobat or a PDF viewer supporting the \textbackslash{href} command. The system video file player, such as VLC, should be capable of playing mp4 files.}
 \end{table}
+\section{\label{sect:oneinc2}Imaging one inclusion with constraints on shear modulus}
+\section{\label{sect:threeinc2}Imaging up to three inclusions with constraints on shear modulus}
 \section{Concluding remarks}
 % Custom activation function
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
