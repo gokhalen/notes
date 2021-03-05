@@ -6,7 +6,8 @@
 \usepackage{cite}
 \usepackage{url}
 \usepackage{graphicx}
-\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[font=tiny]{subcaption}
 \usepackage{multirow}
 \usepackage{draftwatermark}
 \usepackage{pgffor}
@@ -24,7 +25,7 @@
 \newcommand{\pdd}[2]{\frac{\partial}{\partial{#2}}{(#1)} }
 % define variables for \mupics command
 \newcommand{\nhgscalefactor}{0.2}
-\newcommand{\nhgfigheight}{4.0cm}
+\newcommand{\nhgfigheight}{3.9cm}
 
 %\def\nhgvala{true}
 %\def\nhgvalb{exxeyy}
@@ -72,54 +73,64 @@
   % 1
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mutrue.png}
-    \caption{True}
+    \caption{\label{#3a}True}
   \end{subfigure}
   \hfill
   % 2
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muexxeyy.png}
-    \caption{$\epsilon_{xx}$ \& $\epsilon_{yy}$}
+    \caption{\label{#3b}$\epsilon_{xx}$ \& $\epsilon_{yy}$}
   \end{subfigure}
   \hfill
   % 3
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muexxeyynoise.png}
-    \caption{(b)+noise}
+    \caption{\label{#3c}(b)+noise}
   \end{subfigure}
   \hfill
   % 4
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mueyy.png}
-    \caption{$\epsilon_{yy}$}
+    \caption{\label{#3d}$\epsilon_{yy}$}
   \end{subfigure}
   % 5
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mueyynoise.png}
-    \caption{$\epsilon_{yy}$ + noise}
+    \caption{\label{#3e}$\epsilon_{yy}$ + noise}
   \end{subfigure}
   \hfill
   % 6
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuxuy.png}
-    \caption{$u_{x}$ \& $u_y$}
+    \caption{\label{#3f}$u_{x}$ \& $u_y$}
   \end{subfigure}
   \hfill
   % 7
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuy.png}
-    \caption{$u_y$}
+    \caption{\label{#3g}$u_y$}
   \end{subfigure}
   \hfill
   % 8
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuynoise.png}
-    \caption{$u_y$+noise}
+    \caption{\label{#3h}$u_y$+noise}
+  \end{subfigure}
+    % 9
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuynoise.png}
+    \caption{\label{#3i}$\epsilon_{xx},\epsilon_{yy}$+noise+cons}
+  \end{subfigure}\\
+  % 10
+  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuynoise.png}
+    \caption{\label{#3j}$\epsilon_{xx},\epsilon_{yy}$+noise+cons}
   \end{subfigure}
 }
 \begin{document}
 % bib
 \title{Elasticity imaging using a Convolutional Neural Network}
-\author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone (Professor, Mechanical Engineering, Boston University, Boston MA, USA.) for patiently answering many questions about finite elements. Conversations with Arnab Majumdar (ArcVisions, Kolkata, India), Michael Richards (University of Rochester, NY, USA) and Mandar Kulkarni (CGG Veritas, Houston, TX, USA) are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com}
+\author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone (Professor, Mechanical Engineering, Boston University, Boston MA, USA.) for patiently answering many questions about finite elements. Conversations with Arnab Majumdar (ArcVisions, Kolkata, India), Michael Richards (University of Rochester, NY, USA) and Mandar Kulkarni (CGG Veritas, Houston, TX, USA) are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com\\Pune, India.}
 \date{\today}
 \maketitle
 \abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible elastic medium in plane strain using displacement or strain field data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Therefore, imaging the stiffness leads to high-contrast medical images. Our prediction problem is as follows: \textit{Given displacement or strain fields, predict the shear modulus field}. Our CNN is trained using 2400 training examples consist of displacement or strain fields and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
@@ -192,8 +203,8 @@ The typical architecture of the CNN we use in this work is shown in Figure (\ref
 %
 %
 \subsection{\label{sect:probsetup}Problem setup}
-The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The reader is referred to \cite{book:hugheslinear,book:fishbelytschko} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated using bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $2.0$ to $5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$.\\
-$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise. We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
+The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The reader is referred to \cite{book:hugheslinear,book:fishbelytschko} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interplated bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $\mu_{back}=1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. Selective reduced integration is used to avoid mesh locking because the Poisson's ratio of $0.49$ renders the medium almost incompressible. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$.\\
+$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise. We note that noisy data is generated for each run. Referring to Table (\ref{tab:cnnone:io}), this means, that the noise in $\epsilon_{yy}$ in line 1 is different from the noise in $\epsilon_{yy}$ in line 2. We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
 \begin{equation}
   \label{eqn:snr}
   SNR_{dB} = 20\log_{10}\Big(\frac{\|signal\|_{L^2}}{\|noise\|_{L^2}}\Big)
@@ -219,20 +230,28 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 %
 \begin{table}
   \centering
-  \begin{tabular}{|l|c|c|}
+  \begin{tabular}{|l|l|c|c|}
     \hline
-    CNN Name & Training data (noiseless) & Prediction data \\
+     & CNN Name & Training data (noiseless) & Prediction data \\
     \hline
-    CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ or $\epsilon_{xx}$ \& $\epsilon_{yy}$ + noise\\
+    1 & CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ or $\epsilon_{xx}$ \& $\epsilon_{yy}$ + noise\\
     \hline
-    CNN $\epsilon_{yy}$ & $\epsilon_{yy}$ & $\epsilon_{yy}$ or $\epsilon_{yy}$ + noise\\
+    2 & CNN $\epsilon_{yy}$ & $\epsilon_{yy}$ & $\epsilon_{yy}$ or $\epsilon_{yy}$ + noise\\
     \hline
-    CNN $u_x$ \& $u_y$ & $u_x$ \& $u_y$ & $u_x$ \& $u_y$\\
+    3 & CNN $u_x$ \& $u_y$ & $u_x$ \& $u_y$ & $u_x$ \& $u_y$\\
     \hline
-    CNN $u_y$ & $u_y$ & $u_y$ or $u_y$ + noise\\
+    4 & CNN $u_y$ & $u_y$ & $u_y$ or $u_y$ + noise\\
+    \hline
+    5 & CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ or $\epsilon_{xx}$ \& $\epsilon_{yy}$ + noise\\
+    \hline
+    6 & CNNc $\epsilon_{yy}$ & $\epsilon_{yy}$ & $\epsilon_{yy}$ or $\epsilon_{yy}$ + noise\\
+    \hline
+    7 & CNNc $u_x$ \& $u_y$ & $u_x$ \& $u_y$ & $u_x$ \& $u_y$\\
+    \hline
+    8 & CNNc $u_y$ & $u_y$ & $u_y$ or $u_y$ + noise\\
     \hline
   \end{tabular}
-  \caption{\label{tab:cnnone:io} Listing of CNNs trained, their training and prediction data}
+  \caption{\label{tab:cnnone:io} Listing of CNNs trained, their training and prediction data. The first $4$ CNNs only have the constraint the $\mu>0$. The last $4$ CNNs are constraind to predict between $\mu_{back}=1.0$ and $\mu_{max}=5.0$. The 'c' in 'CNNc' stands for 'constrained'.}
 \end{table}
 %
 \begin{table}
@@ -547,77 +566,77 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
 %
 % Figure 1
 \begin{figure}[h]
-  \mupics{3}{1}{}
+  \mupics{3}{1}{fig:threeinc:1}
   \caption{\label{fig:threeinc:1}Imaging up to 3 inclusions: result 1. Fairly accurate results are obtained. Shear modulus is overpredicted in all reconstructions. The CNN was able to correctly predict only one inclusion even though the training set consists of examples with $1,2$ and $3$ inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 2
 \begin{figure}[h]
-  \mupics{3}{2}{}
+  \mupics{3}{2}{fig:threeinc:2}
   \caption{\label{fig:threeinc:2}Imaging up to 3 inclusions: result 2. The number of inclusions is correctly predicted. While the shear moduli of the inclusions are sligtly overpredicted, the CNN is able to predict the relative shear moduli correctly. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 3
 \begin{figure}[h]
-  \mupics{3}{3}{}
+  \mupics{3}{3}{fig:threeinc:3}
   \caption{\label{fig:threeinc:3}Imaging up to 3 inclusions: result 3. The number and location of the inclusion is correctly predicted. The CNN is able to predict the relative shear modulus correctly. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 4
 \begin{figure}[h]
-  \mupics{3}{4}{}
+  \mupics{3}{4}{fig:threeinc:4}
   \caption{\label{fig:threeinc:4}Imaging up to 3 inclusions: result 4. The number and locations of inclusions is correctly predicted.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 5
 \begin{figure}[h]
-  \mupics{3}{5}{}
+  \mupics{3}{5}{fig:threeinc:5}
   \caption{\label{fig:threeinc:5}Imaging up to 3 inclusions: result 5. The number and locations of the inclusions are correctly predicted. The CNN is able to predict the relative shear modulus correctly. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus. While both the inclusions have approximately the same shear modulus in this figure, the shear modulus inclusion with the higher shear modulus is significatly overpredicted.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 6
 \begin{figure}[h]
-  \mupics{3}{6}{}
+  \mupics{3}{6}{fig:threeinc:6}
   \caption{\label{fig:threeinc:6}Imaging up to 3 inclusions: result 6. The number and location of the inclusion is correctly predicted. The shear modulus is most accurately predicted in (h).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 7
 \begin{figure}[h]
-  \mupics{3}{7}{}
+  \mupics{3}{7}{fig:threeinc:7}
   \caption{\label{fig:threeinc:7}Imaging up to 3 inclusions: result 7. There are two inclusions overlapping in (a). An effective inclusion is predicted in the reconstructions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 8
 \begin{figure}[h]
-  \mupics{3}{8}{}
+  \mupics{3}{8}{fig:threeinc:8}
   \caption{\label{fig:threeinc:8}Imaging up to 3 inclusions: result 8. There are two distinct inclusions in (a). The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 9
 \begin{figure}[h]
-  \mupics{3}{9}{}
+  \mupics{3}{9}{fig:threeinc:9}
   \caption{\label{fig:threeinc:9}Imaging up to 3 inclusions: result 9. The number of inclusions is correctly predicted. The relative contrast is captured best in (h).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 10
 \begin{figure}[h]
-  \mupics{3}{10}{}
+  \mupics{3}{10}{fig:threeinc:10}
   \caption{\label{fig:threeinc:10}Imaging up to 3 inclusions: result 10. The number of inclusions is correctly predicted. The shear modulus is overpredicted.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 11
 \begin{figure}[h]
-  \mupics{3}{11}{}
+  \mupics{3}{11}{fig:threeinc:11}
   \caption{\label{fig:threeinc:11}Imaging up to 3 inclusions: result 11. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
@@ -631,28 +650,28 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
 \clearpage
 % Figure 13
 \begin{figure}[h]
-  \mupics{3}{13}{}
+  \mupics{3}{13}{fig:threeinc:13}
   \caption{\label{fig:threeinc:13}Imaging up to 3 inclusions: result 13. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 14
 \begin{figure}[h]
-  \mupics{3}{14}{}
+  \mupics{3}{14}{fig:threeinc:14}
   \caption{\label{fig:threeinc:14}Imaging up to 3 inclusions: result 14. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly. The inclusions have approximately the same shear modulus and so do the reconstructions. The lowermost inclusion has the highest shear modulus and so do the lowermost reconstructed inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 15
 \begin{figure}[h]
-  \mupics{3}{15}{}
+  \mupics{3}{15}{fig:threeinc:15}
   \caption{\label{fig:threeinc:15}Imaging up to 3 inclusions: result 15. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 16
 \begin{figure}[h]
-  \mupics{3}{16}{}
+  \mupics{3}{16}{fig:threeinc:16}
   \caption{\label{fig:threeinc:16}Imaging up to 3 inclusions: result 16. Two out of three inclusions are predicted correctly. The third inclusion, having low shear modulus is very hard to spot. This is consistent with what was seen in Section (\ref{sect:oneinc}). Inclusions with low shear modulus are hard to reconstruct.}
 \end{figure}
 \newpage
