@@ -6,8 +6,8 @@
 \usepackage{cite}
 \usepackage{url}
 \usepackage{graphicx}
-\usepackage[font=small]{caption}
-\usepackage[font=tiny]{subcaption}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{multirow}
 \usepackage{draftwatermark}
 \usepackage{pgffor}
@@ -24,9 +24,8 @@
 \newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \newcommand{\pdd}[2]{\frac{\partial}{\partial{#2}}{(#1)} }
 % define variables for \mupics command
-\newcommand{\nhgscalefactor}{0.2}
-\newcommand{\nhgfigheight}{3.9cm}
-
+\newcommand{\nhgscalefactor}{0.24}
+\newcommand{\nhgfigheight}{4.0cm}
 %\def\nhgvala{true}
 %\def\nhgvalb{exxeyy}
 %\def\nhgvalc{exxeyynoise}
@@ -71,11 +70,13 @@
 %
 \newcommand{\mupics}[3]{
   % 1
+  \hspace{5cm}
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mutrue.png}
     \caption{\label{#3a}True}
   \end{subfigure}
-  \hfill
+  \hspace{5cm}
+  \\
   % 2
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muexxeyy.png}
@@ -93,12 +94,12 @@
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mueyy.png}
     \caption{\label{#3d}$\epsilon_{yy}$}
   \end{subfigure}
+  \hfill
   % 5
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/mueyynoise.png}
     \caption{\label{#3e}$\epsilon_{yy}$ + noise}
-  \end{subfigure}
-  \hfill
+  \end{subfigure}\\
   % 6
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuxuy.png}
@@ -107,24 +108,20 @@
   \hfill
   % 7
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuy.png}
-    \caption{\label{#3g}$u_y$}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuxuynoise.png}
+    \caption{\label{#3g}$u_{x}$ \& $u_y$ + noise}
   \end{subfigure}
   \hfill
   % 8
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuynoise.png}
-    \caption{\label{#3h}$u_y$+noise}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuy.png}
+    \caption{\label{#3h}$u_y$}
   \end{subfigure}
-    % 9
+  \hfill
+  % 9
   \begin{subfigure}[b]{\nhgscalefactor\linewidth}
     \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuynoise.png}
-    \caption{\label{#3i}$\epsilon_{xx},\epsilon_{yy}$+noise+cons}
-  \end{subfigure}\\
-  % 10
-  \begin{subfigure}[b]{\nhgscalefactor\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final#1/ex#2/muuynoise.png}
-    \caption{\label{#3j}$\epsilon_{xx},\epsilon_{yy}$+noise+cons}
+    \caption{\label{#3i}$u_y$+noise}
   \end{subfigure}
 }
 \begin{document}
@@ -133,14 +130,14 @@
 \author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone (Professor, Mechanical Engineering, Boston University, Boston MA, USA.) for patiently answering many questions about finite elements. Conversations with Arnab Majumdar (ArcVisions, Kolkata, India), Michael Richards (University of Rochester, NY, USA) and Mandar Kulkarni (CGG Veritas, Houston, TX, USA) are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com\\Pune, India.}
 \date{\today}
 \maketitle
-\abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible elastic medium in plane strain using displacement or strain field data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Therefore, imaging the stiffness leads to high-contrast medical images. Our prediction problem is as follows: \textit{Given displacement or strain fields, predict the shear modulus field}. Our CNN is trained using 2400 training examples consist of displacement or strain fields and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
+\abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible elastic medium in plane strain using data which consists of displacement or strains fields (or components thereof). This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Imaging the shear modulus field therefore can lead to high-contrast medical images. Our prediction problem is as follows: \textit{Given displacement or strain fields, predict the shear modulus field}. Our CNN is trained using 2400 training examples consisting of displacement or strain fields (or components thereof) and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
 \section{Introduction}
-The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus of soft tissue results in a high-contrast imaging method because suspicious growths will stand out clearly against the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other elastic properties) of soft tissue in various ways. See \cite{paper:gao1996,paper:parker2010,book:alamgarra2019,bookchap:oberaibarbone2019} for a comprehensive reviews of the field.
+The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus field of soft tissue results in a high-contrast imaging method because the elevated shear modulus of suspicious growths will stand out clearly against the lower shear modulus of the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other elastic properties) of soft tissue in various ways. See \cite{paper:gao1996,paper:parker2010,book:alamgarra2019,bookchap:oberaibarbone2019} for a comprehensive reviews of the field.
 %
 \begin{figure}[h]
    \centering
     \includegraphics[totalheight=3cm]{Figures/shearmod.png}
-  \caption{\label{fig:shearmod} Shear moduli of different types of soft tissue. Adapted from Figure 1 in \cite{paper:sarv1998}.}
+  \caption{\label{fig:shearmod} Shear moduli of different types of soft tissue. Adapted from Figure (1) in \cite{paper:sarv1998}.}
 \end{figure}
 %
 \begin{figure}[h]
@@ -150,12 +147,12 @@ The shear modulus of palpable nodules (which can be thought of as abnormal and p
 \end{figure}
 %
 \subsection{Steps involved in elasticity imaging}
-Elasticity Imaging typically consists of  the steps of image acquisition, image registration, and inverse problem solution. These steps are discussed in the following sections.
-\subsubsection{Image acquisition} Images of soft tissue undergoing deformation are acquired using various imaging modalities such as ultrasound or magnetic resonance imaging. While time dependent images can be acquired, we shall consider here only two images: a \textit{pre-deformation image} acquired before force is applied and a \textit{post-deformation image} acquired after force is applied. This process is shown in Figure (\ref{fig:prepostimage}) for ultrasound imaging. Also see Figure 2 in \cite{paper:konofagou2004}.
+Elasticity Imaging typically consists of the three steps of image acquisition, image registration, inverse problem solution. These steps are discussed in the following sections.
+\subsubsection{Image acquisition} Images of soft tissue undergoing deformation are acquired using various imaging modalities such as ultrasound or magnetic resonance imaging. While time dependent images can be acquired, we shall consider here only two images: a \textit{pre-deformation image} acquired before force is applied and a \textit{post-deformation image} acquired after force is applied. This process is shown in Figure (\ref{fig:prepostimage}) for ultrasound imaging. Also see Figure (2) in \cite{paper:konofagou2004}.
 \subsubsection{Image registration} The goal in this step is to find a map between the pre-deformation image and the post-deformation image. For every point in the pre-deformation image we aim to find its location in the post-deformation image. This gives us the \textit{displacement field} between the two images. This displacement field is often referred to as the \textit{measured displacement field}. See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for minimization based approaches for computing the displacement field. See \cite{paper:ophir1991,paper:ophir1996,paper:alam1998} and references therein for cross-correlation based approaches.
-\subsubsection{Inverse problem solution:} The goal in this step is to infer the spatial distribution of the shear modulus from the displacement field. This is called an \textit{inverse problem} because the typical boundary value problem in linear elasticity (referred to as the \textit{forward problem}) is to determine the displacement field given the shear-modulus field. The approaches for inverse problem solution can be divided into two categories: direct and iterative.
+\subsubsection{Inverse problem solution:} The goal in this step is to infer the spatial distribution of the shear modulus from the displacement field. This is called an \textit{inverse problem} because the typical boundary value problem in linear elasticity (referred to as the \textit{forward problem}) is to determine the displacement field given the shear modulus field and the Poisson's ratio field. The approaches for inverse problem solution can be divided into two categories: direct and iterative. These are discussed in the subsequent sections.
 \subsubsection{Direct approach} Direct approaches involve solving a single partial differential equation (pde) to obtain the distribution of shear modulus directly: see \cite{paper:raghavan1994,paper:barboneadjwt,paper:albocher}. The coefficients of this pde depend on the measured displacement field. Such approaches are fast and work well when the measured strain field is completely known and has low noise.
-\subsubsection{Iterative approach} Iterative approaches \cite{paper:oberai2003,paper:gokhale2008,paper:kalle1996,paper:doyley,paper:goenezen2011} involve guessing a distribution for the shear modulus, solving a linear elasticity forward problem to obtain the predicted displacements, comparing the predicted displacements to the measured displacements and updating the guessed shear modulus distribution using a suitable optimization procedure such as a modified Newton Raphson scheme as in \cite{paper:doyley} or the BFGS scheme as in \cite{paper:gokhale2008,paper:goenezen2011}. Such approaches are typically slower than direct methods, since the require the solution of $\approx$ 25-100 forward problems, but have the ability to handle incomplete data and complex material models.
+\subsubsection{Iterative approach} Iterative approaches \cite{paper:oberai2003,paper:gokhale2008,paper:kalle1996,paper:doyley,paper:goenezen2011} involve guessing a distribution for the shear modulus, solving a linear elasticity forward problem to obtain the predicted displacement field, computing the value and the gradient (and/or Hessian) with respect to the shear modulus of an objective function which consists of a user specified norm of the difference between the predicted displacement field and the measured displacement field, and updating the guessed shear modulus distribution using a suitable optimization procedure such as a modified Newton Raphson scheme as in \cite{paper:doyley} or the BFGS scheme as in \cite{paper:gokhale2008,paper:goenezen2011}. Such approaches are typically slower than direct methods, since the require the solution of approximately $50$ to $100$ forward problems, but have the ability to handle incomplete data and complex nonlinear material models such as hyperelasticity.
 \subsubsection{Solving the inverse problem with CNNs}
 We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer, can accommodate complex constitutive relations, can work with incomplete data (e.g. only a single component of a displacement field) and can work with noisy data.
 \section{Neural networks and problem setup}
@@ -204,7 +201,7 @@ The typical architecture of the CNN we use in this work is shown in Figure (\ref
 %
 \subsection{\label{sect:probsetup}Problem setup}
 The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The reader is referred to \cite{book:hugheslinear,book:fishbelytschko} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interplated bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $\mu_{back}=1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. Selective reduced integration is used to avoid mesh locking because the Poisson's ratio of $0.49$ renders the medium almost incompressible. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$.\\
-$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise. We note that noisy data is generated for each run. Referring to Table (\ref{tab:cnnone:io}), this means, that the noise in $\epsilon_{yy}$ in line 1 is different from the noise in $\epsilon_{yy}$ in line 2. We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
+$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. Each displacement or strain component is scaled by finding its absolute maximum over the training data set and then dividing the componeny by it. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise. We note that noisy data is generated for each run. Referring to Table (\ref{tab:cnnone:io}), this means, that the noise in $\epsilon_{yy}$ in line 1 is different from the noise in $\epsilon_{yy}$ in line 2. We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
 \begin{equation}
   \label{eqn:snr}
   SNR_{dB} = 20\log_{10}\Big(\frac{\|signal\|_{L^2}}{\|noise\|_{L^2}}\Big)
@@ -461,7 +458,7 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Movies
 \begin{table}
   \centering
-  \begin{tabular}{|c|c|c|c|}
+  \begin{tabular}{|l|l|c|c|}
     \hline
     Problem data & CNN used & Low res. movie  & High res. movie\\
     \hline
@@ -484,6 +481,10 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
     Noiseless $u_x$ \& $u_y$ & CNN $u_x$ \& $u_y$ &
     \href{run:movies/one/field\_images\_noise\_0.0\_movie.mp4}{Click here} &
     \href{run:movies\_hi\_res/one/field\_images\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
+    \hline
+    Noisy $u_x$ \& $u_y$ & CNN $u_x$ \& $u_y$ &
+    \href{run:movies/one/field\_images\_noise\_0.02\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/one/field\_images\_noise\_0.02\_movie\_hires.mp4}{Click here}\\
     \hline
     Noiseless $u_y$ & CNN $u_y$ &
     \href{run:movies/one/field\_imagesy\_noise\_0.0\_movie.mp4}{Click here} &
@@ -681,7 +682,7 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
 % Movies
 \begin{table}
   \centering
-  \begin{tabular}{|c|c|c|c|}
+  \begin{tabular}{|l|l|c|c|}
     \hline
     Problem data & CNN used & Low res. movie  & High res. movie\\
     \hline
@@ -705,6 +706,10 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
     \href{run:movies/three/field\_images\_noise\_0.0\_movie.mp4}{Click here} &
     \href{run:movies\_hi\_res/three/field\_images\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
     \hline
+    Noisy $u_x$ \& $u_y$ & CNN $u_x$ \& $u_y$ &
+    \href{run:movies/three/field\_images\_noise\_0.02\_movie.mp4}{Click here} &
+    \href{run:movies\_hi\_res/three/field\_images\_noise\_0.02\_movie\_hires.mp4}{Click here}\\
+    \hline
     Noiseless $u_y$ & CNN $u_y$ &
     \href{run:movies/three/field\_imagesy\_noise\_0.0\_movie.mp4}{Click here} &
     \href{run:movies\_hi\_res/three/field\_imagesy\_noise\_0.0\_movie\_hires.mp4}{Click here}\\
@@ -716,8 +721,6 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
   \end{tabular}
   \caption{\label{fig:threeinc:movie} Imaging up to 3 inclusions: movies. The true shear modulus field is on the left and the predicted field is on the right. Requires Adobe Acrobat or a PDF viewer supporting the \textbackslash{href} command. The system video file player, such as VLC, should be capable of playing mp4 files.}
 \end{table}
-\section{\label{sect:oneinc2}Imaging one inclusion with constraints on shear modulus}
-\section{\label{sect:threeinc2}Imaging up to three inclusions with constraints on shear modulus}
 \section{Concluding remarks}
 % Custom activation function
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
@@ -734,7 +737,7 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \item{A simple discrete $L^2$ norm was used to evaluate the loss function for the neural network. This is the \textit{mean squared error} in TensorFlow. The effect of other norms such as a discrete $H^1$ or Total Variation Diminishing (TVD) norm will be interesting to evaluate. Using the discrete $H^1$ norm as a loss function will probably remove the incidence of regions of low shear modulus adjacent to inclusions. Implementing these loss functions will require custom loss functions in TensorFlow perhaps along with custom gradient calculation, in-case TensorFlow's automatic differentiation fails.}
 \item{Investigating different network architectures with the aim of yielding better results will be worth investigation. More CNN layers (or less), deeper (or shallower) networks, should be investigated. Other hyperparameters such as the kernel size for the CNN layers can be varied as well. It may be worth investigating whether a CNN is required at all.}
 \item{Medical image registration to obtain a displacement field is a difficult process. If one could train neural networks to work directly with medical images instead of the computed displacement field, it would be an important advance. This would involve training the CNN by computing thousands of displacement fields by hand and solving an inverse problem and using the predicted shear modulus field as labeled data as input to the CNN. Additional information could be obtained by doctors interpreting medical images and identifying tumors and their mechanical properties.}
-\item{Since the initial choices for the CNN weights are random, one can train the network multiple times and get different values for the network weights. Having thus obtained many CNNs with different weight, we are led to the following two options. One, one can average the weights of the CNNs to obtain an averaged network. Two, one can make multiple predictions with the different CNNs and then average the result. These options should be investigated.}
+\item{Since the initial choices for the CNN weights are random, one can train the network multiple times and get different values for the network weights. Having thus obtained many CNNs with different weight, we are led to the following two options. One, one can average the weights of the CNNs to obtain an averaged network. Two, one can make multiple predictions with the different CNNs and then average the result. This will require large storage because CNNs have millions of parameters. These options should be investigated.}
 \item{It would be interesting to consider a multiscale/hierarchical neural network. This neural network would first make a prediction of the average shear modulus field using only a few weights. In the next step, more nodes would be introduced and, say, 9 nodes would be introduced to make a prediction of the shear modulus field. The number of layers and neurons would be increased and the weights would be initialized for the first simple neural network. This process can continue until a neural network which can make detailed predictions of the stiffness field can be obtained. }
 \item{In this work, CNNs were trained on noiseless data and then used to make predictions on noisy data. Another option could be to increase the number of training set examples by adding noise to them. While this will dramatically increase the size of the training set, it deserves consideration.}
 \item{Extending this work to actual material properties and complex three dimensional organ geometries will be interesting. This may require using Graph Convolutional Networks. Evaluating loss functions on finite element meshes will require custom loss functions. Another method could be to approximate the organ geometry using a structured grid. Nodes outside the organ can have placeholder data, while cells inside the organ can have actual displacement or strain data. Because the data is structured, simple CNNs could be used.}
@@ -742,6 +745,7 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \item{Software and performance issues: The finite element solver and associated scripts for generating the data were written in Python 3.8. Python is slow and much better performance could be obtained by writing the solver in C/C++/Fortran or Julia or using open source solvers like FEniCS \cite{paper:fenics} or deal.II \cite{misc:deal.ii}. Each FE input file is 3.3MB and output file is 1.1MB and total dataset size is $\approx$  20GB. There was no effort made to minimize the size of input and output files. Simple text based JSON files were used. If one wants increase the number of training examples by a factor of thousand 17TB of data would be required. Optimized data structures and hardware supporting fast disk access (SSDs) will be necessary for scaling to a large data sets. The use of GPU clusters to process large amounts of data may also need to be considered. }
 \item{Assuming that inclusions are roughly circular, several auxiliary problems may be considered. Given displacement field, strain fields or shear modulus fields (computed by any inversion procedure) one may train a CNN to compute : 1) Whether or not an inclusion or inclusions exist  in the domain. This is the \textit{binary classification problem} 2) The number of inclusions in the problem 3) The shear modulus of each inclusion 4) The location of the center of each inclusion 5) The radius of each inclusion. }
 \item{It is seen that using multiple components of the strain or displacement field does not necessarily result in better results than using a single component of the the strain or displacement field. This is unlike what is seen for traditional direct or iterative methods.}
+\item{Enforcing constrains on the shear modulus is easy in iterative methods. One just supplies bound constraints to the optimization alorithm. On the other hand, for the type of problem studied in this work, constraints on the shear modulus values result in constraints on the activation function of the final output layer, and not on the input variables. Applying bound constrants to the shear modulus is hard and requires the use of special activation functions which may get stuck in a local minimum. For the problem considered in this work, applying hard bound constraints is hard.}
 \end{enumerate}
 \clearpage
 \bibliography{eibib}{}
