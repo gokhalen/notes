@@ -167,7 +167,21 @@ Given the success achieved by neural networks on the wide variety of application
 \end{figure}
 %
 \subsection{\label{sect:cnnarch} CNN architecture used in this work}
-The typical architecture of the CNN we use in this work is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}). This CNN was implemented in TensorFlow \cite{misc:tensorflow}. The first dimension '?' represents the number of examples to be processed for training, validation or evaluation. Thus, the first training example is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of independent fields in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam}. No regularization is used.  Each CNN has approximately $3.35$ million train-able parameters. The \textit{softplus} activation function is used to prevent negative values for the shear modulus. After training, the model with the best validation loss is chosen to make predictions. 
+The typical architecture of the CNN we use in this work is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}). This CNN was implemented in TensorFlow \cite{misc:tensorflow}. The first dimension '?' represents the number of examples to be processed for training, validation or testing. Thus, the first training example is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of independent fields in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. Table (\ref{tab:cnnone:io}) gives the number of channels for each CNN trained. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam}. No regularization is used.  Each CNN has approximately $3.35$ million train-able parameters. After training, the model with the best validation loss is chosen to make predictions.\\The \textit{softplus} activation function in equation (\ref{eqn:softplus}) and the \textit{perturbed tanh} activation function in equation (\ref{eqn:perttanh}) are considered. The predictions made using the \textit{softplus} only respect the basic positivity constraint on the shear modulus. These results are documented in Sections (\ref{sect:oneinc}) and (\ref{sect:threeinc}). It is seen that the CNNs tend to predict regions of low shear modulus surround the inclusions. Therefore we seek to restrict the range of the shear modulus to within known limits $[\mu_{back},\mu_{max}]$. The activation functions in equations . we consider the \textit{perturbed tanh} function in equation (\ref{eqn:perttanh}). 
+\beq
+\label{eqn:softplus}
+f(x) = \ln(1+\exp(x))
+\eeq
+\beq
+\label{eqn:perttanh}
+f(x) = \tanh(x) + 0.01x
+\eeq
+\ber
+\label{eqn:varacts}
+f(x) = \mu_{max}\frac{1}{1+\exp(-x)} + \mu_{back}\\
+f(x) = \tanh(x) \\
+f(x) = \min(\ln(1+\exp(x)) + \mu_{back},\mu_{max})
+\eer
 \begin{table}
   \centering
  \begin{tabular}{|c|c|}
@@ -227,28 +241,28 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 %
 \begin{table}
   \centering
-  \begin{tabular}{|l|l|c|c|}
+  \begin{tabular}{|l|l|c|c|c|}
     \hline
-     & CNN Name & Training data (noiseless) & Prediction data \\
+     & CNN Name & Training data (noiseless) & Prediction data & Channels\\
     \hline
-    1 & CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ or $\epsilon_{xx}$ \& $\epsilon_{yy}$ + noise\\
+    1 & CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ or $\epsilon_{xx}$ \& $\epsilon_{yy}$ + noise & 2\\
     \hline
-    2 & CNN $\epsilon_{yy}$ & $\epsilon_{yy}$ & $\epsilon_{yy}$ or $\epsilon_{yy}$ + noise\\
+    2 & CNN $\epsilon_{yy}$ & $\epsilon_{yy}$ & $\epsilon_{yy}$ or $\epsilon_{yy}$ + noise & 1\\
     \hline
-    3 & CNN $u_x$ \& $u_y$ & $u_x$ \& $u_y$ & $u_x$ \& $u_y$\\
+    3 & CNN $u_x$ \& $u_y$ & $u_x$ \& $u_y$ & $u_x$ \& $u_y$ & 2\\
     \hline
-    4 & CNN $u_y$ & $u_y$ & $u_y$ or $u_y$ + noise\\
+    4 & CNN $u_y$ & $u_y$ & $u_y$ or $u_y$ + noise& 1\\
     \hline
-    5 & CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ or $\epsilon_{xx}$ \& $\epsilon_{yy}$ + noise\\
+    5 & CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ & $\epsilon_{xx}$ \& $\epsilon_{yy}$ or $\epsilon_{xx}$ \& $\epsilon_{yy}$ + noise & 2\\
     \hline
-    6 & CNNc $\epsilon_{yy}$ & $\epsilon_{yy}$ & $\epsilon_{yy}$ or $\epsilon_{yy}$ + noise\\
+    6 & CNNc $\epsilon_{yy}$ & $\epsilon_{yy}$ & $\epsilon_{yy}$ or $\epsilon_{yy}$ + noise & 1\\
     \hline
-    7 & CNNc $u_x$ \& $u_y$ & $u_x$ \& $u_y$ & $u_x$ \& $u_y$\\
+    7 & CNNc $u_x$ \& $u_y$ & $u_x$ \& $u_y$ & $u_x$ \& $u_y$ & 2\\
     \hline
-    8 & CNNc $u_y$ & $u_y$ & $u_y$ or $u_y$ + noise\\
+    8 & CNNc $u_y$ & $u_y$ & $u_y$ or $u_y$ + noise & 1\\
     \hline
   \end{tabular}
-  \caption{\label{tab:cnnone:io} Listing of CNNs trained, their training and prediction data. The first $4$ CNNs only have the constraint the $\mu>0$. The last $4$ CNNs are constraind to predict between $\mu_{back}=1.0$ and $\mu_{max}=5.0$. The 'c' in 'CNNc' stands for 'constrained'.}
+  \caption{\label{tab:cnnone:io} Listing of CNNs trained, their training and prediction data. The first $4$ CNNs only have the constraint the $\mu>0$. The last $4$ CNNs are constraind to predict between $\mu_{back}=1.0$ and $\mu_{max}=5.0$. The 'c' in 'CNNc' stands for 'constrained'. These CNNs are trained for with data containing only one inclusion and with data containing up to three inclusions. Thus a total of 16 CNNs are trained.}
 \end{table}
 %
 \begin{table}
@@ -568,112 +582,112 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
 % Figure 1
 \begin{figure}[h]
   \mupics{3}{1}{fig:threeinc:1}
-  \caption{\label{fig:threeinc:1}Imaging up to 3 inclusions: result 1. Fairly accurate results are obtained. Shear modulus is overpredicted in all reconstructions. The CNN was able to correctly predict only one inclusion even though the training set consists of examples with $1,2$ and $3$ inclusions.}
+  \caption{\label{fig:threeinc:1}Imaging up to 3 inclusions: result 1.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 2
 \begin{figure}[h]
   \mupics{3}{2}{fig:threeinc:2}
-  \caption{\label{fig:threeinc:2}Imaging up to 3 inclusions: result 2. The number of inclusions is correctly predicted. While the shear moduli of the inclusions are sligtly overpredicted, the CNN is able to predict the relative shear moduli correctly. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
+  \caption{\label{fig:threeinc:2}Imaging up to 3 inclusions: result 2. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 3
 \begin{figure}[h]
   \mupics{3}{3}{fig:threeinc:3}
-  \caption{\label{fig:threeinc:3}Imaging up to 3 inclusions: result 3. The number and location of the inclusion is correctly predicted. The CNN is able to predict the relative shear modulus correctly. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
+  \caption{\label{fig:threeinc:3}Imaging up to 3 inclusions: result 3. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 4
 \begin{figure}[h]
   \mupics{3}{4}{fig:threeinc:4}
-  \caption{\label{fig:threeinc:4}Imaging up to 3 inclusions: result 4. The number and locations of inclusions is correctly predicted.}
+  \caption{\label{fig:threeinc:4}Imaging up to 3 inclusions: result 4. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 5
 \begin{figure}[h]
   \mupics{3}{5}{fig:threeinc:5}
-  \caption{\label{fig:threeinc:5}Imaging up to 3 inclusions: result 5. The number and locations of the inclusions are correctly predicted. The CNN is able to predict the relative shear modulus correctly. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus. While both the inclusions have approximately the same shear modulus in this figure, the shear modulus inclusion with the higher shear modulus is significatly overpredicted.}
+  \caption{\label{fig:threeinc:5}Imaging up to 3 inclusions: result 5. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 6
 \begin{figure}[h]
   \mupics{3}{6}{fig:threeinc:6}
-  \caption{\label{fig:threeinc:6}Imaging up to 3 inclusions: result 6. The number and location of the inclusion is correctly predicted. The shear modulus is most accurately predicted in (h).}
+  \caption{\label{fig:threeinc:6}Imaging up to 3 inclusions: result 6. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 7
 \begin{figure}[h]
   \mupics{3}{7}{fig:threeinc:7}
-  \caption{\label{fig:threeinc:7}Imaging up to 3 inclusions: result 7. There are two inclusions overlapping in (a). An effective inclusion is predicted in the reconstructions.}
+  \caption{\label{fig:threeinc:7}Imaging up to 3 inclusions: result 7. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 8
 \begin{figure}[h]
   \mupics{3}{8}{fig:threeinc:8}
-  \caption{\label{fig:threeinc:8}Imaging up to 3 inclusions: result 8. There are two distinct inclusions in (a). The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
+  \caption{\label{fig:threeinc:8}Imaging up to 3 inclusions: result 8. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 9
 \begin{figure}[h]
   \mupics{3}{9}{fig:threeinc:9}
-  \caption{\label{fig:threeinc:9}Imaging up to 3 inclusions: result 9. The number of inclusions is correctly predicted. The relative contrast is captured best in (h).}
+  \caption{\label{fig:threeinc:9}Imaging up to 3 inclusions: result 9. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 10
 \begin{figure}[h]
   \mupics{3}{10}{fig:threeinc:10}
-  \caption{\label{fig:threeinc:10}Imaging up to 3 inclusions: result 10. The number of inclusions is correctly predicted. The shear modulus is overpredicted.}
+  \caption{\label{fig:threeinc:10}Imaging up to 3 inclusions: result 10. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 11
 \begin{figure}[h]
   \mupics{3}{11}{fig:threeinc:11}
-  \caption{\label{fig:threeinc:11}Imaging up to 3 inclusions: result 11. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
+  \caption{\label{fig:threeinc:11}Imaging up to 3 inclusions: result 11. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 12
 \begin{figure}[h]
   \mupics{3}{12}{}
-  \caption{\label{fig:threeinc:12}Imaging up to 3 inclusions: result 12. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions. The relative contrast is slightly incorrect. The middle (vertically) inclusion should have the highest shear modulus. However, the CNN predicts the lowest inclusion to have the highest shear modulus.}
+  \caption{\label{fig:threeinc:12}Imaging up to 3 inclusions: result 12. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 13
 \begin{figure}[h]
   \mupics{3}{13}{fig:threeinc:13}
-  \caption{\label{fig:threeinc:13}Imaging up to 3 inclusions: result 13. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
+  \caption{\label{fig:threeinc:13}Imaging up to 3 inclusions: result 13. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 14
 \begin{figure}[h]
   \mupics{3}{14}{fig:threeinc:14}
-  \caption{\label{fig:threeinc:14}Imaging up to 3 inclusions: result 14. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly. The inclusions have approximately the same shear modulus and so do the reconstructions. The lowermost inclusion has the highest shear modulus and so do the lowermost reconstructed inclusions.}
+  \caption{\label{fig:threeinc:14}Imaging up to 3 inclusions: result 14. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 15
 \begin{figure}[h]
   \mupics{3}{15}{fig:threeinc:15}
-  \caption{\label{fig:threeinc:15}Imaging up to 3 inclusions: result 15. The number of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly. The geometry of the inclusions is predicted correctly in the reconstructions and so is the relative contrast. That is, the CNN is able to decide which inclusion has the higher shear modulus and which one the lower shear modulus.}
+  \caption{\label{fig:threeinc:15}Imaging up to 3 inclusions: result 15. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 16
 \begin{figure}[h]
   \mupics{3}{16}{fig:threeinc:16}
-  \caption{\label{fig:threeinc:16}Imaging up to 3 inclusions: result 16. Two out of three inclusions are predicted correctly. The third inclusion, having low shear modulus is very hard to spot. This is consistent with what was seen in Section (\ref{sect:oneinc}). Inclusions with low shear modulus are hard to reconstruct.}
+  \caption{\label{fig:threeinc:16}Imaging up to 3 inclusions: result 16. }
 \end{figure}
 \newpage
 \clearpage
@@ -721,13 +735,371 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
   \end{tabular}
   \caption{\label{fig:threeinc:movie} Imaging up to 3 inclusions: movies. The true shear modulus field is on the left and the predicted field is on the right. Requires Adobe Acrobat or a PDF viewer supporting the \textbackslash{href} command. The system video file player, such as VLC, should be capable of playing mp4 files.}
 \end{table}
+\section{Imaging one inclusion with constraints}
+% Training loss, val_loss for exxeyy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/exxeyy/field_strainxxyy_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/exxeyy/field_strainxxyy_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:oneinctanh:trainexxeyy} Training and validation loss for CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging one inclusion with constraints.}
+\end{figure}
+% Training loss, val_loss for eyy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/eyy/field_strainyy_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/eyy/field_strainyy_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:oneinctanh:traineyy} Training and validation loss for CNNc $\epsilon_{yy}$ for imaging one inclusion with constraints.}
+\end{figure}
+%
+% Training loss, val_loss for ux+uy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/uxuy/field_images_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/uxuy/field_images_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:oneinctanh:trainuxuy} Training and validation loss for CNNc $u_x$ \& $u_y$ for imaging one inclusion with constraints.}
+\end{figure}
+%
+% Training loss, val_loss for uy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/uy/field_imagesy_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/uy/field_imagesy_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:oneinctanh:trainuy} Training and validation loss for CNNc $u_y$ for imaging one inclusion with constraints.}
+\end{figure}
+% Figure 1 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{1}{fig:oneinctanh:1}
+  \caption{\label{fig:oneinctanh:1}Imaging one inclusion with constraints: result 1.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 2 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{2}{fig:oneinctanh:2}
+  \caption{\label{fig:oneinctanh:2}Imaging one inclusion with constraints: result 2.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 3 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{3}{fig:oneinctanh:3}
+  \caption{\label{fig:oneinctanh:3}Imaging one inclusion with constraints: result 3.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 4 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{4}{fig:oneinctanh:4}
+  \caption{\label{fig:oneinctanh:4}Imaging one inclusion with constraints: result 4.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 5 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{5}{fig:oneinctanh:5}
+  \caption{\label{fig:oneinctanh:5}Imaging one inclusion with constraints: result 5.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 6 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{6}{fig:oneinctanh:6}
+  \caption{\label{fig:oneinctanh:6}Imaging one inclusion with constraints: result 6.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 7 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{7}{fig:oneinctanh:7}
+  \caption{\label{fig:oneinctanh:7}Imaging one inclusion with constraints: result 7.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 8 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{8}{fig:oneinctanh:8}
+  \caption{\label{fig:oneinctanh:8}Imaging one inclusion with constraints: result 8.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 9 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{9}{fig:oneinctanh:9}
+  \caption{\label{fig:oneinctanh:9}Imaging one inclusion with constraints: result 9.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 10 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{10}{fig:oneinctanh:10}
+  \caption{\label{fig:oneinctanh:10}Imaging one inclusion with constraints: result 10.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 11 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{11}{fig:oneinctanh:11}
+  \caption{\label{fig:oneinctanh:11}Imaging one inclusion with constraints: result 11.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 12 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{12}{fig:oneinctanh:12}
+  \caption{\label{fig:oneinctanh:12}Imaging one inclusion with constraints: result 12.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 13 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{13}{fig:oneinctanh:13}
+  \caption{\label{fig:oneinctanh:13}Imaging one inclusion with constraints: result 13.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 14 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{14}{fig:oneinctanh:14}
+  \caption{\label{fig:oneinctanh:14}Imaging one inclusion with constraints: result 14.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 15 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{15}{fig:oneinctanh:15}
+  \caption{\label{fig:oneinctanh:15}Imaging one inclusion with constraints: result 15.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 16 (onetanh)
+\begin{figure}[h]
+  \mupics{1c}{16}{fig:oneinctanh:16}
+  \caption{\label{fig:oneinctanh:16}Imaging one inclusion with constraints: result 16.}
+\end{figure}
+\newpage
+\clearpage
+\section{Imaging three inclusions with constraints}
+% Training loss, val_loss for exxeyy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/exxeyy/field_strainxxyy_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/exxeyy/field_strainxxyy_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:threeinctanh:trainexxeyy} Training and validation loss for CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging three inclusions with constraints.}
+\end{figure}
+% Training loss, val_loss for eyy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/eyy/field_strainyy_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/eyy/field_strainyy_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:threeinctanh:traineyy} Training and validation loss for CNNc $\epsilon_{yy}$ for imaging three inclusions with constraints.}
+\end{figure}
+%
+% Training loss, val_loss for ux+uy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/uxuy/field_images_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/uxuy/field_images_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:threeinctanh:trainuxuy} Training and validation loss for CNNc $u_x$ \& $u_y$ for imaging three inclusions with constraints.}
+\end{figure}
+%
+% Training loss, val_loss for uy
+\begin{figure}[h]
+  %
+  \centering
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/uy/field_imagesy_plot_loss.png}
+    \caption{Training loss}
+  \end{subfigure}
+  %
+  \begin{subfigure}[b]{0.45\linewidth}
+    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/uy/field_imagesy_plot_val_loss.png}
+    \caption{Validation loss}
+  \end{subfigure}
+  %
+\caption{\label{fig:threeinctanh:trainuy} Training and validation loss for CNNc $u_y$ for imaging three inclusions with constraints.}
+\end{figure}
+% Figure 1 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{1}{fig:threeinctanh:1}
+  \caption{\label{fig:threeinctanh:1}Imaging three inclusions with constraints: result 1.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 2 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{2}{fig:threeinctanh:2}
+  \caption{\label{fig:threeinctanh:2}Imaging three inclusions with constraints: result 2.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 3 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{3}{fig:threeinctanh:3}
+  \caption{\label{fig:threeinctanh:3}Imaging three inclusions with constraints: result 3.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 4 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{4}{fig:threeinctanh:4}
+  \caption{\label{fig:threeinctanh:4}Imaging three inclusions with constraints: result 4.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 5 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{5}{fig:threeinctanh:5}
+  \caption{\label{fig:threeinctanh:5}Imaging three inclusions with constraints: result 5.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 6 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{6}{fig:threeinctanh:6}
+  \caption{\label{fig:threeinctanh:6}Imaging three inclusions with constraints: result 6.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 7 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{7}{fig:threeinctanh:7}
+  \caption{\label{fig:threeinctanh:7}Imaging three inclusions with constraints: result 7.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 8 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{8}{fig:threeinctanh:8}
+  \caption{\label{fig:threeinctanh:8}Imaging three inclusions with constraints: result 8.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 9 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{9}{fig:threeinctanh:9}
+  \caption{\label{fig:threeinctanh:9}Imaging three inclusions with constraints: result 9.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 10 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{10}{fig:threeinctanh:10}
+  \caption{\label{fig:threeinctanh:10}Imaging three inclusions with constraints: result 10.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 11 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{11}{fig:threeinctanh:11}
+  \caption{\label{fig:threeinctanh:11}Imaging three inclusions with constraints: result 11.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 12 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{12}{fig:threeinctanh:12}
+  \caption{\label{fig:threeinctanh:12}Imaging three inclusions with constraints: result 12.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 13 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{13}{fig:threeinctanh:13}
+  \caption{\label{fig:threeinctanh:13}Imaging three inclusions with constraints: result 13.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 14 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{14}{fig:threeinctanh:14}
+  \caption{\label{fig:threeinctanh:14}Imaging three inclusions with constraints: result 14.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 15 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{15}{fig:threeinctanh:15}
+  \caption{\label{fig:threeinctanh:15}Imaging three inclusions with constraints: result 15.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 16 (threetanh)
+\begin{figure}[h]
+  \mupics{3c}{16}{fig:threeinctanh:16}
+  \caption{\label{fig:threeinctanh:16}Imaging three inclusions with constraints: result 16.}
+\end{figure}
+\newpage
+\clearpage
 \section{Concluding remarks}
 % Custom activation function
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
 A CNN capable of predicting shear modulus fields from displacement or strain fields (or components thereof) was presented. Results which warrant further research were presented. Directions for further work are discussed below. 
 \subsection{Future work}
 \begin{enumerate}
-\item{Addition of homogeneous examples to the dataset would be a good test for the algorithm proposed.}
+\item{Addition of homogeneous examples to the dataset would be a good test for the algorithm proposed. However, given that the algorithm underpredicts the shear modulus of small inclusions, we believe homogeneous examples will be predicted correctly by the algorithm.}
 \item{Training the CNN with displacement or strain data generated using random values for the shear modulus at each node and seeing it it learns the inverse operator from the displacement (or strain) fields to shear modulus fields would be interesting. }
 \item{In this work, we have only constrained the predicted shear modulus to be greater than zero. This constraint is rooted in physics: for normal, non-exotic materials the shear modulus is non-negative. Better results may be obtained if one knows the background shear modulus and uses this fact to constrain the predicted shear modulus to be greater than the background shear modulus.}
 \item{It is seen that better results are obtained for larger inclusion with larger contrast. Stiffness of smaller inclusions is under-predicted. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions.}
