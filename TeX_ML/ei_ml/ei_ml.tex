@@ -158,7 +158,7 @@ We believe that solving the inverse problem with CNNs can combine the best chara
 \section{Neural networks and problem setup}
 In recent years, neural networks have been applied to various applications such as image classification \cite{paper:hinton2017}, hand written digit recognition \cite{paper:kulkarni2018}, solving differential equations and symbolic integration \cite{misc:lample2019}, solving complex partial differential equations such as the Navier-Stokes equation \cite{misc:anandkumar2020}, self-driving cars \cite{misc:agnihotri2019,misc:nvidiaselfdriving2016}, chaos \cite{paper:pathak2018}, natural language processing \cite{misc:googlenlp} and face recognition \cite{conf:taigman2014}. Several effective Machine Learning frameworks such as Google's TensorFlow \cite{misc:tensorflow}, Facebook's PyTorch \cite{incollect:pytorch}, Scikit-Learn \cite{paper:scikit-learn} are freely available. See \cite{misc:compdeep} for a complete list. The interested reader is referred to \cite{book:aggarwal,book:goodfellow,book:chollet,misc:cs231n,misc:andrewng,misc:udemy} for further information about neural networks.
 \subsection{Neural networks and elasticity imaging}
-Given the success achieved by neural networks on the wide variety of applications cited, it is natural to explore the application of neural networks to the inverse problem of elasticity imaging and several recent efforts \cite{paper:pateloberai2019,misc:gu2020,paper:hoeriginsana2016} have done so. In \cite{paper:pateloberai2019}, the authors use a convolutional neural network to classify specimens into elastically heterogeneous or elastically nonlinear. In \cite{paper:hoeriginsana2016}, the authors use a neural network to estimate strains and stress and then calculate elastic parameters. In \cite{misc:gu2020}, the authors use a neural network which predicts elasticity distributions using residual force maps to update the weights of the neural network. \\In contrast, in this work we compute the shear modulus field from the displacement or strain field using a CNN. There are no physical constraints involved in our work. It is purely a mapping problem from the space of displacement or strain fields to the space of the shear modulus fields. The input data for our CNN is a set of strain or displacement fields or components thereof. For each input there is a corresponding target shear modulus field. The CNN predicts shear modulus fields compares them with the target fields to compute the loss function and its gradient. Thus the CNN learns weights for its filters and other parameters. Using this learned information the CNN is able to predict a shear modulus field from the input data of strain or displacement fields. This process is shown in Figure (\ref{fig:schematic_inv}).
+Given the success achieved by neural networks on the wide variety of applications cited, it is natural to explore the application of neural networks to the inverse problem of elasticity imaging and several recent efforts \cite{paper:pateloberai2019,misc:gu2020,paper:hoeriginsana2016} have done so. In \cite{paper:pateloberai2019}, the authors use a convolutional neural network to classify specimens into elastically heterogeneous or elastically nonlinear. In \cite{paper:hoeriginsana2016}, the authors use a neural network to estimate strains and stress and then calculate elastic parameters. In \cite{misc:gu2020}, the authors use a neural network which predicts elasticity distributions using residual force maps to update the weights of the neural network. \\In contrast, in this work we compute the shear modulus field from the displacement or strain field using a CNN. There are no physical constraints involved in our work. It is purely a mapping problem from the space of displacement or strain fields to the space of the shear modulus fields. The input data for our CNN is a set of strain or displacement fields or components thereof. For each input there is a known corresponding target shear modulus field. Starting from an initial guess of the weights, the CNN predicts shear modulus fields compares them with the target fields to compute the loss function and its gradient. Using the gradient in an appropriate optimization algorithm, the weights are updated. Thus the CNN learns weights for its filters and other parameters. Using this learned information, the CNN is able to predict a shear modulus field from the input data of strain or displacement fields. Figure (\ref{fig:schematic_inv}) shows the mapping of a displacement field to a shear modulus field.
 %
 \begin{figure}[h]
    \centering
@@ -167,7 +167,7 @@ Given the success achieved by neural networks on the wide variety of application
 \end{figure}
 %
 \subsection{\label{sect:cnnarch} CNN architecture used in this work}
-The typical architecture of the CNN we use in this work is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}). This CNN was implemented in TensorFlow \cite{misc:tensorflow}. The first dimension '?' represents the number of examples to be processed for training, validation or testing. Thus, the first training example is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of independent fields in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. Table (\ref{tab:cnnone:io}) gives the number of channels for each CNN trained. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam}. No regularization is used.  Each CNN has approximately $3.35$ million train-able parameters. After training, the model with the best validation loss is chosen to make predictions.\\The \textit{softplus} activation function in equation (\ref{eqn:softplus}) and the \textit{twisted tanh} activation function in equation (\ref{eqn:twisttanh}) are considered in this work. The predictions made using the \textit{softplus} only respect the basic positivity constraint on the shear modulus. These results are documented in Sections (\ref{sect:oneinc}) and (\ref{sect:threeinc}). It is seen that the CNNs tend to predict regions of low shear modulus surround the inclusions. Therefore we seek to restrict the range of the shear modulus predicted by the CNN to within known limits $[\mu_{back},\mu_{max}]$. One can simply do this by thresholdingh: just apply \textit{min} and \textit{max} functions to post-process the result. But this is unsatisfying. We first applied a suitable scaling to change the range of the output variable from $[\mu_{back},\mu_{max}]$ to $(0,1)$ or $(-1,1)$ as appropriate. We then considered the use of activation functions given in equations (\ref{eqn:sigmoid},\ref{eqn:tanh},\ref{eqn:softplusmin}) whose range is restricted to $(0,1),(-1,1)$ and $(0,1)$. As noted in \cite{bookchap:lecun98b} we observed that with the activation functions given in equations (\ref{eqn:sigmoid},\ref{eqn:tanh},\ref{eqn:softplusmin}) the weights and therefore loss function become stuck because the derivatives of equations (\ref{eqn:sigmoid},\ref{eqn:tanh},\ref{eqn:softplusmin}) become very zero for values sufficiently away from zero. However, we observe, as noted in \cite{bookchap:lecun98b}, that the addition of a 'twisting term' ($0.01x$) to the $\tanh(x)$ function makes the derivative non-zero and the CNN begins to train again. The penalty that we pay, is that the output is only approximately (not exactly) restricted to the range $[\mu_{back},\mu_{max}]$. 
+The typical architecture of the CNN we use in this work is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}). This CNN was implemented in TensorFlow \cite{misc:tensorflow}. The first dimension '?' represents the number of examples to be processed for training, validation or testing. Thus, the first training example is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of independent fields in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. Table (\ref{tab:cnnone:io}) gives the number of channels for each CNN trained. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam}. No regularization is used.  Each CNN has approximately $3.35$ million train-able parameters. After training, the model with the best validation loss is chosen to make predictions.\\The \textit{softplus} activation function in equation (\ref{eqn:softplus}) and the \textit{twisted tanh} activation function in equation (\ref{eqn:twisttanh}) are considered in this work. The predictions made using the \textit{softplus} only respect the basic positivity constraint on the shear modulus. These results are documented in Sections (\ref{sect:oneinc}) and (\ref{sect:threeinc}). It is seen that the CNNs tend to predict regions of low shear modulus surround the inclusions. Therefore we seek to restrict the range of the shear modulus predicted by the CNN to within known limits $[\mu_{back},\mu_{max}]$. One can simply do this by thresholding: just apply \textit{min} and \textit{max} functions to post-process the result. But this is unsatisfying. Rather, a CNN should be trained to predict values within a user specified range. In order to do this, we first applied a suitable scaling to change the range of the output variable from $[\mu_{back},\mu_{max}]$ to $(0,1)$ or $(-1,1)$ as appropriate. We then considered the use of activation functions given in equations (\ref{eqn:sigmoid},\ref{eqn:tanh},\ref{eqn:softplusmin}) whose range is restricted to $(0,1),(-1,1)$ and $(0,1)$. As noted in \cite{bookchap:lecun98b} we observed that with the activation functions given in equations (\ref{eqn:sigmoid},\ref{eqn:tanh},\ref{eqn:softplusmin}) the weights and therefore loss function become stuck because the derivatives of equations (\ref{eqn:sigmoid},\ref{eqn:tanh},\ref{eqn:softplusmin}) become very close to zero for values sufficiently away from zero. However, we again observe, as noted in \cite{bookchap:lecun98b}, that the addition of a 'twisting term' ($0.01x$) to the $\tanh(x)$ function makes the derivative non-zero and the CNN begins to train again. The penalty that we pay is that the output is only approximately and not exactly restricted to the range $[\mu_{back},\mu_{max}]$. 
 \begin{subequations}
 \ber
 \text{softplus}\qquad f(x) &=& \ln(1+\exp(x)) \label{eqn:softplus}\\
@@ -242,7 +242,7 @@ The typical architecture of the CNN we use in this work is shown in Figure (\ref
 %
 \subsection{\label{sect:probsetup}Problem setup}
 The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The reader is referred to \cite{book:hugheslinear,book:fishbelytschko} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interplated bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. The background shear modulus is $\mu_{back}=1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. Selective reduced integration is used to avoid mesh locking because the Poisson's ratio of $0.49$ renders the medium almost incompressible. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$.\\
-$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. Each displacement or strain component is scaled by finding its absolute maximum over the training data set and then dividing the componeny by it. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise. We note that noisy data is generated for each run. Referring to Table (\ref{tab:cnnone:io}), this means, that the noise in $\epsilon_{yy}$ in line 1 is different from the noise in $\epsilon_{yy}$ in line 2. We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
+$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. Each displacement or strain component is scaled by finding its absolute maximum over the training data set and then dividing the component by it. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$. $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise. We note that noisy data is generated for each run. Referring to Table (\ref{tab:cnnone:io}), this means, that the noise in $\epsilon_{yy}$ in line 1 is different from the noise in $\epsilon_{yy}$ in line 2. We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
 \begin{equation}
   \label{eqn:snr}
   SNR_{dB} = 20\log_{10}\Big(\frac{\|signal\|_{L^2}}{\|noise\|_{L^2}}\Big)
@@ -257,14 +257,14 @@ The norm $\|\cdot\|_{L^2}$ in the above equation is a discrete $L^2$ norm.
 \end{figure}
 %
 \section{\label{sect:oneinc}Imaging one inclusion}
-We apply the CNN described in Section (\ref{sect:cnnarch}) to predict the shear modulus field when only one inclusion is present. The data is generated as described in Section (\ref{sect:probsetup}). Eight CNNs are trained. See Table (\ref{tab:cnnone:io}). The CNNs using the \textit{softplus} activation function (equation \ref{eqn:softplus}) to make predictions are CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$, CNN $\epsilon_{yy}$, CNN $u_x$ \& $u_y$, CNN $u_y$. The CNNs using the \textit{twisted tanh} (\ref{eqn:twisttanh}) function to make predictions are CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$, CNNc $\epsilon_{yy}$, CNNc $u_x$ \& $u_y$, CNNc $u_y$. The training data and prediction data for CNNs is specified in Table (\ref{tab:cnnone:io}). For example, the first entry in Table (\ref{tab:cnnone:io}) should be interpreted as: CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ and CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ are trained on both components of a noiseless strain field (given in column 2) and are used to make predictions using both components of the strain field, with and without noise (given in column 3). Since two components of the strain field are used to train and make predictions the number of channels is $3$.\\
-The training and loss curves for the CNNs are shown in Figures (\ref{fig:oneinc:trainexxeyy},\ref{fig:oneinc:traineyy},\ref{fig:oneinc:trainuxuy},\ref{fig:oneinc:trainuy}). It is seen that the CNNs trained on strain data show a sharp and early drop in the loss. The CNNs trained on displacement data show slow drop in the loss. The predictions of the various CNNs are shown in Figures (\ref{fig:oneinc:1}-\ref{fig:oneinc:16}). The subcaptions of the figures are explained in Table (\ref{tab:subcap}).\\
-The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:oneinc:16}) are:
+We apply the CNN described in Section (\ref{sect:cnnarch}) to predict the shear modulus field when only one inclusion is present. The data is generated as described in Section (\ref{sect:probsetup}). Eight CNNs are trained. See Table (\ref{tab:cnnone:io}). The CNNs using the \textit{softplus} activation function (equation \ref{eqn:softplus}) to make predictions are CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$, CNN $\epsilon_{yy}$, CNN $u_x$ \& $u_y$, CNN $u_y$. The CNNs using the \textit{twisted tanh} (\ref{eqn:twisttanh}) function to make predictions are CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$, CNNc $\epsilon_{yy}$, CNNc $u_x$ \& $u_y$, CNNc $u_y$. The additional 'c' in at the end of 'CNNc' denotes 'constrained'. The training data and prediction data for CNNs is specified in Table (\ref{tab:cnnone:io}). For example, the first entry in Table (\ref{tab:cnnone:io}) should be interpreted as: CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ and CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ are trained on both components of a noiseless strain field (given in column 2) and are used to make predictions using both components of the strain field, with and without noise (given in column 3). Since two components of the strain field are used to train and make predictions the number of channels is $3$.\\
+The training and loss curves for the CNNs are shown in Figures (\ref{fig:oneinc:trainexxeyy}-\ref{fig:oneinctanh:trainuy}). The predictions of the various CNNs are shown in Figures (\ref{fig:oneinc:1}-\ref{fig:oneinctanh:16}). The results for the CNNs using \textit{softplus} activation and the CNNs using the \textit{twisted tanh} activation are presented alternately. All figures on the same page are on the same color scale. The subcaptions of the figures are explained in Table (\ref{tab:subcap}).\\
+The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:oneinctanh:16}) are:
 \begin{enumerate}
 \item{The location of the inclusion is predicted accurately.}
-\item{The shear modulus of small inclusions is under-predicted. See Figures (\ref{fig:oneinc:1},\ref{fig:oneinc:3},\ref{fig:oneinc:6},\ref{fig:oneinc:8}).}
-\item{The shear modulus of large inclusions is correct on average. The discontinuities in the true shear modulus field are not predicted accurately. Instead a smooth field is predicted.}
-\item{It is observed that a region of high shear modulus has a region of low shear modulus adjoining it. See Figures (\ref{fig:oneinc:1},\ref{fig:oneinc:2},\ref{fig:oneinc:3},\ref{fig:oneinc:3}). }
+\item{Generally speaking, the shear modulus of small inclusions is under-predicted for CNNs. See Figures (\ref{fig:oneinc:1},\ref{fig:oneinc:3},\ref{fig:oneinc:6},\ref{fig:oneinc:8}).}
+\item{The shear modulus of large inclusions is correct on average. The discontinuities in the true shear modulus field are not predicted accurately. Instead a smooth field is predicted. The CNNs using the \textit{twisted tanh} activation do better in predicting discontinuities.}
+\item{It is observed that the CNNs using the \textit{softplus} activation predict a region of low shear modulus next to a region of high shear modulus. See Figures (\ref{fig:oneinc:1},\ref{fig:oneinc:2},\ref{fig:oneinc:3},\ref{fig:oneinc:3}).}
 \end{enumerate}
 %
 \begin{center}
@@ -460,7 +460,7 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Figure 1 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{1}{fig:oneinctanh:1}
-  \caption{\label{fig:oneinctanh:1}Imaging one inclusion (twisted tanh): result 1.}
+  \caption{\label{fig:oneinctanh:1}Imaging one inclusion (twisted tanh): result 1. Results (a)-(d) are fairly accurate. Results (f)-(i) underpredict the shear modulus but are still better than the softplus results.}
 \end{figure}
 \newpage
 \clearpage
@@ -474,21 +474,21 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Figure 2 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{2}{fig:oneinctanh:2}
-  \caption{\label{fig:oneinctanh:2}Imaging one inclusion (twisted tanh): result 2.}
+  \caption{\label{fig:oneinctanh:2}Imaging one inclusion (twisted tanh): result 2. These results are more accurate than the results using the softplus activation. The results do not show areas of low shear modulus adjacent to the inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 3 (softplus)
 \begin{figure}[h]
   \mupics{1}{3}{fig:oneinc:3}
-  \caption{\label{fig:oneinc:3}Imaging one inclusion (softplus): result 3. Again, these results show that the shear modulus of small inclusions is underpredicted. There are areas of low shear modulus adjacent to the inclusion especially in figures (b) and (c). }
+  \caption{\label{fig:oneinc:3}Imaging one inclusion (softplus): result 3. Again, these results show that the shear modulus of small inclusions is underpredicted. There are areas of low shear modulus adjacent to the inclusion especially in figures (b) and (c).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 3 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{3}{fig:oneinctanh:3}
-  \caption{\label{fig:oneinctanh:3}Imaging one inclusion (twisted tanh): result 3.}
+  \caption{\label{fig:oneinctanh:3}Imaging one inclusion (twisted tanh): result 3. Results (b)-(g) are fairly accurate overall and certainly more accurate than the results using the softplus activation. There are no regions of low shear modulus adjacent to the inclusions. The shear modulus is under predicted in (h) and (i).}
 \end{figure}
 \newpage
 \clearpage
@@ -502,7 +502,7 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Figure 4 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{4}{fig:oneinctanh:4}
-  \caption{\label{fig:oneinctanh:4}Imaging one inclusion (twisted tanh): result 4.}
+  \caption{\label{fig:oneinctanh:4}Imaging one inclusion (twisted tanh): result 4. Results (b)-(e) are accurate. Results (f)-(i) show over prediction of the shear modulus. There are no regions of low shear modulus adjacent to the inclusions.}
 \end{figure}
 \newpage
 \clearpage
@@ -516,63 +516,63 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Figure 5 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{5}{fig:oneinctanh:5}
-  \caption{\label{fig:oneinctanh:5}Imaging one inclusion (twisted tanh): result 5.}
+  \caption{\label{fig:oneinctanh:5}Imaging one inclusion (twisted tanh): result 5. The shear modulus is slightly over predicted in all figures. The best reconstruction is (i). There are no regions of low shear modulus adjacent to the inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 6 (softplus)
 \begin{figure}[h]
   \mupics{1}{6}{fig:oneinc:6}
-  \caption{\label{fig:oneinc:6}Imaging one inclusion (softplus): result 6. Shear modulus of small inclusions is severely underpredicted.}
+  \caption{\label{fig:oneinc:6}Imaging one inclusion (softplus): result 6. Shear modulus of small inclusions is severely underpredicted. Apart from figures (d)-(e) there seems to be no sign of an inclusion in other figures.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 6 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{6}{fig:oneinctanh:6}
-  \caption{\label{fig:oneinctanh:6}Imaging one inclusion (twisted tanh): result 6.}
+  \caption{\label{fig:oneinctanh:6}Imaging one inclusion (twisted tanh): result 6. The inclusion is present in figures (b)-(e) but its shear modulus is underpredicted. The inclusion is almost absent from figures (f)-(i).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 7 (softplus)
 \begin{figure}[h]
   \mupics{1}{7}{fig:oneinc:7}
-  \caption{\label{fig:oneinc:7}Imaging one inclusion (softplus): result 7. Shear modulus of this inclusion is slightly overpredicted. There are areas of low shear modulus adjacent to the inclusion especially in figures (b),(c),(g) and (h).}
+  \caption{\label{fig:oneinc:7}Imaging one inclusion (softplus): result 7. Shear modulus of this inclusion is slightly overpredicted. There are areas of low shear modulus adjacent to the inclusion especially in figures (b),(c),(h) and (i).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 7 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{7}{fig:oneinctanh:7}
-  \caption{\label{fig:oneinctanh:7}Imaging one inclusion (twisted tanh): result 7.}
+  \caption{\label{fig:oneinctanh:7}Imaging one inclusion (twisted tanh): result 7. The predictions are accurate in all cases. There are no regions of low shear modulus adjacent to the inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 8 (softplus)
 \begin{figure}[h]
   \mupics{1}{8}{fig:oneinc:8}
-  \caption{\label{fig:oneinc:8}Imaging one inclusion (softplus): result 8. Shear modulus of this small inclusion is severely underpredicted.}
+  \caption{\label{fig:oneinc:8}Imaging one inclusion (softplus): result 8. Shear modulus of this small inclusion is severely underpredicted in all figures.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 8 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{8}{fig:oneinctanh:8}
-  \caption{\label{fig:oneinctanh:8}Imaging one inclusion (twisted tanh): result 8.}
+  \caption{\label{fig:oneinctanh:8}Imaging one inclusion (twisted tanh): result 8. The inclusion is clearly visible in all figures. Result (b) is good and the results get progressively worse towards result (i).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 9 (softplus)
 \begin{figure}[h]
   \mupics{1}{9}{fig:oneinc:9}
-  \caption{\label{fig:oneinc:9}Imaging one inclusion (softplus): result 9. There appear to be patches of low shear modulus around the predicted inclusions in all reconstructions.}
+  \caption{\label{fig:oneinc:9}Imaging one inclusion (softplus): result 9. The shear modulus is underpredicted in all cases except (d) and (e). There are patches of low shear modulus around the predicted inclusions in all reconstructions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 9 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{9}{fig:oneinctanh:9}
-  \caption{\label{fig:oneinctanh:9}Imaging one inclusion (twisted tanh): result 9.}
+  \caption{\label{fig:oneinctanh:9}Imaging one inclusion (twisted tanh): result 9. The results are fairly accurate in all cases except (f) and (g) where the shear modulus is over predicted.}
 \end{figure}
 \newpage
 \clearpage
@@ -586,21 +586,21 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Figure 10 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{10}{fig:oneinctanh:10}
-  \caption{\label{fig:oneinctanh:10}Imaging one inclusion (twisted tanh): result 10.}
+  \caption{\label{fig:oneinctanh:10}Imaging one inclusion (twisted tanh): result 10. The results are more accurate than the softplus case. There is overprediction in (d)-(g), and underprediction in (h) and (i).}
 \end{figure}
 \newpage
 \clearpage
 % Figure 11 (softplus)
 \begin{figure}[h]
   \mupics{1}{11}{fig:oneinc:11}
-  \caption{\label{fig:oneinc:11}Imaging one inclusion (softplus): result 11. Inclusions to the side of the domain seem to be detected fairly well. All the results, especially (b) and (c), show regions of low shear modulus adjacent to regions of high shear modulus.}
+  \caption{\label{fig:oneinc:11}Imaging one inclusion (softplus): result 11. Inclusions to the side of the domain seem to be detected fairly well. There is overprediction in (b)-(e). All the results, especially (b) and (c), show regions of low shear modulus adjacent to regions of high shear modulus.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 11 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{11}{fig:oneinctanh:11}
-  \caption{\label{fig:oneinctanh:11}Imaging one inclusion (twisted tanh): result 11.}
+  \caption{\label{fig:oneinctanh:11}Imaging one inclusion (twisted tanh): result 11. All results are fairly accurate. There are ripples in the background in (f)-(g).}
 \end{figure}
 \newpage
 \clearpage
@@ -614,7 +614,7 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Figure 12 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{12}{fig:oneinctanh:12}
-  \caption{\label{fig:oneinctanh:12}Imaging one inclusion (twisted tanh): result 12.}
+  \caption{\label{fig:oneinctanh:12}Imaging one inclusion (twisted tanh): result 12. Results (b)-(e) are fairly accurate. There is over-prediction in (f)-(i). There are no regions of low shear modulus adjacent to regions of high shear modulus.}
 \end{figure}
 \newpage
 \clearpage
@@ -628,7 +628,7 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Figure 13 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{13}{fig:oneinctanh:13}
-  \caption{\label{fig:oneinctanh:13}Imaging one inclusion (twisted tanh): result 13.}
+  \caption{\label{fig:oneinctanh:13}Imaging one inclusion (twisted tanh): result 13. Results (b)-(g) are fairly accurate. However, there is overprediction in figures (h) and (i).}
 \end{figure}
 \newpage
 \clearpage
@@ -642,21 +642,21 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Figure 14 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{14}{fig:oneinctanh:14}
-  \caption{\label{fig:oneinctanh:14}Imaging one inclusion (twisted tanh): result 14.}
+  \caption{\label{fig:oneinctanh:14}Imaging one inclusion (twisted tanh): result 14. The inclusions are not clearly defined. They are fuzzy. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 15 (softplus)
 \begin{figure}[h]
   \mupics{1}{15}{fig:oneinc:15}
-  \caption{\label{fig:oneinc:15}Imaging one inclusion (softplus): result 15. Medium sized inclusions are detected fairly well. Surprisingly the best reconstruction is obtained in (d) where only $\epsilon_{yy}$ is used. }
+  \caption{\label{fig:oneinc:15}Imaging one inclusion (softplus): result 15. Medium sized inclusions are detected fairly well. There are regions of low shear modulus adjacent to the inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 15 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{15}{fig:oneinctanh:15}
-  \caption{\label{fig:oneinctanh:15}Imaging one inclusion (twisted tanh): result 15.}
+  \caption{\label{fig:oneinctanh:15}Imaging one inclusion (twisted tanh): result 15. Inclusions are detected clearly but their shear modulus is overpredicted. There are no regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
@@ -670,15 +670,15 @@ The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:onei
 % Figure 16 (onetanh)
 \begin{figure}[h]
   \mupics{1c}{16}{fig:oneinctanh:16}
-  \caption{\label{fig:oneinctanh:16}Imaging one inclusion (twisted tanh): result 16.}
+  \caption{\label{fig:oneinctanh:16}Imaging one inclusion (twisted tanh): result 16. The inclusion is detected accurately in all figures. There are no regions of low shear modulus adjacent to the inclusions.}
 \end{figure}
 \newpage
 \clearpage
 %
 \section{\label{sect:threeinc}Imaging up to three inclusions}
-In this section, we evaluate the ability of the CNN to learn from fields containing multiple (up to $3$) inclusions. The CNN architecture is exactly as described in Section (\ref{sect:cnnarch}). The problem setup is the same as described in Section (\ref{sect:probsetup}) with the following differences. There can be either $1$, $2$ or $3$ inclusions in the domain and their radius ranges from $0.1$ units to $0.15$ units. Figures (\ref{fig:threeinc:1}-\ref{fig:threeinc:16}) show the results obtained. Training curves are presented in Figures (\ref{fig:oneinc:trainexxeyy3}-\ref{fig:oneinc:trainuy3}).
+In this section, we evaluate the ability of the CNN to learn from fields containing multiple (up to $3$) inclusions. The CNN architecture is exactly as described in Section (\ref{sect:cnnarch}). The problem setup is the same as described in Section (\ref{sect:probsetup}) with the following differences. There can be either $1$, $2$ or $3$ inclusions in the domain and their radius ranges from $0.1$ units to $0.15$ units. Training curves are presented in Figures (\ref{fig:threeinc:trainexxeyy}-\ref{fig:threeinctanh:trainuy}). Figures (\ref{fig:threeinc:1}-\ref{fig:threeinctanh:16}) show the results obtained. 
 %
-% Training loss, val_loss for exxeyy
+% Training loss, val_loss for exxeyy (3 softplus)
 \begin{figure}[h]
   %
   \centering
@@ -692,9 +692,9 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
     \caption{Validation loss}
   \end{subfigure}
   %
-\caption{\label{fig:oneinc:trainexxeyy3} Training curves for CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging up to 3 inclusions.}
+\caption{\label{fig:threeinc:trainexxeyy} Training curves for CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging up to 3 inclusions.}
 \end{figure}
-% Training loss, val_loss for eyy
+% Training loss, val_loss for eyy (3 softplus)
 \begin{figure}[h]
   %
   \centering
@@ -708,9 +708,9 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
     \caption{Validation loss}
   \end{subfigure}
   %
-\caption{\label{fig:oneinc:traineyy3} Training curves for CNN $\epsilon_{yy}$ for imaging up to 3 inclusions.}
+\caption{\label{fig:threeinc:traineyy} Training curves for CNN $\epsilon_{yy}$ for imaging up to 3 inclusions.}
 \end{figure} 
-% Training loss, val_loss for uxuy
+% Training loss, val_loss for uxuy (3 softplus)
 \begin{figure}[h]
   %
   \centering
@@ -724,9 +724,9 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
     \caption{Validation loss}
   \end{subfigure}
   %
-  \caption{\label{fig:oneinc:trainuxuy3} Training curves for CNN $u_x$ \& $u_y$ for imaging up to 3 inclusions.}
+  \caption{\label{fig:threeinc:trainuxuy} Training curves for CNN $u_x$ \& $u_y$ for imaging up to 3 inclusions.}
 \end{figure}
-% Training loss, val_loss for uy
+% Training loss, val_loss for uy (3 softplus)
 \begin{figure}[h]
   %
   \centering
@@ -740,127 +740,10 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
     \caption{Validation loss}
   \end{subfigure}
   %
-  \caption{\label{fig:oneinc:trainuy3} Training curves for CNN $u_y$ for imaging up to 3 inclusions.}
+  \caption{\label{fig:threeinc:trainuy} Training curves for CNN $u_y$ for imaging up to 3 inclusions.}
 \end{figure}
 %
-% Figure 1
-\begin{figure}[h]
-  \mupics{3}{1}{fig:threeinc:1}
-  \caption{\label{fig:threeinc:1}Imaging up to 3 inclusions: result 1.}
-\end{figure}
-\newpage
-\clearpage
-% Figure 2
-\begin{figure}[h]
-  \mupics{3}{2}{fig:threeinc:2}
-  \caption{\label{fig:threeinc:2}Imaging up to 3 inclusions: result 2. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 3
-\begin{figure}[h]
-  \mupics{3}{3}{fig:threeinc:3}
-  \caption{\label{fig:threeinc:3}Imaging up to 3 inclusions: result 3. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 4
-\begin{figure}[h]
-  \mupics{3}{4}{fig:threeinc:4}
-  \caption{\label{fig:threeinc:4}Imaging up to 3 inclusions: result 4. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 5
-\begin{figure}[h]
-  \mupics{3}{5}{fig:threeinc:5}
-  \caption{\label{fig:threeinc:5}Imaging up to 3 inclusions: result 5. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 6
-\begin{figure}[h]
-  \mupics{3}{6}{fig:threeinc:6}
-  \caption{\label{fig:threeinc:6}Imaging up to 3 inclusions: result 6. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 7
-\begin{figure}[h]
-  \mupics{3}{7}{fig:threeinc:7}
-  \caption{\label{fig:threeinc:7}Imaging up to 3 inclusions: result 7. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 8
-\begin{figure}[h]
-  \mupics{3}{8}{fig:threeinc:8}
-  \caption{\label{fig:threeinc:8}Imaging up to 3 inclusions: result 8. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 9
-\begin{figure}[h]
-  \mupics{3}{9}{fig:threeinc:9}
-  \caption{\label{fig:threeinc:9}Imaging up to 3 inclusions: result 9. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 10
-\begin{figure}[h]
-  \mupics{3}{10}{fig:threeinc:10}
-  \caption{\label{fig:threeinc:10}Imaging up to 3 inclusions: result 10. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 11
-\begin{figure}[h]
-  \mupics{3}{11}{fig:threeinc:11}
-  \caption{\label{fig:threeinc:11}Imaging up to 3 inclusions: result 11. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 12
-\begin{figure}[h]
-  \mupics{3}{12}{}
-  \caption{\label{fig:threeinc:12}Imaging up to 3 inclusions: result 12. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 13
-\begin{figure}[h]
-  \mupics{3}{13}{fig:threeinc:13}
-  \caption{\label{fig:threeinc:13}Imaging up to 3 inclusions: result 13. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 14
-\begin{figure}[h]
-  \mupics{3}{14}{fig:threeinc:14}
-  \caption{\label{fig:threeinc:14}Imaging up to 3 inclusions: result 14. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 15
-\begin{figure}[h]
-  \mupics{3}{15}{fig:threeinc:15}
-  \caption{\label{fig:threeinc:15}Imaging up to 3 inclusions: result 15. }
-\end{figure}
-\newpage
-\clearpage
-% Figure 16
-\begin{figure}[h]
-  \mupics{3}{16}{fig:threeinc:16}
-  \caption{\label{fig:threeinc:16}Imaging up to 3 inclusions: result 16. }
-\end{figure}
-\newpage
-\clearpage
-%
-%
-
-
-\section{Imaging three inclusions with constraints}
-% Training loss, val_loss for exxeyy
+% Training loss, val_loss for exxeyy (3 tanh)
 \begin{figure}[h]
   %
   \centering
@@ -876,7 +759,7 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
   %
 \caption{\label{fig:threeinctanh:trainexxeyy} Training curves for CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging three inclusions with constraints.}
 \end{figure}
-% Training loss, val_loss for eyy
+% Training loss, val_loss for eyy (3 tanh)
 \begin{figure}[h]
   %
   \centering
@@ -893,7 +776,7 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
 \caption{\label{fig:threeinctanh:traineyy} Training curves for CNNc $\epsilon_{yy}$ for imaging three inclusions with constraints.}
 \end{figure}
 %
-% Training loss, val_loss for ux+uy
+% Training loss, val_loss for ux+uy (3 tanh)
 \begin{figure}[h]
   %
   \centering
@@ -907,10 +790,9 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
     \caption{Validation loss}
   \end{subfigure}
   %
-\caption{\label{fig:threeinctanh:trainuxuy} Training curves for CNNc $u_x$ \& $u_y$ for imaging three inclusions with constraints.}
+  \caption{\label{fig:threeinctanh:trainuxuy} Training curves for CNNc $u_x$ \& $u_y$ for imaging three inclusions with constraints.}
 \end{figure}
-%
-% Training loss, val_loss for uy
+% Training loss, val_loss for uy (3 tanh)
 \begin{figure}[h]
   %
   \centering
@@ -926,122 +808,237 @@ In this section, we evaluate the ability of the CNN to learn from fields contain
   %
 \caption{\label{fig:threeinctanh:trainuy} Training curves for CNNc $u_y$ for imaging three inclusions with constraints.}
 \end{figure}
+% Reconstructions
+% Figure 1 3inc
+\begin{figure}[h]
+  \mupics{3}{1}{fig:threeinc:1}
+  \caption{\label{fig:threeinc:1}Imaging up to 3 inclusions (softplus): result 1. The inclusion with the higher shear modulus is clearly captured. The inclusion with the lower shear modulus is not captured clearly. There are regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
 % Figure 1 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{1}{fig:threeinctanh:1}
-  \caption{\label{fig:threeinctanh:1}Imaging three inclusions with constraints: result 1.}
+  \caption{\label{fig:threeinctanh:1}Imaging up to 3 inclusions (twisted tanh): result 1. The inclusion with the higher shear modulus is overpredicted. The inclusion with the lower shear modulus is not captured. There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 2 3inc
+\begin{figure}[h]
+  \mupics{3}{2}{fig:threeinc:2}
+  \caption{\label{fig:threeinc:2}Imaging up to 3 inclusions (softplus) : result 2. The inclusion is clear but the shear modulus is overpredicted. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 2 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{2}{fig:threeinctanh:2}
-  \caption{\label{fig:threeinctanh:2}Imaging three inclusions with constraints: result 2.}
+  \caption{\label{fig:threeinctanh:2}Imaging up to 3 inclusions (twisted tanh) : result 2. The inclusion is clear but its shear modulus is slightly overpredicted. There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 3 3inc
+\begin{figure}[h]
+  \mupics{3}{3}{fig:threeinc:3}
+  \caption{\label{fig:threeinc:3}Imaging up to 3 inclusions (softplus): result 3. The inclusions with the highest and second highest shear modulus are clearly visible and are slightly overpredicted. The inclusion with the lowest shear modulus is not clearly seen. There are regions of low shear modulus adjacent to the inclusion. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 3 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{3}{fig:threeinctanh:3}
-  \caption{\label{fig:threeinctanh:3}Imaging three inclusions with constraints: result 3.}
+  \caption{\label{fig:threeinctanh:3}Imaging up to 3 inclusions (twisted tanh) : result 3. The inclusions with the highest and second highest shear modulus are clearly visible and are slightly overpredicted in figures (b)-(g). Figures (h) and (i) show only the central inclusion clearly. The inclusion with the lowest shear modulus is not seen.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 4 3inc
+\begin{figure}[h]
+  \mupics{3}{4}{fig:threeinc:4}
+  \caption{\label{fig:threeinc:4}Imaging up to 3 inclusions (softplus): result 4. The inclusion is clear but the shear modulus is overpredicted. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 4 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{4}{fig:threeinctanh:4}
-  \caption{\label{fig:threeinctanh:4}Imaging three inclusions with constraints: result 4.}
+  \caption{\label{fig:threeinctanh:4}Imaging up to 3 inclusions (twisted tanh): result 4. The inclusion is clear and the shear modulus is accurately predicted in (b)-(e). It is overpredicted in (f)-(i). There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 5 3inc
+\begin{figure}[h]
+  \mupics{3}{5}{fig:threeinc:5}
+  \caption{\label{fig:threeinc:5}Imaging up to 3 inclusions (softplus): result 5. The overlapping inclusions are combined into a single inclusion whose shear modulus is overpredicted. The shear modulus of the inclusion to the right is accurately predicted. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 5 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{5}{fig:threeinctanh:5}
-  \caption{\label{fig:threeinctanh:5}Imaging three inclusions with constraints: result 5.}
+  \caption{\label{fig:threeinctanh:5}Imaging up to 3 inclusions (twisted tanh): result 5. The overlapping inclusions are combined into a single inclusion whose shear modulus is accurately predicted. The shear modulus of the inclusion to the right is accurately predicted. There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 6 3inc
+\begin{figure}[h]
+  \mupics{3}{6}{fig:threeinc:6}
+  \caption{\label{fig:threeinc:6}Imaging up to 3 inclusions (softplus): result 6. The shear modulus of the top inclusion is accurately predicted while that of the lower inclusions is over predicted. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 6 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{6}{fig:threeinctanh:6}
-  \caption{\label{fig:threeinctanh:6}Imaging three inclusions with constraints: result 6.}
+  \caption{\label{fig:threeinctanh:6}Imaging up to 3 inclusions (twisted tanh): result 6. The shear modulus of the top inclusion is accurately predicted while that of the lower inclusions is over predicted. There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 7 3inc
+\begin{figure}[h]
+  \mupics{3}{7}{fig:threeinc:7}
+  \caption{\label{fig:threeinc:7}Imaging up to 3 inclusions (softplus): result 7.  The overlapping inclusions are combined into a single inclusion whose shear modulus is overpredicted. There are regions of low shear modulus adjacent to the inclusion. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 7 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{7}{fig:threeinctanh:7}
-  \caption{\label{fig:threeinctanh:7}Imaging three inclusions with constraints: result 7.}
+  \caption{\label{fig:threeinctanh:7}Imaging up to 3 inclusions (twisted tanh): result 7. The overlapping inclusions are combined into a single inclusion whose shear modulus is overpredicted. There are no regions of low shear modulus adjacent to the inclusion. }
+\end{figure}
+\newpage
+\clearpage
+% Figure 8 3inc
+\begin{figure}[h]
+  \mupics{3}{8}{fig:threeinc:8}
+  \caption{\label{fig:threeinc:8}Imaging up to 3 inclusions (softplus): result 8. The shear modulus of both inclusions is overpredicted. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 8 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{8}{fig:threeinctanh:8}
-  \caption{\label{fig:threeinctanh:8}Imaging three inclusions with constraints: result 8.}
+  \caption{\label{fig:threeinctanh:8}Imaging up to 3 inclusions (twisted tanh): result 8. The shear modulus of both inclusions is overpredicted. There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 9 3inc
+\begin{figure}[h]
+  \mupics{3}{9}{fig:threeinc:9}
+  \caption{\label{fig:threeinc:9}Imaging up to 3 inclusions (softplus): result 9. All three inclusions are clearly seen. The shear modulus of the top two is overpredicted while that of the lowest one is underpredicted. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 9 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{9}{fig:threeinctanh:9}
-  \caption{\label{fig:threeinctanh:9}Imaging three inclusions with constraints: result 9.}
+  \caption{\label{fig:threeinctanh:9}Imaging up to 3 inclusions (twisted tanh): result 9. The upper and central inclusions are clearly seen and their shear modulus is overpredicted. The lower inclusion is not clearly seen. It is seen only in wisps. There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 10 3inc
+\begin{figure}[h]
+  \mupics{3}{10}{fig:threeinc:10}
+  \caption{\label{fig:threeinc:10}Imaging up to 3 inclusions (softplus): result 10. The inclusion is clearly seen but its shear modulus is overpredicted. There are regions of low shear modulus adjacent to the inclusion. }
 \end{figure}
 \newpage
 \clearpage
 % Figure 10 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{10}{fig:threeinctanh:10}
-  \caption{\label{fig:threeinctanh:10}Imaging three inclusions with constraints: result 10.}
+  \caption{\label{fig:threeinctanh:10}Imaging up to 3 inclusions (twisted tanh): result 10. The inclusion is clearly seen but its shear modulus is overpredicted. There are no regions of low shear modulus adjacent to the inclusion. }
+\end{figure}
+\newpage
+\clearpage
+% Figure 11 3inc
+\begin{figure}[h]
+  \mupics{3}{11}{fig:threeinc:11}
+  \caption{\label{fig:threeinc:11}Imaging up to 3 inclusions (softplus): result 11. The inclusions are clearly seen. Their shear modulus is overpredicted. The predicted shear modulus of the inclusion with lower shear modulus is lower than the predicted shear modulus of the inclusion with higher shear modulus. That is, the relative contrast is predicted correctly. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 11 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{11}{fig:threeinctanh:11}
-  \caption{\label{fig:threeinctanh:11}Imaging three inclusions with constraints: result 11.}
+  \caption{\label{fig:threeinctanh:11}Imaging up to 3 inclusions (twisted tanh): result 11. Both inclusions are clearly seen but their shear moduli are overpredicted. There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 12 3inc
+\begin{figure}[h]
+  \mupics{3}{12}{}
+  \caption{\label{fig:threeinc:12}Imaging up to 3 inclusions (softplus): result 12. The two overlapping inclusions are combined into one single inclusion whose shear modulus is slightly overpredicted. The predicted shear modulus of the top inclusion is approximately correct. There are regions of low shear modulus adjacent to the inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 12 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{12}{fig:threeinctanh:12}
-  \caption{\label{fig:threeinctanh:12}Imaging three inclusions with constraints: result 12.}
+  \caption{\label{fig:threeinctanh:12}Imaging up to 3 inclusions (twisted tanh): result 12. The two overlapping inclusions are combined into one single inclusion whose shear modulus is accurately predicted. The upper inclusion is not clearly seen. It is seen only in wisps. There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 13 3inc
+\begin{figure}[h]
+  \mupics{3}{13}{fig:threeinc:13}
+  \caption{\label{fig:threeinc:13}Imaging up to 3 inclusions (softplus): result 13. The inclusion is clearly seen and its shear modulus is overpredicted. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 13 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{13}{fig:threeinctanh:13}
-  \caption{\label{fig:threeinctanh:13}Imaging three inclusions with constraints: result 13.}
+  \caption{\label{fig:threeinctanh:13}Imaging up to 3 inclusions (twisted tanh): result 13. The inclusion is clearly seen and its shear modulus is overpredicted. There are no regions of low shear modulus adjacent to the inclusion. }
+\end{figure}
+\newpage
+\clearpage
+% Figure 14 3inc
+\begin{figure}[h]
+  \mupics{3}{14}{fig:threeinc:14}
+  \caption{\label{fig:threeinc:14}Imaging up to 3 inclusions (softplus): result 14. The two inclusions are clearly seen. Their shear modulus is slightly overpredicted. The predicted shear modulus of the inclusion with lower shear modulus is lower than the predicted shear modulus of the inclusion with higher shear modulus. That is, the relative contrast is predicted correctly. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 14 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{14}{fig:threeinctanh:14}
-  \caption{\label{fig:threeinctanh:14}Imaging three inclusions with constraints: result 14.}
+  \caption{\label{fig:threeinctanh:14}Imaging up to 3 inclusions (twisted tanh): result 14. The two inclusions are clearly seen. Their shear modulus is slightly overpredicted. The predicted shear modulus of the inclusion with lower shear modulus is about the same as the predicted shear modulus of the inclusion with higher shear modulus. That is, the relative contrast is not predicted correctly. There are no regions of low shear modulus adjacent to the inclusion.}
+\end{figure}
+\newpage
+\clearpage
+% Figure 15 3inc
+\begin{figure}[h]
+  \mupics{3}{15}{fig:threeinc:15}
+  \caption{\label{fig:threeinc:15}Imaging up to 3 inclusions (softplus): result 15. The three inclusions are clearly seen. The shear modulus of the lowest inclusion is overpredicted. The shear modulus of the top two inclusions is close to correct. There are regions of low shear modulus adjacent to the inclusion.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 15 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{15}{fig:threeinctanh:15}
-  \caption{\label{fig:threeinctanh:15}Imaging three inclusions with constraints: result 15.}
+  \caption{\label{fig:threeinctanh:15}Imaging up to 3 inclusions (twisted tanh): result 15. The topmost and lowermost inclusions are clearly seen. Their shear modulus is overpredicted. The middle inclusion with the lowest shear modulus is seen only in the form of wisps. There are no regions of low shear modulus adjacent to the inclusion. }
+\end{figure}
+\newpage
+\clearpage
+% Figure 16 3inc
+\begin{figure}[h]
+  \mupics{3}{16}{fig:threeinc:16}
+  \caption{\label{fig:threeinc:16}Imaging up to 3 inclusions (softplus): result 16. The three inclusions are clearly seen. Their shear modulus is slightly overpredicted. There are regions of low shear modulus adjacent to the inclusions.}
 \end{figure}
 \newpage
 \clearpage
 % Figure 16 (threetanh)
 \begin{figure}[h]
   \mupics{3c}{16}{fig:threeinctanh:16}
-  \caption{\label{fig:threeinctanh:16}Imaging three inclusions with constraints: result 16.}
+  \caption{\label{fig:threeinctanh:16}Imaging up to 3 inclusions (twisted tanh): result 16. The inclusions are clearly seen in figures (b)-(g). Their shear modulus is overpredicted. In figures (h)-(i) the top two inclusions are only seen as wisps. There are no regions of low shear modulus adjacent to the inclusions.}
 \end{figure}
 \newpage
 \clearpage
+%
+%
 \section{Concluding remarks}
 % Custom activation function
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
-A CNN capable of predicting shear modulus fields from displacement or strain fields (or components thereof) was presented. Results which warrant further research were presented. Directions for further work are discussed below. 
+A CNN capable of predicting shear modulus fields from displacement or strain fields (or components thereof) was presented. Results inwhich a single inclusion was imaged and multiple inclusions were imaged were presented. These results warrant further research. 
 \subsection{Future work}
 \begin{enumerate}
 \item{Addition of homogeneous examples to the dataset would be a good test for the algorithm proposed. However, given that the algorithm underpredicts the shear modulus of small inclusions, we believe homogeneous examples will be predicted correctly by the algorithm.}
