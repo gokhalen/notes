@@ -1107,6 +1107,7 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \begin{enumerate}
 \item{Addition of homogeneous examples to the dataset would be a good test for the CNNs evaluated in this work However, given that the CNNs underpredict the shear modulus of small inclusions, we believe homogeneous examples will be predicted correctly.}
 \item{Training the CNN with displacement or strain data generated using random values for the shear modulus at each node and seeing if it learns the inverse operator from the displacement (or strain) fields to shear modulus fields would be interesting. Training with other complex shapes would also be interesting.}
+\item{Training with examples in which shear modulus of only one node is changed relative to the background. It would be interesting, if based on this information, the CNN can process a displacement filed and understand that the stiffness of only certain nodes needs to be changed.}
 \item{It is seen that better results are obtained for larger inclusion with larger contrast. Stiffness of smaller inclusions is under-predicted. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions. We also note that from previous experience, the adjoint method \cite{paper:oberai2003} is able to predict the small inclusions correctly using noiseless data. It seems that the adjoint method does better than CNNs on the problem of predicting small inclusions.}
 \item{We have not visualized the filters produced for the first two layers of the CNN. Visualizing the filters could yield additional insights as in \cite{paper:pateloberai2019}.}
 \item{It is often observed that a region of high shear modulus (inclusion) has an adjacent region which has shear modulus less than the background stiffness when the softplus activation is used. The origins of this need to be investigated. Using the twisted tanh activation and prior knowledge about the range of allowable shear modulus leads to elimination of this artifact.}
@@ -1130,10 +1131,7 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \bibliography{eibib}{}
 \bibliographystyle{plain}
 \end{document}
-
-
 % Document ends here
-
 \appendix
 
 \section{\label{sect:binary}Binary classification}
