@@ -22,7 +22,7 @@
 \newcommand{\eer}{\end{eqnarray}}
 \newcommand{\nn}{\nonumber}
 \newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
-\newcommand{\pdd}[2]{\frac{\partial}{\partial{#2}}{(#1)} }
+\newcommand{\pdd}[2]{\frac{\partial{{#1}}}{\partial{#2}}}
 % define variables for \mupics command
 \newcommand{\nhgscalefactor}{0.24}
 \newcommand{\nhgfigheight}{4.0cm}
@@ -149,7 +149,12 @@ The shear modulus of palpable nodules (which can be thought of as abnormal and p
 \subsection{Steps involved in elasticity imaging}
 Elasticity Imaging typically consists of the three steps of image acquisition, image registration, inverse problem solution. These steps are discussed in the following sections.
 \subsubsection{Image acquisition} Images of soft tissue undergoing deformation due to applied excitation are acquired using various imaging modalities such as ultrasound or magnetic resonance imaging. While time dependent images can be acquired, we shall consider here only two images: a \textit{pre-deformation image} acquired before force is applied and a \textit{post-deformation image} acquired after force is applied. This process is shown in Figure (\ref{fig:prepostimage}) for ultrasound imaging. Also see Figure (2) in \cite{paper:konofagou2004}.
-\subsubsection{Image registration} The goal in this step is to find a map which transforms the pre-deformation image into the post-deformation image. For every point in the pre-deformation image we aim to find its location in the post-deformation image. See Figure (\ref{fig:registschematic}). This gives us the \textit{displacement field} between the two images. This displacement field is often referred to as the \textit{measured displacement field}. Differentiating the displacement field with respect to spatial coordinates yields the strain field. See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for minimization based approaches for computing the displacement field. See \cite{paper:ophir1991,paper:ophir1996,paper:alam1998} and references therein for cross-correlation based approaches. See Figure (\ref{fig:exampdispstrain}) for examples of displacement and strain fields computed using FyPy \cite{misc:fypy}.\\In our work, since we do not have access to medical images we cannot register them to obtain displacement fields. Instead, we generate displacement fields from known shear modulus fields using the finite element method \cite{book:hugheslinear,book:fishbelytschko}.
+\subsubsection{Image registration} The goal in this step is to find a map which transforms the pre-deformation image into the post-deformation image. For every point in the pre-deformation image we aim to find its location in the post-deformation image. See Figure (\ref{fig:registschematic}). This gives us the \textit{displacement field} between the two images. This displacement field is often referred to as the \textit{measured displacement field}. Differentiating the displacement field with respect to spatial coordinates yields the strain field. If $u_x(x,y)$ and $u_{y}(x,y)$ are the $x$ and $y$ components of the displacement field, then the strain field is given by equation (\ref{eqn:straindef}).
+\beq
+\label{eqn:straindef}
+\epsilon_{xx} = \pdd{u_{x}}{x} \qquad \epsilon_{yy} = \pdd{u_{y}}{y} \qquad \epsilon_{xy} = \frac{1}{2}\Big(\pdd{u_{x}}{y} + \pdd{u_{y}}{x}\Big)
+\eeq
+See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for minimization based approaches for computing the displacement field. See \cite{paper:ophir1991,paper:ophir1996,paper:alam1998} and references therein for cross-correlation based approaches. See Figure (\ref{fig:exampdispstrain}) for examples of displacement and strain fields computed using FyPy \cite{misc:fypy}.\\In our work, since we do not have access to medical images we cannot register them to obtain displacement fields. Instead, we generate displacement fields from known shear modulus fields using the finite element method \cite{book:hugheslinear,book:fishbelytschko}.
 %
 \begin{figure}[h]
   \centering
