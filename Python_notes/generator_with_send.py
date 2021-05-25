@@ -5,6 +5,8 @@ Spyder Editor
 This is a temporary script file.
 """
 
+import sys
+
 # [1] https://stackoverflow.com/q/19892204/13560598
 # [2] https://hackernoon.com/python-generators-35ac68334882
 
