@@ -12,6 +12,12 @@ Created on Fri May 28 12:22:55 2021
 # in the following example, the __new__ method of super(AA,cls)
 # probably calls __init__ of AA
 
+# from gfg
+# This means that if the super is omitted for __new__ method the
+#  __init__ method will not be executed. Let’s see if that is the case.
+
+
+
 class AA(object):
     def __new__(cls,x,y):
         print('new called, creating instance')
