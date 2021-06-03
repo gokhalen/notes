@@ -7,6 +7,8 @@ Created on Thu Jun  3 14:19:40 2021
 
 # Beazley and Jones, 'Python Cookbook' pg. 308
 
+# __getattr__ does not apply to dunder methods
+
 class A:
     def spam3(self,x,y,z):
         print('A.spam3 ',x,y,z)
