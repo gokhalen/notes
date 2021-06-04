@@ -37,16 +37,27 @@ def decorate_args(prefix='',degree='',title=''):
 # last argument, func is the decorated function/
 # first argument is the object to which func is to be attached
 def attach_wrapper(obj,func=None):
-    # not sure what this if does
-    # seems to returns this decorator function
-    # with the obj argument set using functools.partial
-    # might be something where multiple decorators are applied
+    # see below for an explanation of this
     if func is None:
         return partial(attach_wrapper,obj)
     
     setattr(obj,func.__name__,func)
     # notice this - the decorated func is not modified
     return func
+
+# IMPORTANT EXPLANATION 
+# as per p.g. 341 in beazley jones the calling sequence for 
+# decorators with arguments is 
+# 
+# func= attach_wrapper(obj=someting) (func)
+#       ----------------------------
+# the underlined is the first call to attach_wrapper
+# since func is not defined, it is None
+# the code goes to the first return and returns
+# partial of attach_wrapper which accepts only once argument
+# which is func
+# this partial of attach_wrapper is called again
+
 
 # pretty much the same decorator as before but with additional
 # function attributes and non-local definitions
@@ -78,6 +89,37 @@ def decorate_adjustable_args(prefix='',degree='',title=''):
         return wrapper
 
     return decorate
+
+
+# decorator multiple use - can be used with or without args
+# 
+def decorate_multiple(func=None,*,prefix='A',degree='B',title='C'):
+    
+    # as per IMPORTANT EXPLANATION above
+    # if used as 
+    # 1) @decorate_multiple then the calling sequence is 
+    # func = decorate_multiple(func)
+    # func is the first positional argument - the decorator skips the first
+    # return statement
+    # if used as 
+    # 2) @decorate_multiple(prefix='Herr',degree='Doctor',title='Professor')
+    # the calling sequence is 
+    # func = decorate_multiple(prefix='Herr',degree='Doctor',title='Professor')(func)
+    # this first call does through the first return statement and partial of decorate_multiple
+    # is returned, which then accepts func as a positional argument
+    
+    if func is None:
+        return partial(decorate_multiple,prefix=prefix,degree=degree,title=title)
+    
+    @wraps(func)
+    def wrapper(*args,**kwargs):
+        print('-'*80)
+        print(f'{prefix} {degree} {title} ',end='',sep='')
+        func()
+        print('-'*80)
+            
+    return wrapper
+
 
 # ----------------------------------------------------------------------------
 # CASE 1
@@ -112,6 +154,7 @@ def decorate_adjustable_args(prefix='',degree='',title=''):
 # orator from Recipe 9.2, and wrote code like this:
 
 
+'''
 @decorate_adjustable_args(prefix='Herr',degree='Doctor',title='Professor')
 def print_nach():
     print('Nachiket Gokhale')
@@ -123,4 +166,21 @@ print_nach.set_prefix('Comrade')
 print_nach.set_degree('Candidate of Science')
 print_nach.set_title('Akademician')
 print_nach()
+'''
+
+#----------------------------------------------------------------------------
+
+@decorate_multiple(prefix='Herr',degree='Doctor',title='Professor')
+def print_nach():
+    print('Nachiket Gokhale')
+    
+print_nach()
+
+@decorate_multiple
+def print_nach():
+    print('Nachiket Gokhale')
+    
+print_nach()
+
+
 
