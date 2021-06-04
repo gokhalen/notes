@@ -106,6 +106,12 @@ def decorate_adjustable_args(prefix='',degree='',title=''):
 # CASE 3: Decorator which takes arguments which can later be customized
 # 
 
+# An amazing feature of this recipe is that the accessor functions will propagate through
+# multiple levels of decoration (if all of your decorators utilize @functools.wraps). For
+# example, suppose you introduced an additional decorator, such as the @timethis dec‐
+# orator from Recipe 9.2, and wrote code like this:
+
+
 @decorate_adjustable_args(prefix='Herr',degree='Doctor',title='Professor')
 def print_nach():
     print('Nachiket Gokhale')
