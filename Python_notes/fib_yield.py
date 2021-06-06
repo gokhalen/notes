@@ -63,6 +63,8 @@ class FibNode():
             
             
     def fibgen(self):
+         # correct - .value is defined for only f0 and f1
+         # if .value is not defined we need to return the generator
          leftyield  = self.left.fibgen()  if self.left.value  is None else self.left.value
          rightyield = self.right.fibgen() if self.right.value is None else self.right.value
          yield (yield leftyield) + (yield rightyield)
