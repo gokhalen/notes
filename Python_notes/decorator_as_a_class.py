@@ -11,6 +11,8 @@ from functools import wraps
 class Profiled:
     def __init__(self,func):
         print('Calling init: func=',func)
+        # see below for explanation
+        # wraps is copying metadata from func to self (self is callable)
         wraps(func)(self)
         self.ncalls = 0
         
