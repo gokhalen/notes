@@ -59,6 +59,9 @@ class Meta(type):
         # and it must return a dictionary-like object that's used as
         # the local namespace for all the code from the class body.
         
+        # the returned dictionary becomes clsdict in the __new__ method of this class
+        # (Meta)
+        
         print('Calling __prepare__ in Meta')
         print(f'{cls=},{clsname=},{bases=}')
         print('-'*80)
