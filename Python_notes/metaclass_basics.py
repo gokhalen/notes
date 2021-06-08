@@ -22,6 +22,9 @@ class Meta(type):
         # p.g. 279 in Beazley Jones Python Cookbook
         print(f'{self=},{clsname=},{bases=},{clsdict=}')
         print('-'*80)
+        
+        # Can also do the following if you'd like   
+        # super().__init__(clsname,bases,clsdict)
 
     
     def __call__(self,*args,**kwargs):
