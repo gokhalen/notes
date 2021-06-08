@@ -10,8 +10,19 @@ Created on Tue Jun  8 12:16:54 2021
 
 
 # without inheriting from type super() calls don't work
+# type is not automatically the parent, it needs to be specified
 class Meta(type):
     
+    # just like normal classes have a __new__ method, 
+    # metaclasses do so too
+    # this delegates to type, which does the right thing
+    # I think if __new__ is not defined it is inherited from type
+    def __new__(cls,clsname,bases,clsdict):
+        print('Calling __new__ in Meta')
+        print(f'{cls=},{clsname=},{bases=},{clsdict=}')
+        print('-'*80)
+        return super().__new__(cls,clsname,bases,clsdict)
+            
     def __init__(self,clsname,bases,clsdict):
         # this gets called when Normal class is defined with four arguments
         # Since a class is an instance of MetaClass,
@@ -61,6 +72,8 @@ class Normal(metaclass=Meta):
         print(f'{cls=},{x=}')
         print('-'*80)
 
+        # super of Normal is NOT Meta, it is object
+        # you can check Normal.__mro__
         # you can call __init__ as below
         return super(Normal,cls).__new__(cls)
         # doing the following is going to be an infinite recursion
