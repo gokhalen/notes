@@ -30,7 +30,7 @@ class Meta(type):
     def __call__(self,*args,**kwargs):
         # arguments from __init__ in Normal are forwarded here
         print('Calling __call__ in Meta')
-        print(f'{self=}{args=},{kwargs=}')
+        print(f'{self=},{args=},{kwargs=}')
         print('-'*80)
         
 
@@ -41,6 +41,19 @@ class Meta(type):
         
         super().__call__(*args, **kwargs)
         pass
+    
+    @classmethod
+    def __prepare__(cls,clsname,bases):
+        # This method is called before the class body is executed
+        # and it must return a dictionary-like object that's used as
+        # the local namespace for all the code from the class body.
+        
+        print('Calling __prepare__ in Meta')
+        print(f'{cls=},{clsname=},{bases=}')
+        print('-'*80)
+        return {}
+    
+    
     
 class Normal(metaclass=Meta):
     def __new__(cls,x):
