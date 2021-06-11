@@ -8,27 +8,30 @@ import threading
 class FakeDatabase:
     def __init__(self):
         self.value = 0
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
     def update(self,name):
         logging.info(f'Thread {name}: starting update')
         logging.info(f'Thread {name}: about to lock')
 
-        # attempt to release the lock if it has been acquired by someone else
-        # so we are releasing a lock acquired by another thread - dangerous it is
-        # answer will always be 1, instead of 2
+        # attempt to release the RLock if it has been acquired by someone else
+        # so we are releasing a RLock acquired by another thread
+        # unlike Lock, we cannot release a RLock acquired by another thread
         # this is one reason Rlock is better (but slower)
 
         try:
+            logging.info(f'Thread {name} trying to steal lock')
             self._lock.release()
             self._lock.acquire()
         except:
+            logging.info(f'Exception raised, thread {name} now waiting for acquire')
             self._lock.acquire()
+            logging.info(f'Thread {name} has acquired lock')
             
         logging.debug(f'Thread {name} has lock')
         local_copy  = self.value
         local_copy += 1
-        time.sleep(0.2)
+        time.sleep(2)
         self.value = local_copy
         logging.debug(f'Thread {name} about to release lock')
         self._lock.release()
