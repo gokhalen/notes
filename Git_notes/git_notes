@@ -1,0 +1,30 @@
+1) Branching:
+   a) After creating a branch in the local repo it can be pushed into the remote repo via
+
+   git push --set-upstream origin crazy-branch
+
+   b) To switch to a branch:
+
+   git checkout <branch-name>
+
+2) Tagging:
+
+1) To checkout specific tag, first clone the repo and then
+      "git checkout <tagname>" e.g. "git checkout v1.0"
+
+2) Tags are added with:
+      git tag -a v1.0 -m "Before Parallel Development"
+
+      -a means annotated
+      -m means message
+
+3) Tags are pushed with:
+      git push origin --tags
+
+4) "git tag" shows all tags
+
+5) "git tag -d <tagname>" deletes tag
+
+More: https://www.drupixels.com/blog/git-tags-guide-create-delete-push-tags-remote-and-much-more
+
+delete this and this and this
