@@ -1,0 +1,35 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Linear regression and hypothesis testing}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Introduction}
+A (slightly hand waving) proof of first and second order optimality conditions is given. Let $x_0$ be a local minimum of $f(x)$ i.e. $f(x) \leq f(x+h) \,\forall\, h $ in a small neighborhood of $x$. The $\leq$ is important. Changing it to $<$ does not work.
+\section{Proof: first condition}
+\ber
+f(x) &\leq& f(x+h)  \,\forall\, h \text{ in a small neighborhood around } x \\
+f(x) &\leq& f(x) + f'(x)h + ...\\ 
+f(x) &\leq& f(x) - f'(x)h + ... \text{ considering a step in the opposite direction }
+\eer
+Neglecting higher order terms and simplifying equations (2) and (3) we get
+\beq
+0 \leq f'(x)h \qquad \text{and} \qquad 0 \leq -f'(x)h
+\eeq
+The above equations can be satisfied only for $f'(x)h=0$. Since $h\neq{0}$, we must have $f'(x)=0$. This is the first order optimality condition.
+\section{Proof: second condition}
+Using $f'(x)=0$, the Taylor expansion becomes
+\beq
+f(x+h) = f(x) + \frac{1}{2}f''(x)h^2 + ...
+\eeq
+Neglecting higher order terms, we note that since $f(x+h) \geq f(x)$ we must have $\frac{1}{2}f''(x)h^2 \geq 0$. This implies $f''(x) \geq 0$. 
+\end{document}
