@@ -1,5 +1,6 @@
 % Six results 2 - Excellent, 2 Good, 2 Bad. For softplus show halos
 % Mention adding more noise
+% Use only active voice. 
 \documentclass[12pt]{article}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -14,6 +15,8 @@
 \usepackage{pgffor}
 % usually hyperref has to be the last package imported
 \usepackage{hyperref}
+%
+\setlength\parindent{20pt}
 \SetWatermarkText{Draft}
 \SetWatermarkScale{10}
 %
@@ -113,6 +116,7 @@ Elasticity Imaging typically consists of the three steps of image acquisition, i
 \label{eqn:straindef}
 \epsilon_{xx} = \pdd{u_{x}}{x} \qquad \epsilon_{yy} = \pdd{u_{y}}{y} \qquad \epsilon_{xy} = \frac{1}{2}\Big(\pdd{u_{x}}{y} + \pdd{u_{y}}{x}\Big)
 \eeq
+
 See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for minimization based approaches for computing the displacement field. See \cite{paper:ophir1991,paper:ophir1996,paper:alam1998} and references therein for cross-correlation based approaches. In our work, we generate displacement fields from known shear modulus fields using the finite element method \cite{book:hugheslinear,book:fishbelytschko} and add appropriate noise to mimic the noise when displacement fields are computed from experimentally acquired images. See Figure (\ref{fig:exampdispstrain}) for examples of displacement and strain fields computed using FyPy \cite{misc:fypy}.
 %
 \begin{figure}[h]
@@ -155,18 +159,39 @@ See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for min
 \subsubsection{Iterative approach} Iterative approaches \cite{paper:oberai2003,paper:gokhale2008,paper:kalle1996,paper:doyley,paper:goenezen2011} involve guessing a distribution for the shear modulus, solving a linear elasticity forward problem to obtain the predicted displacement field, computing the value and the gradient (and/or Hessian) with respect to the shear modulus of an objective function which consists of a user specified norm of the difference between the predicted displacement field and the measured displacement field, and updating the guessed shear modulus distribution using a suitable optimization procedure such as a modified Newton Raphson scheme as in \cite{paper:doyley} or the BFGS scheme as in \cite{paper:gokhale2008,paper:goenezen2011}. Such approaches are typically slower than direct methods, since they require the solution of approximately $50$ to $100$ forward problems, but have the ability to handle incomplete data and complex nonlinear material models such as hyperelasticity.
 \subsubsection{Solving the inverse problem with CNNs}
 We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer (once time has been spent up front to train the CNN), can accommodate complex constitutive relations\footnote{We note here that we expect determining multiple material parameters (e.g. a linear and a non-linear parameter) from the same set of images to be challenging.}, can work with incomplete data (e.g. only a single component of a displacement field) and can work with noisy data. On the other hand, if data which is unlike what the CNN has been trained on is seen, then it is doubtful that the CNN will be able to make correct predictions. Also, CNNs do not predict a perfect result in the absence on noise, unlike traditional direct or iterative methods. On the other hand, it also appears that the performance of CNNs does not degrade as rapidly as direct or iterative methods with increasing noise.
-\section{Neural networks and problem setup}
+\section{\label{sect:probsetup}Problem setup for data generation}
+The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The reader is referred to \cite{book:hugheslinear,book:fishbelytschko,book:segelmathcont} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). Plane strain is assumed. The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. Both degrees of freedom are constrained at the pin and only the $y$ degree of freedom is constrained at the roller. The background shear modulus is $\mu_{back}=1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. Selective reduced integration is used to avoid mesh locking because the Poisson's ratio of $0.49$ renders the medium almost incompressible. The shear modulus of inclusions is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$. Depending on the dataset, there can be either exactly one inclusion or either one, two or three inclusions in the domain. 
+
+$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. The input data is scaled by the absolute maximum over all components. When noisy data is used we add zero mean additive Gaussian noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
+\begin{equation}
+  \label{eqn:snr}
+  SNR_{dB} = 20\log_{10}\Big(\frac{\|signal\|_{L^2}}{\|noise\|_{L^2}}\Big) \qquad \text{where} \|x\|_{L^2} = \sqrt{\sum_{i=1}^{N}x_i^2} 
+\end{equation}
+% Noise details
+%
+\begin{figure}[h] 
+   \centering
+    \includegraphics[totalheight=9cm]{Figures/bc.png}
+  \caption{\label{fig:bc}Boundary conditions and material properties used in this work. }
+\end{figure}
+%
+\section{Neural network architecture}
+\subsection{Review}
 In recent years, neural networks have been applied to various applications such as image classification \cite{paper:hinton2017}, hand written digit recognition \cite{paper:kulkarni2018}, solving differential equations and symbolic integration \cite{misc:lample2019}, solving complex partial differential equations such as the Navier-Stokes equation \cite{misc:anandkumar2020}, self-driving cars \cite{misc:agnihotri2019,misc:nvidiaselfdriving2016}, chaos \cite{paper:pathak2018}, natural language processing \cite{misc:googlenlp}, face recognition \cite{conf:taigman2014} and playing board games such as chess \cite{paper:alphazero}. Several effective Machine Learning frameworks such as Google's TensorFlow \cite{misc:tensorflow} (which we use in this work), Facebook's PyTorch \cite{incollect:pytorch}, Scikit-Learn \cite{paper:scikit-learn} are freely available. See \cite{misc:compdeep} for a complete list. We do not cover the theory of neural networks in this work. The interested reader is referred to \cite{book:aggarwal,book:goodfellow,book:chollet,misc:cs231n,misc:andrewng,misc:udemy} for detailed information about neural networks.
 \subsection{Neural networks and elasticity imaging}
-Given the success achieved by neural networks on the wide variety of applications cited in the previous section, it is natural to explore the application of neural networks to the inverse problem of elasticity imaging and several recent efforts \cite{paper:pateloberai2019,misc:gu2020,paper:hoeriginsana2016} have done so. In \cite{paper:pateloberai2019}, the authors use a convolutional neural network to classify specimens into elastically heterogeneous or elastically nonlinear. In \cite{paper:hoeriginsana2016}, the authors use a neural network to estimate strains and stress and then calculate elastic parameters. In \cite{misc:gu2020}, the authors use a neural network which predicts elasticity distributions using residual force maps to update the weights of the neural network. \\In contrast, in this work we compute the shear modulus field from the displacement or strain field using a CNN. There are no physical constraints involved in our work. It is purely a mapping problem from the space of displacement or strain fields to the space of the shear modulus fields. The input data for our CNN is a set of strain or displacement fields or components thereof. For each input there is a known corresponding target shear modulus field. Starting from an initial random guess of the weights, the CNN predicts shear modulus fields, compares them with the target fields to compute the loss function and its gradient. Using the gradient in an appropriate optimization algorithm, the weights are updated. Thus the CNN learns weights for its filters and other parameters. Using this learned information, the CNN is able to predict a shear modulus field from the input data of strain or displacement fields. Figure (\ref{fig:schematic_inv}) shows the mapping of a displacement field to a shear modulus field.\\
-It is worth considering if neural networks are really necessary. Consider the following algorithm to solve the elasticity imaging problem.
+Given the success achieved by neural networks on the wide variety of applications cited in the previous section, it is natural to explore the application of neural networks to the inverse problem of elasticity imaging and several recent efforts \cite{paper:pateloberai2019,misc:gu2020,paper:hoeriginsana2016} have done so. In \cite{paper:pateloberai2019}, the authors use a convolutional neural network to classify specimens into elastically heterogeneous or elastically nonlinear. In \cite{paper:hoeriginsana2016}, the authors use a neural network to estimate strains and stress and then calculate elastic parameters. In \cite{misc:gu2020}, the authors use a neural network which predicts elasticity distributions using residual force maps to update the weights of the neural network.
+
+In contrast, in this work we compute the shear modulus field from the displacement or strain field using a CNN. There are no physical constraints involved in our work. It is purely a mapping problem from the space of displacement or strain fields to the space of the shear modulus fields. The input data for our CNN is a set of strain or displacement fields or components thereof. For each input there is a known corresponding target shear modulus field. Starting from an initial random guess of the weights, the CNN predicts shear modulus fields, compares them with the target fields to compute the loss function and its gradient. Using the gradient in an appropriate optimization algorithm, the weights are updated. Thus the CNN learns weights for its filters and other parameters. Using this learned information, the CNN is able to predict a shear modulus field from the input data of strain or displacement fields. Figure (\ref{fig:schematic_inv}) shows the mapping of a displacement field to a shear modulus field.\\
+\subsection{Need for neural networks}
+At this point, it is worth considering if neural networks are really necessary. Consider the following algorithm to solve the elasticity imaging problem.
 %
 \begin{enumerate}
 \item{Let there be $n_{nodes}$ nodes used to discretize the shear modulus and displacement fields.}
-\item{Let the shear modulus at each node be allowed to take $n_{\mu}$ discrete values between the minimum shear modulus $\mu_{min}$ and the maximum shear modulus $\mu_{max}$.}
+\item{Let the shear modulus at each node be allowed to take $n_{\mu}$ discrete values between the minimum shear modulus $\mu_{back}$ and the maximum shear modulus $\mu_{max}$.}
 \item{Solve and store displacement fields corresponding to every possible discrete shear modulus field.}
 \item{When an unknown displacement field is encountered, find the closest displacement field from step (3) and output the corresponding shear modulus field as the answer.}
 \end{enumerate}
+
 The problem with the above algorithm is that the storage required in step (3) and the search space in step (4) is beyond enormous. There are ${n_{\mu}}^{n_{nodes}}$ possible shear modulus fields. This is an enormous number. To see this, take a concrete example: consider $n_{nodes}=1000$ and $n_{\mu}=10$. Then there are $10^{1000}$ possible shear modulus fields. We need an algorithm to search the large search space efficiently, and hence, the need for neural networks.
 %
 \begin{figure}[h]
@@ -176,7 +201,37 @@ The problem with the above algorithm is that the storage required in step (3) an
 \end{figure}
 %
 \subsection{\label{sect:cnnarch} CNN architecture used in this work}
-The typical architecture of the CNN we use in this work (implemented in TensorFlow \cite{misc:tensorflow}) is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}). The first dimension '?' represents the number of examples to be processed for training, validation or testing. Thus, the first training example's input data is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy \cite{paper:numpy} notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In color image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of components of the displacement or strain field used in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. Table (\ref{tab:cnnone:io}) gives the number of channels for each CNN trained. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam} with default settings. No regularization is used.  Each CNN has approximately $3.35$ million trainable parameters. After training, the model with the best validation loss is chosen to make predictions.\\For the activation of the output layer, we consider the softplus activation function in equation (\ref{eqn:softplus}) and the twisted tanh activation function in equation (\ref{eqn:twisttanh}). When using the softplus activation, the training shear modulus data is not normalized and while using the twisted tanh function the training shear modulus data is normalized to the range $(-1,1)$. The predictions made using the softplus only respect the basic positivity constraint on the shear modulus i.e. $\mu(x) > 0$. In addition, it is seen that the CNNs using the softplus activation tend to predict regions of low shear modulus typically surrounding the inclusions (but also seen in other places). We call these regions 'haloes'. See Figure (\ref{fig:softplushalos}) for examples. We seek to prevent haloes by incorporating prior information into our reconstruction algorithm, which we do by restricting the range of the shear modulus predicted by the CNN to within known limits $[\mu_{back},\mu_{max}]$ where $\mu_{back}$ is the background shear modulus and typically the lowest shear modulus in the problem and $\mu_{max}$ is the maximum shear modulus in the problem. These values can be computed over the training set. One can simply do this by thresholding: just apply \textit{min} and \textit{max} functions to the shear modulus images produced by using the softplus activation function and post-process the result. But this is unsatisfying because it does not restrict the output of the CNN. \\We considered restricting the output of the CNN to a specified range by first applying a suitable scaling to change the range of the output variable from $[\mu_{back},\mu_{max}]$ to $(0,1)$ or $(-1,1)$ as appropriate. We then considered the use of activation functions given in equations (\ref{eqn:sigmoid},\ref{eqn:tanh},\ref{eqn:softplusmin}) whose range is restricted to $(0,1),(-1,1)$ and $(0,1)$. As noted in \cite{bookchap:lecun98b} we observed that with the activation functions given in equations (\ref{eqn:sigmoid},\ref{eqn:tanh},\ref{eqn:softplusmin}) the weights and therefore loss function become stuck because the derivatives of equations (\ref{eqn:sigmoid},\ref{eqn:tanh},\ref{eqn:softplusmin}) become very close to zero for values sufficiently away from zero. However, we again observe as noted in \cite{bookchap:lecun98b}, that the addition of a \textit{twisting term} ($0.01x$) to the $\tanh(x)$ function makes the derivative non-zero and training of the CNN occurs. While the twisting term changes the range of $\tanh$ from $(-1,1)$ to $(-\infty,+\infty)$, it is observed that in practice the predictions are approximately restricted to the range $[\mu_{back},\mu_{max}]$. We also observe that using the twisted tanh activation results in shear modulus images in which a region of low shear modulus is not seen next to inclusions.
+The typical architecture of the CNN we use in this work (implemented in TensorFlow \cite{misc:tensorflow}) is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}). The first dimension '?' represents the number of examples to be processed for training, validation or testing. Thus, the first training example's input data is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy \cite{paper:numpy} notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In color image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of components of the displacement or strain field used in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. Table (\ref{tab:cnnone:io}) gives the number of channels for each CNN trained. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam} with default settings. No regularization is used.  Each CNN has approximately $3.35$ million trainable parameters. After training, the model with the best validation loss is chosen to make predictions.
+\subsubsection{Output layer activation: twisted tanh}
+We consider the functions given in equation (\ref{eqn:activations}) as activation functions for the output layer and choose the twisted tanh function (equation (\ref{eqn:twisttanh})) as the output layer activation. All our work is carried out using the twisted tanh activation function, unless specified otherwise.
+
+The softplus activation function (\ref{eqn:softplus}) has range $(0,\infty)$ and thus it respects the physical positivity constraint on the shear modulus: $\mu(x)>0$ for reasonable materials \cite{book:segelmathcont}. The drawback of the softplus activation function is that it produces regions in which the shear modulus is very close to zero. We call such regions haloes. See Table (\ref{table:muminmax}) and Figure (\ref{fig:softplushalos}).
+
+We seek to avoid this problem by using the logistic and tanh activation functions, given by equations (\ref{eqn:logistic}) and (\ref{eqn:tanh}) respectively, whose range is limited to $(-1,1)$. Using these activation functions requires us to scale the training data such that it lies in the interval $(-1,1)$. This requires prior knowledge of the minimum, denoted by $\mu_{lower}$, and maximum, denoted by $\mu_{upper}$, value of the shear modulus to scale the training data using a linear transformation such that the interval $[\mu_{lower},\mu_{upper}]$ is mapped linearly to the interval $[-1,1]$. However, we find that as noted in \cite{bookchap:lecun98b}, the gradient of the logistic (\ref{eqn:logistic}) and tanh (\ref{eqn:tanh}) functions vanishes as we go farther away from zero. This causes the weights to get stuck and as a consequence the neural network does not learn.
+
+To avoid this we add, as noted in \cite{bookchap:lecun98b}, a \textit{twisting term} $0.01x$ to the the tanh activation (equation (\ref{eqn:tanh})) to get the twisted tanh activation function, given by \ref{eqn:twisttanh}. The addition of the twisting term ensures that the gradient of the twisted tanh function does not vanish far away from zero. While the addition of the twisting term changes the range of the tanh function from $(-1,1)$ to $(-\infty,\infty)$, it is seen that in practice that the predictions of the neural network when rescaled lie only slightly outside the interval $[\mu_{lower},\mu_{upper}]$. This is seen in Table (\ref{table:muminmax}).
+
+We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mean that we are using the twisted tanh activation function with the input data being scaled such that the interval $[\mu_{lower},\mu_{upper}]$ is mapped linearly to $[-1,1]$. The true range of the shear modulus is $[1.0,5.0]$. The more accurately we know the true range of the shear modulus, the closer the the maximum and minium values of the predicted modulus are to the true maximum and minimum values. This is also seen in Table (\ref{table:muminmax}).
+
+Finally we note that as a final post-processing step one can apply thresholding (use of minimum and maximum functions) to restrict the output of the neural network to a desired range. Also note that, because the minimum and maximum functions are not differentiable everywhere, we do not recommend their use in training the neural network since it is not advisable to take derivatives of non-differentiable functions.
+%
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Activation & Minimum $\mu$ & Maximum $\mu$ \\
+    \hline
+    softplus   & 0.00526       & 6.095  \\
+    \hline
+    twisted tanh [1.0, 5.0]  & 0.763  & 5.084\\
+    \hline
+    twisted tanh [0.75,5.25] & 0.614  & 5.311\\
+    \hline
+    twisted tanh [0.5, 5.5]  & 0.399  & 5.499\\
+    \hline
+  \end{tabular}
+  \caption{\label{table:muminmax} Maximum and minimum values predicted by CNNs using the softplus and twisted tanh activation functions.}
+\end{table}
 % softplus halos
 \begin{figure}[h]
   \centering
@@ -190,11 +245,12 @@ The typical architecture of the CNN we use in this work (implemented in TensorFl
 \begin{subequations}
 \ber
 \text{softplus}\qquad f(x) &=& \ln(1+\exp(x)) \label{eqn:softplus}\\
-\text{sigmoid}\qquad f(x) &=& \frac{1}{1+\exp(-x)}\label{eqn:sigmoid}\\
+\text{logistic}\qquad f(x) &=& \frac{1}{1+\exp(-x)}\label{eqn:logistic}\\
 \text{tanh} \qquad f(x) &=& \tanh(x) \label{eqn:tanh}\\
-\text{softplusmin} \qquad f(x) &=& \min(\ln(1+\exp(x)),1.0)\label{eqn:softplusmin} \\
+%\text{softplusmin} \qquad f(x) &=& \min(\ln(1+\exp(x)),1.0)\label{eqn:softplusmin} \\
 \text{twisted tanh} \qquad f(x) &=& \tanh(x) + 0.01x  \label{eqn:twisttanh}
 \eer
+\label{eqn:activations}
 \end{subequations}
 %
 \begin{figure}[h]
@@ -206,8 +262,8 @@ The typical architecture of the CNN we use in this work (implemented in TensorFl
   \end{subfigure}
   %
   \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=4cm]{Figures/scripts/sigmoid.png}
-    \caption{sigmoid}
+    \includegraphics[totalheight=4cm]{Figures/scripts/logistic.png}
+    \caption{logistic}
   \end{subfigure}
   %
   \begin{subfigure}[b]{0.45\linewidth}
@@ -215,10 +271,10 @@ The typical architecture of the CNN we use in this work (implemented in TensorFl
     \caption{tanh}
   \end{subfigure}
   %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=4cm]{Figures/scripts/minsoftplus.png}
-    \caption{softplusmin}
-  \end{subfigure}
+  %\begin{subfigure}[b]{0.45\linewidth}
+  %  \includegraphics[totalheight=4cm]{Figures/scripts/minsoftplus.png}
+  %  \caption{softplusmin}
+  %\end{subfigure}
   %
   \begin{subfigure}[b]{0.45\linewidth}
     \includegraphics[totalheight=4cm]{Figures/scripts/twistedtanh.png}
@@ -258,22 +314,6 @@ The typical architecture of the CNN we use in this work (implemented in TensorFl
     \caption{\label{fig:typical_cnn}Typical CNN architecture used in this work. This architecture is essentially the same the one used in the Deep Learning example in \cite{misc:udemy} in which it was used to classify images into two categories: 'cat' or 'dog'.}
 \end{figure}
 %
-%
-\subsection{\label{sect:probsetup}Problem setup}
-The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. The reader is referred to \cite{book:hugheslinear,book:fishbelytschko} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). Plane strain is assumed. The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. Both degrees of freedom are constrained at the pin and only the $y$ degree of freedom is constrained at the roller. The background shear modulus is $\mu_{back}=1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. Selective reduced integration is used to avoid mesh locking because the Poisson's ratio of $0.49$ renders the medium almost incompressible. There is exactly one inclusion in the domain and its shear modulus is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$.\\
-$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. Each displacement or strain component is scaled by finding the maximum of its absolute value over the training data set and then dividing the component by it. When noisy data is used we add noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB using equation (\ref{eqn:snr}). The data is made noisy by element wise multiplication of the strain or displacement data with a matrix containing random numbers in the interval $(1-\epsilon,1+\epsilon)$ where $\epsilon$ is chosen appropriately to yield $\approx$ 40dB noise. We note that noisy data is generated for each run. We do not save noisy test examples for once and for all. Referring to Table (\ref{tab:cnnone:io}), this means, that the noise in $\epsilon_{yy}$ in line 1 is different from the noise in $\epsilon_{yy}$ in line 2. We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
-\begin{equation}
-  \label{eqn:snr}
-  SNR_{dB} = 20\log_{10}\Big(\frac{\|signal\|_{L^2}}{\|noise\|_{L^2}}\Big)
-\end{equation}
-The norm $\|\cdot\|_{L^2}$ in the above equation is a discrete $L^2$ norm. 
-% Noise details
-%
-\begin{figure}[h] 
-   \centering
-    \includegraphics[totalheight=9cm]{Figures/bc.png}
-  \caption{\label{fig:bc}Boundary conditions and material properties used in this work. }
-\end{figure}
 %
 \section{\label{sect:oneinc}Imaging one inclusion}
 We apply the CNN described in Section (\ref{sect:cnnarch}) to predict the shear modulus field when only one inclusion is present. The data is generated as described in Section (\ref{sect:probsetup}). Eight CNNs are trained. See Table (\ref{tab:cnnone:io}) where the training data and prediction data for each CNN is specified. For example, the first entry in Table (\ref{tab:cnnone:io}) should be interpreted as: CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ and CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ are trained on both components of a noiseless strain field (given in column 2) and are used to make predictions using both components of the strain field, with and without noise (given in column 3). Since two components of the strain field are used to train and make predictions the number of channels is $2$.\\The CNNs using the softplus activation function (equation \ref{eqn:softplus}) to make predictions are:
@@ -367,7 +407,7 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \item{We have not visualized the filters produced for the first two layers of the CNN. Visualizing the filters could yield additional insights as in \cite{paper:pateloberai2019,misc:vizfilterlink}.}
 \item{It is often observed that a region of high shear modulus (inclusion) has an adjacent region which has shear modulus less than the background stiffness when the softplus activation is used. The origins of this need to be investigated. Using the twisted tanh activation and prior knowledge about the range of allowable shear modulus leads to elimination of this artifact.}
 \item{We have trained the CNN using examples in which the stiffness of the circular inclusion lies between $2.0$ and $5.0$. We call this the training range. The test data also contains examples in the \textit{same} range. Expanding this test range to include examples outside the training range and evaluating the performance of the CNNs will be interesting.}
-\item{A simple \textit{mean squared error} (which corresponds to the $L^2$ norm in the continuous case) was used to evaluate the loss function for the neural network. The effect of other losses corresponding to $H^1$ or Total Variation Diminishing (TVD) norms will be interesting to evaluate. We think that using a loss function corresponding to the $H^1$ norm will remove the incidence of regions of low shear modulus adjacent to inclusions. If we are training with both components of a noiseless displacement field, then one can consider a loss function which is simply the residual obtained when the predicted shear modulus and input fields are plugged into the equilibrium equations of elasticity. Implementing these loss functions will require custom loss functions in TensorFlow perhaps along with custom gradient calculation.}
+\item{A simple \textit{mean squared error} (which corresponds to the $L^2$ norm in the continuous case) was used to evaluate the loss function for the neural network. The effect of other losses corresponding to $H^1$ or Total Variation Diminishing (TVD) norms will be interesting to evaluate. We think that using a loss function corresponding to the $H^1$ norm will remove the incidence of regions of low shear modulus adjacent to inclusions. However, it will also penalize sharp discontinuities in the inclusions as well. If we are training with both components of a noiseless displacement field, then one can consider a loss function which is simply the residual obtained when the predicted shear modulus and input fields are plugged into the equilibrium equations of elasticity. Implementing these loss functions will require custom loss functions in TensorFlow perhaps along with custom gradient calculation.}
 \item{Investigating different network architectures with the aim of yielding better results will be worth investigation. More CNN layers (or less), deeper (or shallower) networks, should be investigated. Other hyperparameters such as the kernel size for the CNN layers can be varied as well. It may be worth investigating whether a CNN is required at all. The first dense layer contains $128$ nodes. Increasing this number will probably result in better networks, but will also increase the number of weights. It may also be worthwhile to replace the full connection of the dense layers with spatially close connections. By this, we mean that after flattening each node in the first dense layer would be connected only to those neurons which are spatially close together in the previous layer.}
 \item{Medical image registration to obtain a displacement field is a difficult process. If one could train neural networks to work directly with medical images instead of the computed displacement field, it would be an important advance. This would involve training the CNN by computing thousands of displacement fields by hand and solving an inverse problem and using the predicted shear modulus field as labeled data as input to the CNN. Additional information could be obtained by doctors interpreting medical images and identifying tumors and their mechanical properties.}
 \item{Since the initial choices for the CNN weights are random, one can train the network multiple times and get different values for the network weights. Having thus obtained many CNNs with different weights, we are led to the following two options. One, one can average the weights of the CNNs to obtain an averaged network. Two, one can make multiple predictions with the different CNNs and then average the result. The second option will require large storage because CNNs have millions of parameters. These options should be investigated.}
@@ -658,3 +698,6 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \caption{\label{fig:threeinctanh:trainuy} Training curves for CNNc $u_y$ for imaging three inclusions with constraints.}
 %
 \end{figure}
+% blue starts
+\textcolor{blue}{We consider the softplus activation function in equation (\ref{eqn:softplus}) and the twisted tanh activation function in equation (\ref{eqn:twisttanh}). When using the softplus activation, the training shear modulus data is not normalized and while using the twisted tanh function the training shear modulus data is normalized to the range $(-1,1)$. The predictions made using the softplus only respect the basic positivity constraint on the shear modulus i.e. $\mu(x) > 0$. In addition, it is seen that the CNNs using the softplus activation tend to predict regions of low shear modulus typically surrounding the inclusions (but also seen in other places). We call these regions 'haloes'. See Figure (\ref{fig:softplushalos}) for examples. We seek to prevent haloes by incorporating prior information into our reconstruction algorithm. We do so by restricting the range of the shear modulus predicted by the CNN to within known limits $[\mu_{back},\mu_{max}]$ where $\mu_{back}$ is the background shear modulus and typically the lowest shear modulus in the problem and $\mu_{max}$ is the maximum shear modulus in the problem. One can simply do this by thresholding: just apply \textit{min} and \textit{max} functions to the shear modulus images produced by using the softplus activation function and post-process the result. But this is unsatisfying because it does not restrict the output of the CNN. \\We considered restricting the output of the CNN to a specified range by first applying a suitable scaling to change the range of the output variable from $[\mu_{back},\mu_{max}]$ to $(0,1)$ or $(-1,1)$ as appropriate. We then considered the use of activation functions given in equations (\ref{eqn:logistic},\ref{eqn:tanh},\ref{eqn:softplusmin}) whose range is restricted to $(0,1),(-1,1)$ and $(0,1)$. As noted in \cite{bookchap:lecun98b} we observed that with the activation functions given in equations (\ref{eqn:logistic},\ref{eqn:tanh},\ref{eqn:softplusmin}) the weights and therefore loss function become stuck because the derivatives of equations (\ref{eqn:logistic},\ref{eqn:tanh},\ref{eqn:softplusmin}) become very close to zero for values sufficiently away from zero. However, we again observe as noted in \cite{bookchap:lecun98b}, that the addition of a \textit{twisting term} ($0.01x$) to the $\tanh(x)$ function makes the derivative non-zero and training of the CNN occurs. While the twisting term changes the range of $\tanh$ from $(-1,1)$ to $(-\infty,+\infty)$, it is observed that in practice the predictions are approximately restricted to the range $[\mu_{back},\mu_{max}]$. We also observe that using the twisted tanh activation results in shear modulus images in which a region of low shear modulus is not seen next to inclusions.}
+% Blue ends

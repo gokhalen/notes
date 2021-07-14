@@ -24,9 +24,9 @@ def plotarr(xx,yy,leg,fname):
 # plot tanh
 yvals = tf.keras.backend.tanh(xvals)
 plotarr(xvals,yvals,'tanh','tanh.png')
-# plot sigmoid
+# plot logistic
 yvals = tf.keras.backend.sigmoid(xvals)
-plotarr(xvals,yvals,'sigmoid','sigmoid.png')
+plotarr(xvals,yvals,'logistic','logistic.png')
 # plot softplus
 yvals = tf.keras.backend.softplus(xvals)
 plotarr(xvals,yvals,'softplus','softplus.png')
