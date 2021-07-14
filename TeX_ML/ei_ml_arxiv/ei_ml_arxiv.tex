@@ -201,7 +201,20 @@ The problem with the above algorithm is that the storage required in step (3) an
 \end{figure}
 %
 \subsection{\label{sect:cnnarch} CNN architecture used in this work}
-The typical architecture of the CNN we use in this work (implemented in TensorFlow \cite{misc:tensorflow}) is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}). The first dimension '?' represents the number of examples to be processed for training, validation or testing. Thus, the first training example's input data is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy \cite{paper:numpy} notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In color image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of components of the displacement or strain field used in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. Table (\ref{tab:cnnone:io}) gives the number of channels for each CNN trained. The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam} with default settings. No regularization is used.  Each CNN has approximately $3.35$ million trainable parameters. After training, the model with the best validation loss is chosen to make predictions.
+The typical architecture of the CNN we use in this work (implemented in TensorFlow is shown in Figure (\ref{fig:typical_cnn}) and its parameters are given in Table (\ref{tab:cnnparams}).
+
+The first dimension '?' represents the number of examples to be processed for training, validation or testing. Thus, the first training example's input data is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy \cite{paper:numpy} notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively.
+
+The last dimension represents the number of channels in the image. In color image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of components of the displacement or strain field used in our problem. If we use three independent components of the strain field $\epsilon_{xx},\epsilon_{yy},\epsilon_{xy}$ then the number of channels is $3$. If we use only a single component of the strain field, say $\epsilon_{xx}$ only, then the number of channels is $1$. Table (\ref{tab:cnnone:io}) gives the number of channels for each CNN trained. Since we are working with almost incompressible linear elasticity in a situation which is very close to uniaxial compression:
+\begin{subequations}
+\ber
+\epsilon_{xx}+\epsilon_{yy}\approx{0} \implies u_{x,x} + u_{y,y} \approx{0}\\
+\epsilon_{xy} \approx 0 \qquad \text{in most of the domain.}
+\eer
+The above equations imply that, effectively, the only indepdent components are $\epsilon_{yy}$ and $u_y$. Therefore in this work, we restrict our attention to only single channel images which represent either $u_y$ or $\epsilon_{yy}$.
+\end{subequations}
+
+Finally, we note that the \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam} \cite{misc:kingma2017adam} with default TensorFlow settings. No regularization or dropout is used.  Each CNN has approximately $3.35$ million trainable parameters. After training, the model with the best validation loss is chosen to make predictions.
 \subsubsection{Output layer activation: twisted tanh}
 We consider the functions given in equation (\ref{eqn:activations}) as activation functions for the output layer and choose the twisted tanh function (equation (\ref{eqn:twisttanh})) as the output layer activation. All our work is carried out using the twisted tanh activation function, unless specified otherwise.
 
