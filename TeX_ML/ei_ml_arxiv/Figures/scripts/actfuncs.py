@@ -12,12 +12,18 @@ import matplotlib.pyplot as plt
 xvals = np.linspace(-10,10,1024)
 
 def plotarr(xx,yy,leg,fname):
+    fontsize=18
+    minorticksize=14
     plt.figure()
     plt.plot(xx,yy,linewidth='4')
     plt.grid(True,which='both',linewidth='2')
-    plt.xlabel('input',fontsize=18)
-    plt.ylabel('output',fontsize=18)
-    plt.legend([leg],fontsize=18)
+    plt.xticks(fontsize=fontsize)
+    plt.yticks(fontsize=fontsize)
+    plt.tick_params(axis='both', which='minor', labelsize=minorticksize)
+    plt.tight_layout()    
+    plt.xlabel('input',fontsize=fontsize)
+    plt.ylabel('output',fontsize=fontsize)
+    plt.legend([leg],fontsize=fontsize)
     plt.savefig(fname,bbox_inches='tight')
 
 
