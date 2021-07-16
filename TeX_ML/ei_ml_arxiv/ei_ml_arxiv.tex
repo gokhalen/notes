@@ -13,6 +13,7 @@
 \usepackage{multirow}
 \usepackage{draftwatermark}
 \usepackage{pgffor}
+\usepackage{alphalph}
 % usually hyperref has to be the last package imported
 \usepackage{hyperref}
 %
@@ -88,6 +89,16 @@
     \caption{\label{#3i}$u_y$+noise}
   \end{subfigure}
 }
+% mupics ends here
+% filterloop starts here
+\newcommand{\filterpics}[1]{
+  \foreach \myvar in {0,...,31}{
+    \begin{subfigure}[b]{2.3cm}
+      \includegraphics[totalheight=2.0cm]{Figures/#1/filter_\myvar_channel_0.png}
+      \caption{}
+    \end{subfigure}
+  }
+}  
 \begin{document}
 % bib
 \title{Elasticity imaging using a Convolutional Neural Network}
@@ -410,12 +421,31 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \item{Effect of regularization and dropout on the CNN need to be investigated.}
 \item{Training CNNs to recognize nonlinear parameters would be a worthwhile research direction.}
 \item{A hybrid approach combining machine learning and traditional approaches (iterative or direct) will be interesting. We envision that the ML based approach will provide a measure of the confidence in its output. If this is confidence is low, then a solution will be computed using traditional methods and perhaps added to the machine learning training dataset.}
-\item{Extending the method studied in this document to predict multiple parameter fields will be interesting, because the method will have to study the features in the displacement or strain fields and then decide which parameter field was responsible for producing those features. Such cases will occur when we try to predict both $\lambda(x)$ and $\mu(x)$ for linear elasticity or the nonlinear parameter $\gamma(x)$ and the linear parameter $\mu(x)$ as in \cite{paper:gokhale2008}}
+\item{Extending the method studied in this document to predict multiple parameter fields will be interesting, because the method will have to study the features in the displacement or strain fields and then decide which parameter field was responsible for producing those features. Such cases will occur when we try to predict both $\lambda(x)$ and $\mu(x)$ for linear elasticity both the nonlinear parameter $\gamma(x)$ and the linear parameter $\mu(x)$ as in \cite{paper:gokhale2008}}.
 \item{Software and performance issues: The finite element solver and associated scripts for generating the data were written in Python 3.8. While the elements were accelerated using Numba \cite{conf:numba}, we believe that better performance could be obtained by writing the solver in C/C++/Fortran or Julia or using open source solvers like FEniCS \cite{paper:fenics} or deal.II \cite{misc:deal.ii}. Each FE input file is 3.3MB and output file is 1.1MB and total dataset size is $\approx$  20GB. Approximately 10 seconds were required to compute one training example. There was no effort made to minimize the size of input and output files. Simple text based JSON files were used because of their simplicity. If one wants increase the number of training examples by a factor of thousand, 20TB of data would be required. Optimized data structures and hardware supporting fast disk access (SSDs) will be necessary for scaling to large data sets. The use of GPU clusters to process large amounts of data may also need to be considered. The simulations to generate data and the CNN training in this work were carried out on an Intel i5-4460 3.2Ghz processor with four physical and logical cores and 8GB RAM. The OS used was Windows 10 running WSL2. TensorFlow 2.4 was used.}
 \end{enumerate}
 \clearpage
 \bibliography{eibib}{}
 \bibliographystyle{plain}
+\appendix
+\section{Filters}
+\subsection{Filters 1}
+% solves 'Counter too large' problem
+\renewcommand*{\thesubfigure}{\arabic{subfigure}}
+\begin{figure}[h]
+  \filterpics{FiltersTanhStrain3}
+  \caption{Filters for case 1}
+\end{figure}  
+\subsection{Filters 2}
+\begin{figure}[h]
+  \filterpics{FiltersTanhDisp3}
+  \caption{Filters for case 2}
+\end{figure}  
+\subsection{Filters 3}
+\begin{figure}[h]
+  \filterpics{FiltersTanhStrain1}
+  \caption{Filters for case 3}
+\end{figure}  
 \end{document}
 % Document ends here
 \appendix
