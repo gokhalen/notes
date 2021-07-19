@@ -4,6 +4,7 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{mathtools}
 \usepackage{cite}
 % to break urls: https://tex.stackexchange.com/questions/115690/urls-in-bibliography-latex-not-breaking-line-as-expected
 \usepackage[hyphens]{url}
@@ -107,7 +108,7 @@
 \maketitle
 \abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible elastic medium in plane strain using data which consists of displacement or strains fields (or components thereof). This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Imaging the shear modulus field therefore can lead to high-contrast medical images. Our prediction problem is as follows: \textit{Given a displacement or strain field (or its components), predict the corresponding shear modulus field}. Our CNN is trained using 2400 training examples consisting of displacement or strain fields (or components thereof) and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
 \section{Introduction}
-The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also Figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus field of soft tissue results in a high-contrast imaging method because the elevated shear modulus of suspicious growths will stand out clearly against the lower shear modulus of the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other mechanical properties) of soft tissue in various ways. See \cite{paper:gao1996,paper:parker2010,book:alamgarra2019,bookchap:oberaibarbone2019} for comprehensive reviews of the field.
+The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus field of soft tissue results in a high-contrast imaging method because the elevated shear modulus of suspicious growths will stand out clearly against the lower shear modulus of the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other mechanical properties) of soft tissue in various ways. See \cite{paper:gao1996,paper:parker2010,book:alamgarra2019,bookchap:oberaibarbone2019} for comprehensive reviews of the field.
 %
 \begin{figure}[h]
    \centering
@@ -123,14 +124,14 @@ The shear modulus of palpable nodules (which can be thought of as abnormal and p
 %
 \subsection{Steps involved in elasticity imaging}
 Elasticity Imaging typically consists of the three steps of image acquisition, image registration, inverse problem solution. These steps are discussed in the following sections.
-\subsubsection{Image acquisition} Images of soft tissue undergoing deformation due to applied excitation are acquired using various imaging modalities such as ultrasound or magnetic resonance imaging. While time dependent images can be acquired, we shall consider here only two images: a \textit{pre-deformation image} acquired before force is applied and a \textit{post-deformation image} acquired after force is applied. This process is shown in Figure (\ref{fig:prepostimage}) for ultrasound imaging. Also see Figure (2) in \cite{paper:konofagou2004}.
-\subsubsection{Image registration} The goal in this step is to find a map which transforms the pre-deformation image into the post-deformation image. For every point in the pre-deformation image we aim to find its location in the post-deformation image. See Figure (\ref{fig:registschematic}). This gives us the \textit{displacement field} between the two images. This displacement field is often referred to as the \textit{measured displacement field}. Differentiating the displacement field with respect to spatial coordinates yields the strain field. If $u_x(x,y)$ and $u_{y}(x,y)$ are the $x$ and $y$ components of the displacement field, then the strain field is given by equation (\ref{eqn:straindef}).
+\subsubsection{Image acquisition} Images of soft tissue undergoing deformation due to applied excitation are acquired using various imaging modalities such as ultrasound or magnetic resonance imaging. While time dependent images can be acquired, we shall consider here only two images: a \textit{pre-deformation image} acquired before force is applied and a \textit{post-deformation image} acquired after force is applied. This process is shown in figure (\ref{fig:prepostimage}) for ultrasound imaging. Also see figure (2) in \cite{paper:konofagou2004}.
+\subsubsection{Image registration} The goal in this step is to find a map which transforms the pre-deformation image into the post-deformation image. For every point in the pre-deformation image we aim to find its location in the post-deformation image. See figure (\ref{fig:registschematic}). This gives us the \textit{displacement field} between the two images. This displacement field is often referred to as the \textit{measured displacement field}. Differentiating the displacement field with respect to spatial coordinates yields the strain field. If $u_x(x,y)$ and $u_{y}(x,y)$ are the $x$ and $y$ components of the displacement field, then the strain field is given by equation (\ref{eqn:straindef}).
 \beq
 \label{eqn:straindef}
 \epsilon_{xx} = \pdd{u_{x}}{x} \qquad \epsilon_{yy} = \pdd{u_{y}}{y} \qquad \epsilon_{xy} = \frac{1}{2}\Big(\pdd{u_{x}}{y} + \pdd{u_{y}}{x}\Big)
 \eeq
 
-See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for minimization based approaches for computing the displacement field. See \cite{paper:ophir1991,paper:ophir1996,paper:alam1998} and references therein for cross-correlation based approaches. In our work, we generate displacement fields from known shear modulus fields using the finite element method \cite{book:hugheslinear,book:fishbelytschko} and add appropriate noise to mimic the noise when displacement fields are computed from experimentally acquired images. See Figure (\ref{fig:exampdispstrain}) for examples of displacement and strain fields computed using FyPy \cite{misc:fypy}.
+See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for minimization based approaches for computing the displacement field. See \cite{paper:ophir1991,paper:ophir1996,paper:alam1998} and references therein for cross-correlation based approaches. In our work, we generate displacement fields from known shear modulus fields using the finite element method \cite{book:hugheslinear,book:fishbelytschko} and add appropriate noise to mimic the noise when displacement fields are computed from experimentally acquired images. See figure (\ref{fig:exampdispstrain}) for examples of displacement and strain fields computed using FyPy \cite{misc:fypy}.
 %
 \begin{figure}[h]
   \centering
@@ -173,13 +174,16 @@ See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for min
 \subsubsection{Solving the inverse problem with CNNs}
 We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer (once time has been spent up front to train the CNN), can accommodate complex constitutive relations, can work with incomplete data (e.g. only a single component of a displacement field) and can work with noisy data. On the other hand, if data which is unlike what the CNN has been trained on is seen, then it is doubtful that the CNN will be able to make correct predictions. See section (\ref{sect:3with1}) for further discussion. Also, we note that CNNs do not predict a perfect result in the absence on noise, unlike traditional direct or iterative methods. Finally, we note here that we expect determining multiple material parameters e.g. a linear and a non-linear parameter or both the Lam\'e parameters for compressible elasticity from the same set of images to be challenging.
 \section{\label{sect:probsetup}Problem setup for data generation}
-The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. We refer the reader to \cite{book:hugheslinear,book:fishbelytschko,book:segelmathcont} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated bilinearly. The problem geometry is shown in Figure (\ref{fig:bc}). Plane strain is assumed. The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. Both degrees of freedom are constrained at the pin and only the $y$ degree of freedom is constrained at the roller. The background shear modulus is $\mu_{back}=1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. Selective reduced integration is used to avoid mesh locking because the Poisson's ratio of $0.49$ renders the medium almost incompressible. The shear modulus of inclusions is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$. Depending on the dataset, there can be either exactly one inclusion or either one, two or three inclusions in the domain. 
+The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. We refer the reader to \cite{book:hugheslinear,book:fishbelytschko,book:segelmathcont} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated bilinearly. The problem geometry is shown in figure (\ref{fig:bc}). Plane strain is assumed. The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. Both degrees of freedom are constrained at the pin and only the $y$ degree of freedom is constrained at the roller. The background shear modulus is $\mu_{back}=1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. Selective reduced integration is used to avoid mesh locking because the Poisson's ratio of $0.49$ renders the medium almost incompressible. The shear modulus of inclusions is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$. The number of inclusions in the domain depends on the network being trained. Referring to table (\ref{table:cnnparams}), there is exactly one inclusion in the data used to train CNN3 and there are either one, two or three inclusions in the data used to train CNN1 and CNN2.
 
-$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. The input data is scaled by the absolute maximum over all components. When noisy data is used we add zero mean additive Gaussian noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB according to equation (\ref{eqn:snr}). We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input. 
-\begin{equation}
-  \label{eqn:snr}
-  SNR_{dB} = 20\log_{10}{\Bigg (}\frac{\|signal\|_{L^2}}{\|noise\|_{L^2}}{\Bigg )} \qquad \text{where}\,\, \|x\|_{L^2} = \sqrt{\sum_{i=1}^{N}x_i^2} 
-\end{equation}
+$4000$ displacement and strain images are generated and are split into $2400$ training examples, $800$ validation examples and $800$ test examples. The input data is scaled by the absolute maximum over all components. When noisy data is used we add zero mean additive Gaussian noise in the strain or displacement data such that the signal to noise ratio (SNR) is 40dB according to equation (\ref{eqn:snr}). We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data and noisy data is given to the CNN as input.
+\begin{subequations}
+\ber
+  SNR_{dB} &=& 20\log_{10}{\Bigg (}\frac{\|signal\|_{2}}{\|noise\|_{2}}{\Bigg )} \label{eqn:snr} \text{ where, }\\
+  \|\mathbf{x}\|_{2} &=& \sqrt{x_{1}^{2}+\cdots+x_{n}^2}  \text{ is the Euclidean norm.}   \label{eqn:eucnorm}
+  \eer
+  
+\end{subequations}  
 % Noise details
 %
 \begin{figure}[h] 
@@ -214,7 +218,7 @@ The problem with the above algorithm is that the storage required in step (3) an
 \end{figure}
 %
 \subsection{\label{sect:cnnarch} CNN architecture used in this work}
-Figure (\ref{fig:typical_cnn}) shows the architecture of the CNN we use in this work. We implement this architecture in TensorFlow. The parameters of the layers are given in Table (\ref{table:cnnlayerparams}).
+figure (\ref{fig:typical_cnn}) shows the architecture of the CNN we use in this work. We implement this architecture in TensorFlow. The parameters of the layers are given in table (\ref{table:cnnlayerparams}).
 
 The first dimension '?' represents the number of examples to be processed for training, validation or testing. Thus, the first training example's input data is a three dimensional array and can be accessed using the indices $[0,:,:,:]$ (using Numpy \cite{paper:numpy} notation) and similarly for the others. The second and third dimensions represent the number of nodes in the $y$ and $x$ direction respectively.
 
@@ -258,34 +262,38 @@ Finally, we note that the \textit{loss function} is \textit{mean squared error} 
 \subsubsection{\label{sect:outputact} Output layer activation: twisted tanh}
 We consider the functions given in equation (\ref{eqn:activations}) as activation functions for the output layer and choose the twisted tanh function (equation (\ref{eqn:twisttanh})) as the output layer activation. All our work is carried out using the twisted tanh activation function, unless specified otherwise.
 
-The softplus activation function (\ref{eqn:softplus}) has range $(0,\infty)$ and thus it respects the physical positivity constraint on the shear modulus: $\mu(x)>0$ for reasonable materials \cite{book:segelmathcont}. The drawback of the softplus activation function is that it produces regions in which the shear modulus is very close to zero. We call such regions \textit{haloes}. See Table (\ref{table:muminmax}) and Figure (\ref{fig:haloes}).
+The softplus activation function (\ref{eqn:softplus}) has range $(0,\infty)$ and thus it respects the physical positivity constraint on the shear modulus: $\mu(x)>0$ for reasonable materials \cite{book:segelmathcont}. The drawback of the softplus activation function is that it produces regions in which the shear modulus is very close to zero. We call such regions \textit{haloes}. See table (\ref{table:muminmax}) and figure (\ref{fig:haloes}).
 
 We seek to avoid this problem by using the logistic and tanh activation functions, given by equations (\ref{eqn:logistic}) and (\ref{eqn:tanh}) respectively, whose range is limited to $(-1,1)$. Hence, the training data must be scaled such that it lies in the interval $(-1,1)$. This requires prior knowledge of the maximum and minimum value of the shear modulus, denoted by $\mu_{lower}$ and $\mu_{upper}$, to scale the training data using a linear transformation such that the interval $[\mu_{lower},\mu_{upper}]$ is mapped linearly to the interval $[-1,1]$. However, we find that as noted in \cite{bookchap:lecun98b}, the gradient of the logistic (\ref{eqn:logistic}) and tanh (\ref{eqn:tanh}) functions vanishes as we go farther away from zero. This causes the weights to get stuck and as a consequence the neural network does not learn.
 
-To avoid this we add, as noted in \cite{bookchap:lecun98b}, a \textit{twisting term} $0.01x$ to the the tanh activation (equation (\ref{eqn:tanh})) to get the twisted tanh activation function, given by \ref{eqn:twisttanh}. The addition of the twisting term ensures that the gradient of the twisted tanh function does not vanish far away from zero. While the addition of the twisting term changes the range of the tanh function from $(-1,1)$ to $(-\infty,\infty)$, it is seen that in practice that the predictions of the neural network when rescaled lie only slightly outside the interval $[\mu_{lower},\mu_{upper}]$. This is seen in Table (\ref{table:muminmax}).
+To avoid this we add, as noted in \cite{bookchap:lecun98b}, a \textit{twisting term} $0.01x$ to the the tanh activation (equation (\ref{eqn:tanh})) to get the twisted tanh activation function, given by \ref{eqn:twisttanh}. The addition of the twisting term ensures that the gradient of the twisted tanh function does not vanish far away from zero. While the addition of the twisting term changes the range of the tanh function from $(-1,1)$ to $(-\infty,\infty)$, it is seen that in practice that the predictions of the neural network when rescaled lie only slightly outside the interval $[\mu_{lower},\mu_{upper}]$. This is seen in table (\ref{table:muminmax}).
 
-We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mean that we are using the twisted tanh activation function with the input data being scaled such that the interval $[\mu_{lower},\mu_{upper}]$ is mapped linearly to $[-1,1]$. The true range of the shear modulus for all the examples in this work is $[1.0,5.0]$. The more accurately we know the true range of the shear modulus, the closer the the maximum and minium values of the predicted modulus are to the true maximum and minimum values. In addition, the the root mean square (rms) of the error between the true and predicted fields decreases as the known bounds $[\mu_{lower},\mu_{upper}]$ approach true bounds $[1.0,5.0]$, as seen in Table (\ref{table:muminmax}). Finally, referring to Figure (\ref{fig:haloes}), we see that the 'haloes' seen in Figure (\ref{fig:haloes_softplus}) are almost eliminated in Figures (\ref{fig:haloes_tanh0}) and (\ref{fig:haloes_tanhp25}) and are seen to increase again in Figure (\ref{fig:haloes_tanhp50}). We conclude that it is possible to contain haloes with accurate knowledge about the minimum and maximum shear modulus in the problem.
+We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mean that we are using the twisted tanh activation function with the input data being scaled such that the interval $[\mu_{lower},\mu_{upper}]$ is mapped linearly to $[-1,1]$. The true range of the shear modulus for all the examples in this work is $[1.0,5.0]$. The more accurately we know the true range of the shear modulus, the closer the the maximum and minium values of the predicted modulus are to the true maximum and minimum values. In addition, the scaled error, defined in equation (\ref{eqn:scalederror}), fields decreases as the known bounds $[\mu_{lower},\mu_{upper}]$ approach true bounds $[1.0,5.0]$, as seen in table (\ref{table:muminmax}). Finally, referring to figure (\ref{fig:haloes}), we see that the 'haloes' seen in figures (\ref{fig:haloes_softplus}) and (\ref{fig:haloes_tanhp50}) are almost eliminated in figures (\ref{fig:haloes_tanhp25}) and (\ref{fig:haloes_tanhp0}). We conclude that it is possible to contain haloes with accurate knowledge about the minimum and maximum shear modulus in the problem.
+\begin{subequations}
+  \beq
+  \text{Scaled error}\coloneqq \frac{\|\mu_{predicted} - \mu_{true}\|_{2}}{\|\mu_{true}\|_{2}}   \label{eqn:scalederror},
+\eeq
+\end{subequations}
+where $\mu_{true},\mu_{predicted}$ are vectors containing true and predicted values of the shear modulus from all test examples.
 
-Finally we note that as a final post-processing step we can apply thresholding (use of minimum and maximum functions) to restrict the output of the neural network to a desired range. Also note that, because the minimum and maximum functions are not differentiable everywhere, we do not recommend their use in training the neural network. This is because the backpropagation algorithm for training requires derivatives.
-%
+Finally we note that as a final post-processing step we can apply thresholding (use of minimum and maximum functions) to restrict the output of the neural network to a desired range. Also note that, because the minimum and maximum functions are not differentiable everywhere, we do not recommend their use in training the neural network. This is because the backpropagation algorithm for neural network training requires derivatives.
 \begin{table}
   \centering
   \begin{tabular}{|c|c|c|c|}
     \hline
-    \multirow{3}{*}{Activation}  & \multirow{3}{*}{Minimum $\mu$} & \multirow{3}{*}{Maximum $\mu$} & Root mean \\
-                                 &                                &                                & square of \\
-                                 &                                &                                & the error \\ 
+    \multirow{2}{*}{Activation}  & \multirow{2}{*}{Minimum $\mu$} & \multirow{2}{*}{Maximum $\mu$} & \multirow{2}{*}{Scaled error}\\
+                                 &                                &                                &              \\
     \hline
-    softplus                 & 0.0414       & 6.300          & 17.427\\
+    softplus                 & 0.0414       & 6.300            & 0.196\\
     \hline
-    twisted tanh $[1.0, 5.0]$  & 0.748        & 5.105          & 13.225\\
+    twisted tanh $[0.5, 5.5]$  & 0.372        & 5.452          & 0.186\\     
     \hline
-    twisted tanh $[0.75,5.25]$ & 0.634        & 5.310          & 14.207\\
+    twisted tanh $[0.75,5.25]$ & 0.634        & 5.310          & 0.160\\
     \hline
-    twisted tanh $[0.5, 5.5]$  & 0.372        & 5.452          & 16.568\\ 
+    twisted tanh $[1.0, 5.0]$  & 0.748        & 5.105          & 0.149\\
     \hline
   \end{tabular}
-  \caption{\label{table:muminmax} Maximum and minimum values predicted by CNNs using the softplus and twisted tanh activation functions. See also Figure (\ref{fig:haloes}).}
+  \caption{\label{table:muminmax} Maximum values, minimum values and the scaled error for CNNs using the softplus and twisted tanh activation functions. It is seen that the more accurate our prior knowledge of the shear modulus, the more accurate the predictions. See also figure (\ref{fig:haloes}). See equation (\ref{eqn:scalederror}) for the definition of the scaled error.}
 \end{table}
 % softplus halos
 \begin{figure}[h]
@@ -299,20 +307,20 @@ Finally we note that as a final post-processing step we can apply thresholding (
     \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos/ex1/musoftplus.png}
     \caption{\label{fig:haloes_softplus} Softplus}
   \end{subfigure}    
-  \begin{subfigure}[c]{\nhghaloeswidth}    
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos/ex1/mutanhshift0.png}
-    \caption{\label{fig:haloes_tanh0} Twisted 1}    
-  \end{subfigure}   
+  \begin{subfigure}[c]{\nhghaloeswidth}      
+    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos/ex1/mutanhshiftp50.png}
+    \caption{\label{fig:haloes_tanhp50} Twisted 1}            
+  \end{subfigure}    
   \begin{subfigure}[c]{\nhghaloeswidth}
     \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos/ex1/mutanhshiftp25.png}
     \caption{\label{fig:haloes_tanhp25} Twisted 2}        
   \end{subfigure}
-  \begin{subfigure}[c]{\nhghaloeswidth}      
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos/ex1/mutanhshiftp50.png}
-    \caption{\label{fig:haloes_tanhp50} Twisted 3}            
-  \end{subfigure}    
+  \begin{subfigure}[c]{\nhghaloeswidth}    
+    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos/ex1/mutanhshift0.png}
+    \caption{\label{fig:haloes_tanhp0} Twisted 3}    
+  \end{subfigure}     
   %
-  \caption{\label{fig:haloes} Reconstructions using the softplus activation function show regions of very low shear modulus (haloes), typically adjoining inclusions. See also Table (\ref{table:muminmax}). Twisted 1, Twisted 2 and Twisted 3 correspond to the twisted tanh $[1.0,5.0]$, twisted tanh $[0.75,5.25]$ and twisted tanh $[0.5, 5.5]$ activations. These figures are on the same color scale.}
+  \caption{\label{fig:haloes} Reconstructions using the softplus activation function show regions of very low shear modulus (haloes), typically adjoining inclusions. Twisted 1, Twisted 2 and Twisted 3 correspond to the twisted tanh $[0.5, 5.5]$, twisted tanh $[0.75,5.25]$ and twisted tanh $[1.0,5.0]$ activations. The better our prior knowledge about the shear modulus, the lesser the haloes. These figures are on the same color scale. See also table (\ref{table:muminmax}).}
 \end{figure}
 % 
 \begin{subequations}
@@ -378,7 +386,7 @@ Finally we note that as a final post-processing step we can apply thresholding (
    \multirow{3}{*}{dense\_1} & $nnodex*nnodey$ units,\\& activation softplus or twisted tanh,\\& no regularization\\
    \hline
  \end{tabular}
- \caption{\label{table:cnnlayerparams} Parameters for the CNN shown in Figure (\ref{fig:typical_cnn}).}
+ \caption{\label{table:cnnlayerparams} Parameters for the CNN shown in figure (\ref{fig:typical_cnn}).}
 \end{table}
 %
 \begin{figure}[h] 
@@ -408,7 +416,7 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \item{It is often observed that a region of high shear modulus (inclusion) has an adjacent region which has shear modulus less than the background stiffness when the softplus activation is used. The origins of this need to be investigated. Using the twisted tanh activation and prior knowledge about the range of allowable shear modulus leads to elimination of this artifact.}
 \item{We have trained the CNN using examples in which the stiffness of the circular inclusion lies between $2.0$ and $5.0$. We call this the training range. The test data also contains examples in the \textit{same} range. Expanding this test range to include examples outside the training range and evaluating the performance of the CNNs will be interesting.}
 \item{A simple \textit{mean squared error} (which corresponds to the $L^2$ norm in the continuous case) was used to evaluate the loss function for the neural network. The effect of other losses corresponding to $H^1$ or Total Variation Diminishing (TVD) norms will be interesting to evaluate. We think that using a loss function corresponding to the $H^1$ norm will remove the incidence of regions of low shear modulus adjacent to inclusions. However, it will also penalize sharp discontinuities in the inclusions as well. If we are training with both components of a noiseless displacement field, then one can consider a loss function which is simply the residual obtained when the predicted shear modulus and input fields are plugged into the equilibrium equations of elasticity. Implementing these loss functions will require custom loss functions in TensorFlow perhaps along with custom gradient calculation.}
-\item{Investigating different network architectures with the aim of yielding better results will be worth investigation. More CNN layers (or less), deeper (or shallower) networks, should be investigated. Other hyperparameters such as the kernel size for the CNN layers can be varied as well. It may be worth investigating whether a CNN is required at all. The first dense layer contains $128$ nodes. Increasing this number will probably result in better networks, but will also increase the number of weights. It may also be worthwhile to replace the full connection of the dense layers with spatially close connections. By this, we mean that after flattening each node in the first dense layer would be connected only to those neurons which are spatially close together in the previous layer.}
+\item{Investigating different network architectures with the aim of yielding better results will be worth investigation. More CNN layers (or less), deeper (or shallower) networks, should be investigated. Other hyperparameters such as the kernel size for the CNN layers can be varied as well. It may be worth investigating whether a CNN is required at all and whether a simple dense network can produce similar quality results. The first dense layer contains $128$ nodes. Increasing this number will probably result in better networks, but will also increase the number of weights. It may also be worthwhile to replace the full connection of the dense layers with spatially close connections. By this, we mean that after flattening each node in the first dense layer would be connected only to those neurons which are spatially close together in the previous layer.}
 \item{Medical image registration to obtain a displacement field is a difficult process. It would be an important advance if we could train neural networks to work directly with medical images instead of the computed displacement field. This would involve training the CNN by computing thousands of displacement fields by hand and solving an inverse problem and using the predicted shear modulus field as labeled data as input to the CNN. Additional information could be obtained by doctors interpreting medical images and identifying tumors and their mechanical properties.}
 \item{Since the initial choices for the CNN weights are random, we can train the network multiple times and get different values for the network weights. Having thus obtained many CNNs with different weights, we are led to the following two options. One, we can average the weights of the CNNs to obtain an averaged network. Two, we can make multiple predictions with the different CNNs and then average the result. The second option will require large storage because CNNs have millions of parameters. These options should be investigated.}
 \item{It would be interesting to consider a multiscale/hierarchical neural network. This neural network would first make a prediction of the average shear modulus field using only a few weights. In the next step, more nodes would be introduced and, say, 9 nodes would be introduced to make a prediction of the shear modulus field. The number of layers and neurons would be increased and the weights would be initialized from the previous neural network. This process can continue until a neural network which can make detailed predictions of the stiffness field can be obtained.}
@@ -448,327 +456,4 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \end{figure}  
 \end{document}
 % Document ends here
-\appendix
-\section{Training losses}
-\subsection{Imaging one inclusion}
-%
-% oneinc: Training loss, val_loss for exxeyy
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/exxeyy/field_strainxxyy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/exxeyy/field_strainxxyy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:oneinc:trainexxeyy} Training curves for CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging one inclusion.}
-\end{figure}
-% oneinc: Training loss, val_loss for eyy
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/eyy/field_strainyy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/eyy/field_strainyy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:oneinc:traineyy} Training curves for CNN $\epsilon_{yy}$ for imaging one inclusion.}
-\end{figure} 
-% oneinc: Training loss, val_loss for uxuy
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/uxuy/field_images_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/uxuy/field_images_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-  \caption{\label{fig:oneinc:trainuxuy} Training curves for CNN $u_x$ \& $u_y$ for imaging one inclusion.}
-\end{figure}
-% oneinc: Training loss, val_loss for uy
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/uy/field_imagesy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1/training/uy/field_imagesy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-  \caption{\label{fig:oneinc:trainuy} Training curves for CNN $u_y$ for imaging one inclusion.}
-\end{figure}
-%
-% oneinctanh: Training loss, val_loss for exxeyy
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/exxeyy/field_strainxxyy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/exxeyy/field_strainxxyy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:oneinctanh:trainexxeyy} Training curves for CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging one inclusion.}
-\end{figure}
-% oneinctanh: Training loss, val_loss for eyy
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/eyy/field_strainyy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/eyy/field_strainyy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:oneinctanh:traineyy} Training curves for CNNc $\epsilon_{yy}$ for imaging one inclusion.}
-\end{figure}
-%
-% oneinctanh: Training loss, val_loss for ux+uy
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/uxuy/field_images_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/uxuy/field_images_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:oneinctanh:trainuxuy} Training curves for CNNc $u_x$ \& $u_y$ for imaging one inclusion.}
-\end{figure}
-%
-% oneinctanh: Training loss, val_loss for uy
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/uy/field_imagesy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final1c/training/uy/field_imagesy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:oneinctanh:trainuy} Training curves for CNNc $u_y$ for imaging one inclusion.}
-\end{figure}
-\section{Training loss for 3 inclusions}
-% Training loss, val_loss for exxeyy (3 softplus)
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/exxeyy/field_strainxxyy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/exxeyy/field_strainxxyy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:threeinc:trainexxeyy} Training curves for CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging up to 3 inclusions.}
-\end{figure}
-% Training loss, val_loss for eyy (3 softplus)
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/eyy/field_strainyy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/eyy/field_strainyy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:threeinc:traineyy} Training curves for CNN $\epsilon_{yy}$ for imaging up to 3 inclusions.}
-\end{figure} 
-% Training loss, val_loss for uxuy (3 softplus)
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/uxuy/field_images_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/uxuy/field_images_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-  \caption{\label{fig:threeinc:trainuxuy} Training curves for CNN $u_x$ \& $u_y$ for imaging up to 3 inclusions.}
-\end{figure}
-% Training loss, val_loss for uy (3 softplus)
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/uy/field_imagesy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3/training/uy/field_imagesy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-  \caption{\label{fig:threeinc:trainuy} Training curves for CNN $u_y$ for imaging up to 3 inclusions.}
-\end{figure}
-%
-% Training loss, val_loss for exxeyy (3 tanh)
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/exxeyy/field_strainxxyy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/exxeyy/field_strainxxyy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:threeinctanh:trainexxeyy} Training curves for CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ for imaging three inclusions with constraints.}
-\end{figure}
-% Training loss, val_loss for eyy (3 tanh)
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/eyy/field_strainyy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/eyy/field_strainyy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:threeinctanh:traineyy} Training curves for CNNc $\epsilon_{yy}$ for imaging three inclusions with constraints.}
-\end{figure}
-%
-% Training loss, val_loss for ux+uy (3 tanh)
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/uxuy/field_images_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/uxuy/field_images_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-  \caption{\label{fig:threeinctanh:trainuxuy} Training curves for CNNc $u_x$ \& $u_y$ for imaging three inclusions with constraints.}
-\end{figure}
-% Training loss, val_loss for uy (3 tanh)
-\begin{figure}[h]
-  %
-  \centering
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/uy/field_imagesy_plot_loss.png}
-    \caption{Training loss}
-  \end{subfigure}
-  %
-  \begin{subfigure}[b]{0.45\linewidth}
-    \includegraphics[totalheight=\nhgfigheight]{Figures/final3c/training/uy/field_imagesy_plot_val_loss.png}
-    \caption{Validation loss}
-  \end{subfigure}
-  %
-\caption{\label{fig:threeinctanh:trainuy} Training curves for CNNc $u_y$ for imaging three inclusions with constraints.}
-%
-\end{figure}
-% blue starts
-\textcolor{blue}{We consider the softplus activation function in equation (\ref{eqn:softplus}) and the twisted tanh activation function in equation (\ref{eqn:twisttanh}). When using the softplus activation, the training shear modulus data is not normalized and while using the twisted tanh function the training shear modulus data is normalized to the range $(-1,1)$. The predictions made using the softplus only respect the basic positivity constraint on the shear modulus i.e. $\mu(x) > 0$. In addition, it is seen that the CNNs using the softplus activation tend to predict regions of low shear modulus typically surrounding the inclusions (but also seen in other places). We call these regions 'haloes'. See Figure (\ref{fig:haloes}) for examples. We seek to prevent haloes by incorporating prior information into our reconstruction algorithm. We do so by restricting the range of the shear modulus predicted by the CNN to within known limits $[\mu_{back},\mu_{max}]$ where $\mu_{back}$ is the background shear modulus and typically the lowest shear modulus in the problem and $\mu_{max}$ is the maximum shear modulus in the problem. One can simply do this by thresholding: just apply \textit{min} and \textit{max} functions to the shear modulus images produced by using the softplus activation function and post-process the result. But this is unsatisfying because it does not restrict the output of the CNN. \\We considered restricting the output of the CNN to a specified range by first applying a suitable scaling to change the range of the output variable from $[\mu_{back},\mu_{max}]$ to $(0,1)$ or $(-1,1)$ as appropriate. We then considered the use of activation functions given in equations (\ref{eqn:logistic},\ref{eqn:tanh},\ref{eqn:softplusmin}) whose range is restricted to $(0,1),(-1,1)$ and $(0,1)$. As noted in \cite{bookchap:lecun98b} we observed that with the activation functions given in equations (\ref{eqn:logistic},\ref{eqn:tanh},\ref{eqn:softplusmin}) the weights and therefore loss function become stuck because the derivatives of equations (\ref{eqn:logistic},\ref{eqn:tanh},\ref{eqn:softplusmin}) become very close to zero for values sufficiently away from zero. However, we again observe as noted in \cite{bookchap:lecun98b}, that the addition of a \textit{twisting term} ($0.01x$) to the $\tanh(x)$ function makes the derivative non-zero and training of the CNN occurs. While the twisting term changes the range of $\tanh$ from $(-1,1)$ to $(-\infty,+\infty)$, it is observed that in practice the predictions are approximately restricted to the range $[\mu_{back},\mu_{max}]$. We also observe that using the twisted tanh activation results in shear modulus images in which a region of low shear modulus is not seen next to inclusions.}
-% Blue ends
-\section{\label{sect:oneinc}Imaging one inclusion}
-We apply the CNN described in Section (\ref{sect:cnnarch}) to predict the shear modulus field when only one inclusion is present. The data is generated as described in Section (\ref{sect:probsetup}). Eight CNNs are trained. See Table (\ref{table:cnnparams}) where the training data and prediction data for each CNN is specified. For example, the first entry in Table (\ref{table:cnnparams}) should be interpreted as: CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ and CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ are trained on both components of a noiseless strain field (given in column 2) and are used to make predictions using both components of the strain field, with and without noise (given in column 3). Since two components of the strain field are used to train and make predictions the number of channels is $2$.\\The CNNs using the softplus activation function (equation \ref{eqn:softplus}) to make predictions are:
-\begin{enumerate}
-\item{CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$}
-\item{CNN $\epsilon_{yy}$}
-\item{CNN $u_x$ \& $u_y$}
-\item{CNN $u_y$}
-\end{enumerate}
-The CNNs using the twisted tanh (\ref{eqn:twisttanh}) function to make predictions are:
-\begin{enumerate}
-\item{CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$}
-\item{CNNc $\epsilon_{yy}$}
-\item{CNNc $u_x$ \& $u_y$}
-\item{CNNc $u_y$}
-\end{enumerate}
-The additional 'c' at the end of 'CNNc' denotes 'constrained'. We refer to the CNNs using the twisted tanh activation function as constrained because their output is restricted to approximately the interval:$(\mu_{back},\mu_{max})$. See Section (\ref{sect:cnnarch}) for a detailed discussion. \\
-The training and loss curves for the CNNs are shown in Figures (\ref{fig:oneinc:trainexxeyy}-\ref{fig:oneinctanh:trainuy}). The predictions of the various CNNs are shown in Figures (\ref{fig:oneinc:1}-\ref{fig:oneinctanh:16}). The results for the CNNs using softplus activation and the CNNs using the twisted tanh activation are presented alternately. All figures on the same page are on the same color scale. The subcaptions of the figures are explained in Table (\ref{tab:subcap}).\\
-The conclusions that can be drawn from Figures (\ref{fig:oneinc:1}-\ref{fig:oneinctanh:16}) are:
-\begin{enumerate}
-\item{The location of the inclusion is predicted accurately.}
-\item{Generally speaking, the shear modulus of small inclusions is under-predicted by CNNs. See Figures (\ref{fig:oneinc:1},\ref{fig:oneinc:3},\ref{fig:oneinc:6},\ref{fig:oneinc:8}).}
-\item{The shear modulus of large inclusions is correct on average. The discontinuities in the true shear modulus field are not predicted accurately. Instead a smooth field is predicted. The CNNs using the twisted tanh activation do better in predicting discontinuities.}
-\item{It is observed that the CNNs using the softplus activation predict a region of low shear modulus next to a region of high shear modulus. See Figures (\ref{fig:oneinc:1},\ref{fig:oneinc:2},\ref{fig:oneinc:3},\ref{fig:oneinc:3}).}
-\end{enumerate}
-\begin{table}
-  \centering
-   \begin{tabular}{cp{8cm}}
-    \hline
-    \multicolumn{1}{|c|}{Subcaption} & \multicolumn{1}{c|}{Meaning}\\
-    \hline
-    \multicolumn{1}{|c|}{True} & \multicolumn{1}{p{8cm}|}{This is the true shear modulus field. The input displacement or strain fields correspond to this shear modulus field. This is the ideal prediction of our CNN.}\\
-    \hline
-    \multicolumn{1}{|c|}{$\epsilon_{xx}$ \& $\epsilon_{yy}$} & \multicolumn{1}{p{8cm}|}{Prediction using CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ or CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ using noiseless $\epsilon_{xx}$ \& $\epsilon_{yy}$}\\
-    \hline
-    \multicolumn{1}{|c|}{(b) + noise} & \multicolumn{1}{p{8cm}|}{Prediction using CNN $\epsilon_{xx}$ \& $\epsilon_{yy}$ or CNNc $\epsilon_{xx}$ \& $\epsilon_{yy}$ using noisy $\epsilon_{xx}$ \& $\epsilon_{yy}$}\\
-    \hline
-    \multicolumn{1}{|c|}{$\epsilon_{yy}$} & \multicolumn{1}{p{8cm}|}{Prediction using CNN $\epsilon_{yy}$ or CNNc $\epsilon_{yy}$ using noiseless $\epsilon_{yy}$}\\
-    \hline
-    \multicolumn{1}{|c|}{$\epsilon_{yy}$ + noise} & \multicolumn{1}{p{8cm}|}{Prediction using CNN $\epsilon_{yy}$ or CNNc $\epsilon_{yy}$ using noisy $\epsilon_{yy}$}\\
-    \hline
-    \multicolumn{1}{|c|}{$u_x$ \& $u_y$} & \multicolumn{1}{p{8cm}|}{Prediction using CNN $u_x$ \& $u_y$ or CNNc $u_x$ \& $u_y$ using noiseless $u_x$ \& $u_y$ }\\
-    \hline
-    \multicolumn{1}{|c|}{$u_x$ \& $u_y$ + noise} & \multicolumn{1}{p{8cm}|}{Prediction using CNN $u_x$ \& $u_y$ or CNNc $u_x$ \& $u_y$ using noisy $u_x$ \& $u_y$ }\\
-    \hline
-    \multicolumn{1}{|c|}{$u_y$} & \multicolumn{1}{p{8cm}|}{Prediction using CNN $u_y$ or CNNc $u_y$ using noiseless $u_y$ }\\
-    \hline
-    \multicolumn{1}{|c|}{$u_y$ + noise} & \multicolumn{1}{p{8cm}|}{Prediction using CNN $u_y$ or CNNc $u_y$ using noisy $u_y$ }\\
-    \hline
-  \end{tabular}
-  \caption{\label{tab:subcap} Interpretations of subcaptions for Figures (\ref{fig:oneinc:1}-\ref{fig:oneinctanh:16}) and (\ref{fig:threeinc:1}-\ref{fig:threeinctanh:16}).}
-\end{table}
-%
-\section{\label{sect:threeinc}Imaging up to three inclusions}
-In this section, we evaluate the ability of the CNN to learn from fields containing multiple (up to $3$) inclusions. The CNN architecture is exactly as described in Section (\ref{sect:cnnarch}). The problem setup is the same as described in Section (\ref{sect:probsetup}) with the following differences. There can be either $1$, $2$ or $3$ inclusions in the domain and their radius ranges from $0.1$ units to $0.15$ units. Training curves are presented in Figures (\ref{fig:threeinc:trainexxeyy}-\ref{fig:threeinctanh:trainuy}). Figures (\ref{fig:threeinc:1}-\ref{fig:threeinctanh:16}) show the results obtained. 
+
