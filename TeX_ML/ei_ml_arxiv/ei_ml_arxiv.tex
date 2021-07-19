@@ -236,26 +236,26 @@ Finally, we note that the \textit{loss function} is \textit{mean squared error} 
 \begin{center}
 \begin{table}
   \centering
-  \begin{tabular}{|c|c|c|c|}
+  \begin{tabular}{|c|c|c|}
     \hline
-    \multirow{2}{*}{CNN Name} & \multirow{2}{*}{Description} & Training    & Prediction \\
-                              &                              & data        & data \\
+    \multirow{2}{*}{CNN Name} &  \multirow{2}{*}{Training data}           & \multirow{2}{*}{Prediction data}\\
+                              &                                           &  \\
      \hline
-     \multirow{3}{*}{CNN1}    & {activation:  }                    & {$\epsilon_{yy}$}                 &  $\epsilon_{yy}$\\
-                              & twisted tanh $[0.75,5.25]$         &  (noiseless)                     & $\epsilon_{yy}$ + noise\\
-                              & {inclusions: $1-3$}                &                                  &\\
+     \multirow{3}{*}{CNN1}    &  $\epsilon_{yy}$                           &  \multirow{3}{*}{$\epsilon_{yy}$ + 40 dB noise}\\
+                              &  noiseless                                & \\
+                              &  1-3 inclusions                           &\\
      \hline
-     \multirow{3}{*}{CNN2}    & {activation: }                     & {$u_{y}$}                         & $u_{y}$\\
-                              & twisted tanh $[0.75,5.25]$         & (noiseless)                      & $u_{y}$ + noise\\
-                              & {inclusions: $1-3$}                &                                  &\\  
+     \multirow{3}{*}{CNN2}    &  $u_{y}$                                   & \multirow{3}{*}{$u_{y}$ + 40 dB noise}\\
+                              &  noiseless                                & \\
+                              &  1-3 inclusions                           &\\  
      \hline
-     \multirow{3}{*}{CNN3}    & {activation:}                      & {$\epsilon_{yy}$}                 & {$\epsilon_{yy}$}\\
-                              & twisted tanh $[0.75,5.25]$         & (noiseless)                      & (noiseless)\\
-                              & {inclusions: $1$}                  &                                  & \\
+     \multirow{3}{*}{CNN3}    &  $\epsilon_{yy}$                           & \multirow{3}{*}{$\epsilon_{yy}$ + 40 dB noise}\\
+                              &  noiseless                                & \\
+                              &  1 inclusion                              & \\
 
     \hline
   \end{tabular}
-  \caption{\label{table:cnnparams} Listing of CNNs trained and their parameters. See section (\ref{sect:outputact}) for the meaning of twisted tanh [0.75,5.25]. CNN1 and CNN2 are trained with data containing $1-3$ inclusions. CNN3 is trained on data containing exactly $1$ inclusions.}
+  \caption{\label{table:cnnparams} Table of CNNs trained and their parameters. All CNNs use the twisted tanh [0.75,5.25] activation function (see section (\ref{sect:outputact})).}
 \end{table}
 \end{center}
 %
@@ -362,7 +362,7 @@ Finally we note that as a final post-processing step we can apply thresholding (
     \caption{twisted tanh}
   \end{subfigure}
   %
-\caption{\label{fig:activations} Activation functions for equations (\ref{eqn:softplus}-\ref{eqn:twisttanh}).}
+\caption{\label{fig:activations} Graphs of activation functions for equations (\ref{eqn:softplus}-\ref{eqn:twisttanh}).}
 \end{figure}
 %
 \begin{table}
@@ -411,9 +411,9 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \item{Addition of homogeneous examples to the dataset would be a good test for the CNNs evaluated in this work However, given that the CNNs underpredict the shear modulus of small inclusions, we believe homogeneous examples will be predicted correctly.}
 \item{Training the CNN with displacement or strain data generated using random values for the shear modulus at each node and seeing if it learns the inverse operator from the displacement (or strain) fields to shear modulus fields would be interesting. Training with other complex shapes would also be interesting.}
 \item{Training with examples in which shear modulus of only one node is changed relative to the background. It would be interesting, if based on this information, the CNN can process a displacement field and understand that the stiffness of only certain nodes needs to be changed.}
-\item{It is seen that better results are obtained for larger inclusion with larger contrast. Stiffness of smaller inclusions is under-predicted. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions. We also note that from previous experience, the adjoint method \cite{paper:oberai2003} is able to predict the small inclusions correctly using noiseless data. It seems that the adjoint method does better than CNNs on the problem of predicting small inclusions.}
-\item{We have not visualized the filters produced for the first two layers of the CNN. Visualizing the filters could yield additional insights as in \cite{paper:pateloberai2019,misc:vizfilterlink}.}
+\item{It is seen that better results are obtained for larger inclusion with larger contrast. Stiffness of smaller inclusions is under-predicted. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions. We also note that from previous experience, the adjoint method \cite{paper:oberai2003} is able to predict the small inclusions correctly using noiseless data. It seems that the adjoint method does better than CNN on the problem of predicting small inclusions.}
 \item{It is often observed that a region of high shear modulus (inclusion) has an adjacent region which has shear modulus less than the background stiffness when the softplus activation is used. The origins of this need to be investigated. Using the twisted tanh activation and prior knowledge about the range of allowable shear modulus leads to elimination of this artifact.}
+\item{Filters for the first convolutional layer for the three CNNs trained (see table (\ref{tab:})) are shown in appendices ()}
 \item{We have trained the CNN using examples in which the stiffness of the circular inclusion lies between $2.0$ and $5.0$. We call this the training range. The test data also contains examples in the \textit{same} range. Expanding this test range to include examples outside the training range and evaluating the performance of the CNNs will be interesting.}
 \item{A simple \textit{mean squared error} (which corresponds to the $L^2$ norm in the continuous case) was used to evaluate the loss function for the neural network. The effect of other losses corresponding to $H^1$ or Total Variation Diminishing (TVD) norms will be interesting to evaluate. We think that using a loss function corresponding to the $H^1$ norm will remove the incidence of regions of low shear modulus adjacent to inclusions. However, it will also penalize sharp discontinuities in the inclusions as well. If we are training with both components of a noiseless displacement field, then one can consider a loss function which is simply the residual obtained when the predicted shear modulus and input fields are plugged into the equilibrium equations of elasticity. Implementing these loss functions will require custom loss functions in TensorFlow perhaps along with custom gradient calculation.}
 \item{Investigating different network architectures with the aim of yielding better results will be worth investigation. More CNN layers (or less), deeper (or shallower) networks, should be investigated. Other hyperparameters such as the kernel size for the CNN layers can be varied as well. It may be worth investigating whether a CNN is required at all and whether a simple dense network can produce similar quality results. The first dense layer contains $128$ nodes. Increasing this number will probably result in better networks, but will also increase the number of weights. It may also be worthwhile to replace the full connection of the dense layers with spatially close connections. By this, we mean that after flattening each node in the first dense layer would be connected only to those neurons which are spatially close together in the previous layer.}
@@ -437,19 +437,19 @@ A CNN capable of predicting shear modulus fields from displacement or strain fie
 \bibliographystyle{plain}
 \appendix
 \section{Filters}
-\subsection{Filters 1}
+\subsection{\label{sect:filtcnn1}Filters for CNN1}
 % solves 'Counter too large' problem
 \renewcommand*{\thesubfigure}{\arabic{subfigure}}
 \begin{figure}[h]
   \filterpics{FiltersTanhStrain3}
   \caption{Filters for case 1}
 \end{figure}  
-\subsection{Filters 2}
+\subsection{Filters for CNN 2}
 \begin{figure}[h]
   \filterpics{FiltersTanhDisp3}
   \caption{Filters for case 2}
 \end{figure}  
-\subsection{Filters 3}
+\subsection{Filters for CNN3}
 \begin{figure}[h]
   \filterpics{FiltersTanhStrain1}
   \caption{Filters for case 3}
