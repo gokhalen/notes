@@ -172,7 +172,7 @@ See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for min
 \subsubsection{Direct approach} Direct approaches involve solving a partial differential equation (PDE) to obtain the distribution of shear modulus directly: see \cite{paper:raghavan1994,paper:barboneadjwt,paper:albocher}. The coefficients of this PDE depend on the measured displacement field. Such approaches are fast and work well when the measured strain field is completely known and has low noise.
 \subsubsection{Iterative approach} Iterative approaches \cite{paper:oberai2003,paper:gokhale2008,paper:kalle1996,paper:doyley,paper:goenezen2011} involve guessing a distribution for the shear modulus, solving a linear elasticity forward problem to obtain the predicted displacement field, computing the value and the gradient (and/or Hessian) with respect to the shear modulus of an objective function which consists of a user specified norm of the difference between the predicted displacement field and the measured displacement field, and updating the guessed shear modulus distribution using a suitable optimization procedure such as a modified Newton Raphson scheme as in \cite{paper:doyley} or the BFGS scheme as in \cite{paper:gokhale2008,paper:goenezen2011}. Such approaches are typically slower than direct methods, since they require the solution of approximately $50$ to $100$ forward problems, but have the ability to handle incomplete data and complex nonlinear material models such as hyperelasticity.
 \subsubsection{Solving the inverse problem with CNNs}
-We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer (once time has been spent up front to train the CNN), can accommodate complex constitutive relations, can work with incomplete data (e.g. only a single component of a displacement field) and can work with noisy data. On the other hand, if data which is unlike what the CNN has been trained on is seen, then it is doubtful that the CNN will be able to make correct predictions. See section (\ref{sect:3with1}) for further discussion. Also, we note that CNNs do not predict a perfect result in the absence on noise, unlike traditional direct or iterative methods. Finally, we note here that we expect determining multiple material parameters e.g. a linear and a non-linear parameter or both the Lam\'e parameters for compressible elasticity from the same set of images to be challenging.
+We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer (once time has been spent up front to train the CNN), can accommodate complex constitutive relations, can work with incomplete data (e.g. only a single component of a displacement field) and can work with noisy data. On the other hand, if data which is unlike what the CNN has been trained on is seen, then it is doubtful that the CNN will be able to make correct predictions. We also note that CNNs do not predict a perfect result in the absence of noise, unlike traditional direct or iterative methods. Finally, we note here that we expect determining multiple material parameters e.g. a linear and a non-linear parameter or both the Lam\'e parameters for compressible elasticity from the same set of images to be challenging.
 \section{\label{sect:probsetup}Problem setup for data generation}
 The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. We refer the reader to \cite{book:hugheslinear,book:fishbelytschko,book:segelmathcont} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated bilinearly. The problem geometry is shown in figure (\ref{fig:bc}). Plane strain is assumed. The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. Both degrees of freedom are constrained at the pin and only the $y$ degree of freedom is constrained at the roller. The background shear modulus is $\mu_{back}=1.0$ unit. The Poisson's ratio is a constant and is set to $0.49$. Selective reduced integration is used to avoid mesh locking because the Poisson's ratio of $0.49$ renders the medium almost incompressible. The shear modulus of inclusions is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$. The number of inclusions in the domain depends on the network being trained, either CNN1, CNN2 or CNN3. Their parameters are are listed in table (\ref{table:cnnparams}). There are either one, two or three inclusions in the data used to train CNN1 and CNN2 and there is exactly one inclusion in the data used to train CNN3.
 
@@ -383,7 +383,7 @@ Finally we note that as a final post-processing step we can apply thresholding (
    \hline
    \multirow{3}{*}{dense}  & $128$ units,\\& activation \textit{relu},\\& no regularization\\
    \hline
-   \multirow{3}{*}{dense\_1} & $nnodex*nnodey$ units,\\& activation softplus or twisted tanh,\\& no regularization\\
+   \multirow{3}{*}{dense\_1} & $nnodex*nnodey$ units,\\& activation or twisted tanh,\\& no regularization\\
    \hline
  \end{tabular}
  \caption{\label{table:cnnlayerparams} Parameters for the CNN shown in figure (\ref{fig:typical_cnn}).}
@@ -397,10 +397,71 @@ Finally we note that as a final post-processing step we can apply thresholding (
 %
 %
 \section{Results}
-We present results for the CNNs described in table (\ref{table:cnnparams}). Their architecture is given in figure (\ref{fig:typical_cnn}) and the layer parameters are given in table (\ref{table:cnnlayerparams}).
+We present results for the CNNs described in table (\ref{table:cnnparams}). Their architecture is given in figure (\ref{fig:typical_cnn}) and the layer parameters are given in table (\ref{table:cnnlayerparams}). Every CNN is trained for 384 epochs.
 \subsection{\label{sect:resultscnn1}Results for CNN1}
+%
+The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1losses}). For this network, the scaled error defined in equation (\ref{eqn:scalederror}) is $XXX$.
+% Losses for CNN1
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[c]{0.45\linewidth}
+    \includegraphics[totalheight=4cm]{Figures/Results1/loss.png}
+    \subcaption{Loss}
+  \end{subfigure}
+%  
+  \begin{subfigure}[c]{0.45\linewidth}
+    \includegraphics[totalheight=4cm]{Figures/Results1/val_loss.png}
+    \subcaption{Validation loss}
+  \end{subfigure}
+  %
+  \caption{\label{fig:cnn1losses} Training and validation losses for CNN1.}
+\end{figure}
+%
+% Results for CNN1
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[c]{0.23\linewidth}
+  \end{subfigure}
+  \caption{Reconstructions for CNN1.}
+\end{figure}
+% 
 \subsection{\label{sect:resultscnn2}Results for CNN2}
+The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn2losses}). For this network, the scaled error defined in equation (\ref{eqn:scalederror}) is $XXX$.
+% Losses for CNN2
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[c]{0.45\linewidth}
+    \includegraphics[totalheight=4cm]{Figures/Results2/loss.png}
+    \subcaption{Loss}
+  \end{subfigure}
+%  
+  \begin{subfigure}[c]{0.45\linewidth}
+    \includegraphics[totalheight=4cm]{Figures/Results2/val_loss.png}
+    \subcaption{Validation loss}
+  \end{subfigure}
+  %
+  \caption{\label{fig:cnn2losses} Training and validation losses for CNN2.}
+\end{figure}
+%
 \subsection{\label{sect:resultscnn3}Results for CNN3}
+The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn3losses}). For this network, the scaled error defined in equation (\ref{eqn:scalederror}) is $XXX$.
+% Losses for CNN3
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[c]{0.45\linewidth}
+    \includegraphics[totalheight=4cm]{Figures/Results3/loss.png}
+    \subcaption{Loss}
+  \end{subfigure}
+%  
+  \begin{subfigure}[c]{0.45\linewidth}
+    \includegraphics[totalheight=4cm]{Figures/Results3/val_loss.png}
+    \subcaption{Validation loss}
+  \end{subfigure}
+  %
+  \caption{\label{fig:cnn3losses} Training and validation losses for CNN3.}
+\end{figure}
+%
+\subsection{Discussion}
 %
 \section{Concluding remarks}
 % Custom activation function
@@ -412,7 +473,6 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \item{Training the CNN with displacement or strain data generated using random values for the shear modulus at each node and seeing if it learns the inverse operator from the displacement (or strain) fields to shear modulus fields would be interesting. Training with other complex shapes would also be interesting.}
 \item{Training with examples in which shear modulus of only one node is changed relative to the background. It would be interesting, if based on this information, the CNN can process a displacement field and understand that the stiffness of only certain nodes needs to be changed.}
 \item{It is seen that better results are obtained for larger inclusion with larger contrast. Stiffness of smaller inclusions is under-predicted. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions. We also note that from previous experience, the adjoint method \cite{paper:oberai2003} is able to predict the small inclusions correctly using noiseless data. It seems that the adjoint method does better than CNN on the problem of predicting small inclusions.}
-\item{It is often observed that a region of high shear modulus (inclusion) has an adjacent region which has shear modulus less than the background stiffness when the softplus activation is used. The origins of this need to be investigated. Using the twisted tanh activation and prior knowledge about the range of allowable shear modulus leads to reduction of this artifact.}
 \item{Filters for the first convolutional layer for the three CNNs trained (see table (\ref{table:cnnparams})) are shown in appendix (\ref{sect:filters}). Fourier analysis of these filters, as reported in \cite{paper:pateloberai2019} would be valuable.}
 \item{We have trained the CNN using examples in which the stiffness of the circular inclusion lies between $2.0$ and $5.0$. We call this the training range. The test data also contains examples in the \textit{same} range. Expanding this test range to include examples outside the training range and evaluating the performance of the CNNs will be interesting.}
 \item{A simple \textit{mean squared error} (which corresponds to the square of the $L^2$ norm in the continuous case) was used to evaluate the loss function for the neural network. The effect of other losses corresponding to $H^1$ or Total Variation Diminishing (TVD) norms will be interesting to evaluate. We think that using a loss function corresponding to the $H^1$ norm will remove the incidence of regions of low shear modulus adjacent to inclusions. However, it will also penalize sharp discontinuities in the inclusions as well. If we are training with both components of a noiseless displacement field, then one can consider a loss function which is simply the residual obtained when the predicted shear modulus and input fields are plugged into the equilibrium equations of elasticity. Implementing these loss functions will require custom loss functions in TensorFlow perhaps along with custom gradient calculation.}
