@@ -1,6 +1,6 @@
 % Six results 2 - Excellent, 2 Good, 2 Bad. For softplus show halos
-% Mention adding more noise
-% Use only active voice. 
+% Average error, histogram of the scaled error, histogram of total dataset
+
 \documentclass[12pt]{article}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -110,13 +110,13 @@
 \section{Introduction}
 The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus field of soft tissue results in a high-contrast imaging method because the elevated shear modulus of suspicious growths will stand out clearly against the lower shear modulus of the background of normal tissue. Elasticity Imaging is a broad term that refers to methods which image the shear modulus (or other mechanical properties) of soft tissue in various ways. See \cite{paper:gao1996,paper:parker2010,book:alamgarra2019,bookchap:oberaibarbone2019} for comprehensive reviews of the field.
 %
-\begin{figure}[h]
+\begin{figure}[!h]
    \centering
     \includegraphics[totalheight=3cm]{Figures/shearmod.png}
   \caption{\label{fig:shearmod} Shear modulii of different types of soft tissue. Adapted from Figure (1) in \cite{paper:sarv1998}.}
 \end{figure}
 %
-\begin{figure}[h]
+\begin{figure}[!h]
    \centering
     \includegraphics[totalheight=5cm]{Figures/prepostimage.png}
   \caption{\label{fig:prepostimage} Schematic figure showing medical image acquisition when soft tissue is being deformed using ultrasound imaging. The image taken on the left is referred to as the \textit{pre-deformation} image and the image on the right is the \textit{post-deformation image}.}
@@ -133,13 +133,13 @@ Elasticity Imaging typically consists of the three steps of image acquisition, i
 
 See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for minimization based approaches for computing the displacement field. See \cite{paper:ophir1991,paper:ophir1996,paper:alam1998} and references therein for cross-correlation based approaches. In our work, we generate displacement fields from known shear modulus fields using the finite element method \cite{book:hugheslinear,book:fishbelytschko} and add appropriate noise to mimic the noise when displacement fields are computed from experimentally acquired images. See figure (\ref{fig:exampdispstrain}) for examples of displacement and strain fields computed using FyPy \cite{misc:fypy}.
 %
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
   \includegraphics[totalheight=4cm]{Figures/regist.png}
   \caption{\label{fig:registschematic} A schematic figure of image registration. For the red and green points in the pre-deformation image on the left we aim to find their location in the post-deformation image on the right. Doing this for every point in the pre-deformation image yields a displacement field.}
 \end{figure}
 %
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
   %
   \begin{subfigure}[c]{0.25\linewidth}
@@ -186,7 +186,7 @@ $4000$ displacement and strain images are generated and are split into $2400$ tr
 \end{subequations}  
 % Noise details
 %
-\begin{figure}[h] 
+\begin{figure}[!h] 
    \centering
     \includegraphics[totalheight=5cm]{Figures/bc.png}
   \caption{\label{fig:bc}Boundary conditions and material properties used in this work. }
@@ -211,7 +211,7 @@ At this point, it is worth asking the questions: Are neural networks really nece
 
 The problem with the above algorithm is that the storage required in step (3) and the search space in step (4) is beyond enormous. There are ${n_{\mu}}^{n_{nodes}}$ possible shear modulus fields. This is an enormous number. To see this, take a concrete example: consider $n_{nodes}=1000$ and $n_{\mu}=10$. Then there are $10^{1000}$ possible shear modulus fields. We need an algorithm to search the large search space efficiently, and hence, the need for neural networks.
 %
-\begin{figure}[h]
+\begin{figure}[!h]
    \centering
     \includegraphics[totalheight=5cm]{Figures/schematic_inv/schematic_inv.png}
   \caption{\label{fig:schematic_inv} Solving the inverse problem using CNNs. The displacement or strain field (or components thereof) are mapped by the CNN into a shear modulus field.}
@@ -255,7 +255,7 @@ Finally, we note that the \textit{loss function} is \textit{mean squared error} 
 
     \hline
   \end{tabular}
-  \caption{\label{table:cnnparams} Table of CNNs trained and their parameters. All CNNs use the twisted tanh [0.75,5.25] activation function (see section (\ref{sect:outputact})).}
+  \caption{\label{table:cnnparams} Table of CNNs trained and their parameters. All CNNs use the twisted tanh [0.75,5.25] activation function (see section (\ref{sect:outputact})). CNN1 and CNN2 have the same true shear modulus fields. The shear modulus fields for CNN3 are different.}
 \end{table}
 \end{center}
 %
@@ -268,35 +268,40 @@ We seek to avoid this problem by using the logistic and tanh activation function
 
 To avoid this we add, as noted in \cite{bookchap:lecun98b}, a \textit{twisting term} $0.01x$ to the the tanh activation (equation (\ref{eqn:tanh})) to get the twisted tanh activation function, given by \ref{eqn:twisttanh}. The addition of the twisting term ensures that the gradient of the twisted tanh function does not vanish far away from zero. While the addition of the twisting term changes the range of the tanh function from $(-1,1)$ to $(-\infty,\infty)$, it is seen that in practice that the predictions of the neural network when rescaled lie only slightly outside the interval $[\mu_{lower},\mu_{upper}]$. This is seen in table (\ref{table:muminmax}).
 
-We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mean that we are using the twisted tanh activation function with the input data being scaled such that the interval $[\mu_{lower},\mu_{upper}]$ is mapped linearly to $[-1,1]$. The true range of the shear modulus for all the examples in this work is $[1.0,5.0]$. The more accurately we know the true range of the shear modulus, the closer the the maximum and minium values of the predicted modulus are to the true maximum and minimum values. In addition, the scaled error, defined in equation (\ref{eqn:scalederror}), fields decreases as the known bounds $[\mu_{lower},\mu_{upper}]$ approach true bounds $[1.0,5.0]$, as seen in table (\ref{table:muminmax}). Finally, referring to figure (\ref{fig:haloes}), we see that the 'haloes' seen in figures (\ref{fig:haloes_softplus}) and (\ref{fig:haloes_tanhp50}) are almost eliminated in figures (\ref{fig:haloes_tanhp25}) and (\ref{fig:haloes_tanhp0}). We conclude that it is possible to contain haloes with accurate knowledge about the minimum and maximum shear modulus in the problem.
+We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mean that we are using the twisted tanh activation function with the input data being scaled such that the interval $[\mu_{lower},\mu_{upper}]$ is mapped linearly to $[-1,1]$. The true range of the shear modulus for all the examples in this work is $[1.0,5.0]$.
+
+We now define the scaled error for the $i^{th}$  test example $\zeta_{i}$ and the average scaled error as
 \begin{subequations}
-  \beq
-  \text{Scaled error}\coloneqq \frac{\|\mu_{predicted} - \mu_{true}\|_{2}}{\|\mu_{true}\|_{2}}   \label{eqn:scalederror},
-\eeq
+  \ber
+  \zeta_{i} &\coloneqq& \frac{\|\mu_{i}^{predicted} - \mu_{i}^{true}\|_{2}}{\|\mu_{i}^{true}\|_{2}}  \label{eqn:scalederror}\\
+  \zeta_{ave} &\coloneqq& \frac{\sum_{i=1}^{n_{test}}\zeta_{i}}{n_{test}} \label{eqn:averagescalederror}
+  \eer
 \end{subequations}
-where $\mu_{true},\mu_{predicted}$ are vectors containing true and predicted values of the shear modulus from all test examples.
+where $\mu_{i}^{predicted}$ and $\mu_{i}^{true}$ are vectors containing the predicted and true values of the shear modulus for the $i^{th}$ test example and $n_{test}$ is the number of test examples, in this case $800$.
+
+We find that the average scaled error, defined above in equation (\ref{eqn:averagescalederror}), decreases as the known bounds $[\mu_{lower},\mu_{upper}]$ approach true bounds $[1.0,5.0]$, as seen in table (\ref{table:muminmax}). Finally, referring to figure (\ref{fig:haloes}), we see that the 'haloes' seen in figures (\ref{fig:haloes_softplus}) and (\ref{fig:haloes_tanhp50}) are almost eliminated in figures (\ref{fig:haloes_tanhp25}) and (\ref{fig:haloes_tanhp0}). Finally, we see that the more accurately we know the true range of the shear modulus, the closer the the maximum and minium values of the predicted modulus are to the true maximum and minimum values. We conclude that it is possible to contain haloes with accurate knowledge about the minimum and maximum shear modulus in the problem.
 
 Finally we note that as a final post-processing step we can apply thresholding (use of minimum and maximum functions) to restrict the output of the neural network to a desired range. Also note that, because the minimum and maximum functions are not differentiable everywhere, we do not recommend their use in training the neural network. This is because the backpropagation algorithm for neural network training requires derivatives.
 \begin{table}
   \centering
   \begin{tabular}{|c|c|c|c|}
     \hline
-    \multirow{2}{*}{Activation}  & \multirow{2}{*}{Minimum $\mu$} & \multirow{2}{*}{Maximum $\mu$} & \multirow{2}{*}{Scaled error}\\
+    \multirow{2}{*}{Activation}  & \multirow{2}{*}{Minimum $\mu$} & \multirow{2}{*}{Maximum $\mu$} & \multirow{2}{*}{Average scaled error}\\
                                  &                                &                                &              \\
     \hline
-    softplus                 & 0.0414       & 6.300            & 0.196\\
+    softplus                 & 0.0414       & 6.300            & 0.183\\
     \hline
-    twisted tanh $[0.5, 5.5]$  & 0.372        & 5.452          & 0.186\\     
+    twisted tanh $[0.5, 5.5]$  & 0.372        & 5.452          & 0.176\\     
     \hline
-    twisted tanh $[0.75,5.25]$ & 0.634        & 5.310          & 0.160\\
+    twisted tanh $[0.75,5.25]$ & 0.634        & 5.310          & 0.151\\
     \hline
-    twisted tanh $[1.0, 5.0]$  & 0.748        & 5.105          & 0.149\\
+    twisted tanh $[1.0, 5.0]$  & 0.748        & 5.105          & 0.140\\
     \hline
   \end{tabular}
-  \caption{\label{table:muminmax} Maximum values, minimum values and the scaled error for CNNs using the softplus and twisted tanh activation functions. It is seen that the more accurate our prior knowledge of the shear modulus, the more accurate the predictions. See also figure (\ref{fig:haloes}). See equation (\ref{eqn:scalederror}) for the definition of the scaled error.}
+  \caption{\label{table:muminmax} Maximum values, minimum values and the scaled error for CNNs using the softplus and twisted tanh activation functions. It is seen that the more accurate our prior knowledge of the shear modulus, the more accurate the predictions. See also figure (\ref{fig:haloes}). See equation (\ref{eqn:averagescalederror}) for the definition of the average scaled error.}
 \end{table}
 % softplus halos
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
   %
   \begin{subfigure}[c]{\nhghaloeswidth}
@@ -334,7 +339,7 @@ Finally we note that as a final post-processing step we can apply thresholding (
 \label{eqn:activations}
 \end{subequations}
 %
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
   %
   \begin{subfigure}[c]{5.5cm}
@@ -389,7 +394,7 @@ Finally we note that as a final post-processing step we can apply thresholding (
  \caption{\label{table:cnnlayerparams} Parameters for the CNN shown in figure (\ref{fig:typical_cnn}).}
 \end{table}
 %
-\begin{figure}[h] 
+\begin{figure}[!h] 
    \centering
     \includegraphics[totalheight=9cm]{Figures/typical_cnn.png}
     \caption{\label{fig:typical_cnn}Typical CNN architecture used in this work. This architecture is essentially the same the one used in the Deep Learning example in \cite{misc:udemy} in which it was used to classify images into two categories: 'cat' or 'dog'.}
@@ -397,12 +402,13 @@ Finally we note that as a final post-processing step we can apply thresholding (
 %
 %
 \section{Results}
-We present results for the CNNs described in table (\ref{table:cnnparams}). Their architecture is given in figure (\ref{fig:typical_cnn}) and the layer parameters are given in table (\ref{table:cnnlayerparams}). Every CNN is trained for 384 epochs.
+We present results for the CNNs described in table (\ref{table:cnnparams}). Their architecture is given in figure (\ref{fig:typical_cnn}) and the layer parameters are given in table (\ref{table:cnnlayerparams}). Every CNN is trained for 384 epochs. At $\approx{12}$ seconds per epoch, the network takes $\approx{1.5}$ hours to train. We present the best and worst reconstructions (according to equation (\ref{eqn:scalederror})) and two other reconstructions which illustrate the efficacy of our neural network.
+%
 \subsection{\label{sect:resultscnn1}Results for CNN1}
 %
-The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1losses}). For this network, the scaled error defined in equation (\ref{eqn:scalederror}) is $XXX$.
+The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1losses}). For this network, the total scaled error defined in equation (\ref{eqn:averagescalederror}) is $0.207$. The standard deviation of the scaled error defined in equation (\ref{eqn:averagescalederror}) is $0.0531$. Figures (\ref{fig:cnn1resultb}-\ref{fig:cnn1resultd}) show that the regions of low shear modulus are not accurately reconstructed. Their reconstruction can be best described as 'wisps'. Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, equation (\ref{eqn:scalederror}), is on the x-axis and the y-axis represent the fraction of examples in each bin (number of examples in each bin divided by the total number of examples). It is seen that the examples appear to be normally distributed around a mean of $\approx{0.2}$ and that $80\%$ examples have scaled error of less than $0.25$.
 % Losses for CNN1
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
   \begin{subfigure}[c]{0.45\linewidth}
     \includegraphics[totalheight=4cm]{Figures/Results1/loss.png}
@@ -418,17 +424,51 @@ The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1lo
 \end{figure}
 %
 % Results for CNN1
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
-  \begin{subfigure}[c]{0.23\linewidth}
+  \begin{subfigure}[c]{0.4\linewidth}
+    \includegraphics[totalheight=3cm]{Figures/Results1/ex1/mu.png}
+    \subcaption{\label{fig:cnn1resulta}Best (0.0786)}
   \end{subfigure}
-  \caption{Reconstructions for CNN1.}
+  %
+  \begin{subfigure}[c]{0.4\linewidth}
+    \includegraphics[totalheight=3cm]{Figures/Results1/ex2/mu.png}
+    \subcaption{\label{fig:cnn1resultb}Worst (0.391)}
+  \end{subfigure}
+  %
+  \begin{subfigure}[c]{0.4\linewidth}
+    \includegraphics[totalheight=3cm]{Figures/Results1/ex3/mu.png}
+    \subcaption{\label{fig:cnn1resultc}(0.286)}
+  \end{subfigure}
+  %
+  \begin{subfigure}[c]{0.4\linewidth}
+    \includegraphics[totalheight=3cm]{Figures/Results1/ex4/mu.png}
+    \subcaption{\label{fig:cnn1resultd}(0.252)}
+  \end{subfigure}
+\caption{\label{fig:cnn1result} Results for CNN1. The numbers in the brackets are the scaled errors as defined in equation (\ref{eqn:scalederror}).}  
 \end{figure}
-% 
+%
+% Histograms for CNN1
+\begin{figure}[!h]
+\captionsetup[subfigure]{justification=centering}
+  \centering
+  \begin{subfigure}[c]{0.45\linewidth}
+    \includegraphics[totalheight=5.0cm]{Figures/Results1/histogram.png}
+    \subcaption{Histogram}
+  \end{subfigure}
+%  
+  \begin{subfigure}[c]{0.45\linewidth}
+    \includegraphics[totalheight=5.0cm]{Figures/Results1/cumulative.png}
+    \subcaption{Cumulative histogram}
+  \end{subfigure}
+  %
+  \caption{\label{fig:cnn1histo} Histogram and cumulative histogram for CNN1.}
+\end{figure}
+%
 \subsection{\label{sect:resultscnn2}Results for CNN2}
-The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn2losses}). For this network, the scaled error defined in equation (\ref{eqn:scalederror}) is $XXX$.
+The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn2losses}). For this network, the scaled error defined in equation (\ref{eqn:averagescalederror}) is $XXX$.
 % Losses for CNN2
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
   \begin{subfigure}[c]{0.45\linewidth}
     \includegraphics[totalheight=4cm]{Figures/Results2/loss.png}
@@ -444,9 +484,9 @@ The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn2lo
 \end{figure}
 %
 \subsection{\label{sect:resultscnn3}Results for CNN3}
-The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn3losses}). For this network, the scaled error defined in equation (\ref{eqn:scalederror}) is $XXX$.
+The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn3losses}). For this network, the scaled error defined in equation (\ref{eqn:averagescalederror}) is $XXX$.
 % Losses for CNN3
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
   \begin{subfigure}[c]{0.45\linewidth}
     \includegraphics[totalheight=4cm]{Figures/Results3/loss.png}
@@ -497,17 +537,17 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \subsection{\label{sect:filtcnn1}Filters for CNN1}
 % solves 'Counter too large' problem
 \renewcommand*{\thesubfigure}{\arabic{subfigure}}
-\begin{figure}[h]
+\begin{figure}[!h]
   \filterpics{FiltersTanhStrain3}
   \caption{Filters for case 1}
 \end{figure}  
 \subsection{Filters for CNN2}
-\begin{figure}[h]
+\begin{figure}[!h]
   \filterpics{FiltersTanhDisp3}
   \caption{Filters for case 2}
 \end{figure}  
 \subsection{Filters for CNN3}
-\begin{figure}[h]
+\begin{figure}[!h]
   \filterpics{FiltersTanhStrain1}
   \caption{Filters for case 3}
 \end{figure}  
