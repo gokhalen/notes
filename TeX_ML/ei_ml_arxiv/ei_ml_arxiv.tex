@@ -228,7 +228,7 @@ The last dimension represents the number of channels in the image. In color imag
 \epsilon_{xx}+\epsilon_{yy}\approx{0} \implies \pdd{u_x}{x} + \pdd{u_y}{y} \approx{0}\\
 \epsilon_{xy} \approx 0 \qquad \text{in most of the domain.}
 \eer
-The above equations imply that, effectively, the only independent components are $\epsilon_{yy}$ and $u_y$. Therefore in this work, we restrict our attention to only single channel images which represent either $u_y$ or $\epsilon_{yy}$.
+The above equations imply that $u_y$ and $\epsilon_{yy}$ can be regarded as independent variables. Therefore in this work, we restrict our attention to only single channel images which represent either $u_y$ or $\epsilon_{yy}$.
 \end{subequations}
 
 Finally, we note that the \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam} \cite{misc:kingma2017adam} with default TensorFlow settings. No regularization or dropout is used.  Each CNN has approximately $3.35$ million trainable parameters. After training, the model with the best validation loss is chosen to make predictions.
@@ -270,14 +270,14 @@ To avoid this we add, as noted in \cite{bookchap:lecun98b}, a \textit{twisting t
 
 We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mean that we are using the twisted tanh activation function with the input data being scaled such that the interval $[\mu_{lower},\mu_{upper}]$ is mapped linearly to $[-1,1]$. The true range of the shear modulus for all the examples in this work is $[1.0,5.0]$.
 
-We now define the scaled error for the $i^{th}$  test example $\zeta_{i}$ and the average scaled error as
+We now define the scaled error for the $i^{th}$  test example $\zeta_{i}$ and the average scaled error $\zeta_{ave}$ as
 \begin{subequations}
   \ber
-  \zeta_{i} &\coloneqq& \frac{\|\mu_{i}^{predicted} - \mu_{i}^{true}\|_{2}}{\|\mu_{i}^{true}\|_{2}}  \label{eqn:scalederror}\\
+  \zeta_{i} &\coloneqq& \frac{\|\mu^{i,predicted} - \mu^{i,true}\|_{2}}{\|\mu^{i,true}\|_{2}}  \label{eqn:scalederror}\\
   \zeta_{ave} &\coloneqq& \frac{\sum_{i=1}^{n_{test}}\zeta_{i}}{n_{test}} \label{eqn:averagescalederror}
   \eer
 \end{subequations}
-where $\mu_{i}^{predicted}$ and $\mu_{i}^{true}$ are vectors containing the predicted and true values of the shear modulus for the $i^{th}$ test example and $n_{test}$ is the number of test examples, in this case $800$.
+where $\mu^{i,predicted}$ and $\mu^{i,true}$ are vectors containing the predicted and true values of the shear modulus for the $i^{th}$ test example and $n_{test}$ is the number of test examples, in our case $800$.
 
 We find that the average scaled error, defined above in equation (\ref{eqn:averagescalederror}), decreases as the known bounds $[\mu_{lower},\mu_{upper}]$ approach true bounds $[1.0,5.0]$, as seen in table (\ref{table:muminmax}). Finally, referring to figure (\ref{fig:haloes}), we see that the 'haloes' seen in figures (\ref{fig:haloes_softplus}) and (\ref{fig:haloes_tanhp50}) are almost eliminated in figures (\ref{fig:haloes_tanhp25}) and (\ref{fig:haloes_tanhp0}). Finally, we see that the more accurately we know the true range of the shear modulus, the closer the the maximum and minimum values of the predicted modulus are to the true maximum and minimum values. We conclude that it is possible to contain haloes with accurate knowledge about the minimum and maximum shear modulus in the problem.
 
@@ -402,11 +402,27 @@ Finally we note that as a final post-processing step we can apply thresholding (
 %
 %
 \section{Results}
-We present results for the CNNs described in table (\ref{table:cnnparams}). Their architecture is given in figure (\ref{fig:typical_cnn}) and the layer parameters are given in table (\ref{table:cnnlayerparams}). Every CNN is trained for 384 epochs. At $\approx{12}$ seconds per epoch, the network takes $\approx{1.5}$ hours to train. We present the best and worst reconstructions (according to equation (\ref{eqn:scalederror})) and two other reconstructions which illustrate the efficacy of our neural network.
+We present results for the CNNs described in table (\ref{table:cnnparams}). Their architecture is given in figure (\ref{fig:typical_cnn}) and the layer parameters are given in table (\ref{table:cnnlayerparams}). Every CNN is trained for 384 epochs. At $\approx{12}$ seconds per epoch, the network takes $\approx{1.5}$ hours to train. We present the best and worst reconstructions (according to equation (\ref{eqn:scalederror})) and two other reconstructions which illustrate the performance of our neural network.
+
+We introduce a new metric to evaluate the performance of the neural networks. This metric measures the average percentage error in the shear modulus in the background or in the inclusion for the $i^{th}$ test example.
+
+We define \textit{inclusion scaled error} $\eta_{i}$ and its average $\eta_{ave}$ as, 
+\begin{subequations}
+  \ber
+  \eta_{i} &\coloneqq& \frac{1}{n_{inc_i}}\sum_{j=1}^{n_{inc_i}}\frac{\mu^{i,predicted}_{j}-\mu^{i,true}_{j}}{\mu^{i,true}_{j}}  \label{eqn:incscalederror},\\
+  \eta_{ave} &\coloneqq& \frac{\sum_{i=1}^{n_{test}}\eta_{i}}{n_{test}} \label{eqn:averageincscalederror}.
+  \eer
+\end{subequations}
+In the above equations, $\mu_{j}^{i,true}$ is the $j^{th}$ component of vector $\mu^{i,true}$ containing true values of the shear modulus for the $i^{th}$ test example, \textit{restricted to the inclusion(s)} only. $\mu_{j}^{i,predicted}$ is the $j^{th}$ component of a vector $\mu^{i,predicted}$ containing corresponding predictions. $n_{inc_i}$ is the number of nodes in the background for the $i^{th}$ test examle. $n_{test}$ is the number of test examples, in our case $800$. The quantities $\eta_i,\eta_{ave}$ capture how accurately the shear modulus of the inclusions is predicted and, depending on its sign, can tell us whether it is overpredicted or underpredicted. Negative sign indicates underprediction and positive sign indicates overprediction.
+
+The \textit{background scaled error} and its average can be defined similarly, by replacing $n_{inc_i}$ with $n_{back_i}$ and restricting the vectors $\mu^{i,true}$ and $\mu^{i,predicted}$ to the background only.
+
 %
 \subsection{\label{sect:resultscnn1}Results for CNN1}
 %
-The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1losses}). For this network, the average of the scaled error, defined in equation (\ref{eqn:scalederror}), is $0.207$ and its standard deviation is $0.0531$. Figures (\ref{fig:cnn1resultb}-\ref{fig:cnn1resultd}) show that the regions of low shear modulus are not accurately reconstructed. Their reconstruction can be best described as 'wisps'. Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, equation (\ref{eqn:scalederror}), is on the x-axis and the y-axis represents the fraction of examples in each bin (number of examples in each bin divided by the total number of examples). It is seen that the examples appear to be normally distributed around a mean of ${0.207}$ and that $80\%$ test examples have scaled error of less than $0.25$.
+The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1losses}). For this network, the average of the scaled error, defined in equation (\ref{eqn:scalederror}), is $0.207$ and its standard deviation is $0.0531$. The average inclusion scaled error is $-0.117$ and the average background scaled error is $-0.0171$. These indicate that, on average, the shear modulus of the inclusions is underpredicted, and that of the background is predicted fairly accurately.
+
+Figures (\ref{fig:cnn1resultb}-\ref{fig:cnn1resultd}) show that the regions of low shear modulus are not accurately reconstructed. Their reconstruction can be best described as 'wisps'. Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, equation (\ref{eqn:scalederror}), is on the x-axis and the y-axis represents the fraction of examples in each bin (number of examples in each bin divided by the total number of examples). It is seen that the examples appear to be normally distributed around a mean of ${0.207}$ and that $80\%$ test examples have scaled error of less than $0.25$. The maximum and minimum shear moduli in the prediction are $5.32$ and $0.631$. 
 % Losses for CNN1
 \begin{figure}[!h]
   \centering
@@ -466,7 +482,9 @@ The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1lo
 \end{figure}
 %
 \subsection{\label{sect:resultscnn2}Results for CNN2}
-The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn2losses}). For this network, the average of the scaled error, defined in equation (\ref{eqn:scalederror}), is $0.229$ and its standard deviation is $0.0552$. As before, figures (\ref{fig:cnn2resultb}-\ref{fig:cnn2resultd}) show that the regions of low shear modulus are not accurately reconstructed. As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn2histo}) shows histograms of the scaled error. It is seen that the examples appear to be normally distributed around a mean of ${0.229}$ and that $65.8\%$ test examples have scaled error of less than $0.25$. This is much worse than the corresponding number ($80\%$)for CNN1, indicating that strain based CNNs perform better than displacement based CNNs.
+The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn2losses}). For this network, the average of the scaled error, defined in equation (\ref{eqn:scalederror}), is $0.229$ and its standard deviation is $0.0552$. The average inclusion scaled error is $-0.123$ and the average background scaled error is $-0.0107$. These indicate that, on average, the shear modulus of the inclusions is underpredicted, and that of the background is predicted accurately.
+
+As before, figures (\ref{fig:cnn2resultb}-\ref{fig:cnn2resultd}) show that the regions of low shear modulus are not accurately reconstructed. As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn2histo}) shows histograms of the scaled error. It is seen that the examples appear to be normally distributed around a mean of ${0.229}$ and that $65.8\%$ test examples have scaled error of less than $0.25$. This is much worse than the corresponding number ($80\%$)for CNN1, indicating that strain based CNNs perform better than displacement based CNNs. The maximum and minimum shear moduli in the prediction are $5.267$ and $0.643$. 
 % Losses for CNN2
 \begin{figure}[!h]
   \centering
@@ -526,7 +544,12 @@ The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn2lo
 \end{figure}
 %
 \subsection{\label{sect:resultscnn3}Results for CNN3}
-In this section, we evaluate the ability of the CNN to generalize to the type of examples outside its training set. As noted in table (\ref{table:cnnparams}) we train the CNN using data which was generated using only one inclusion. But we evaluate it on data containing one, two or three inclusions. The training and validation losses for CNN3 are shown in figure (\ref{fig:cnn3losses}). For this network, the average scaled error defined in equation (\ref{eqn:averagescalederror}) is $0.229$ which is only slightly worse than that of CNN1 and the same as that of CNN2 when rounded to three significant digits, which we consider surprising. The standard deviation of the scaled error is $0.0727$ which is significantly more than that of CNN1 and CNN2. As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. It is seen that the examples appear to be normally distributed around a mean of ${0.229}$ and that $62.8\%$ examples have a scaled error less that $0.25$. This is much worse than the corresponding number for CNN1 ($80\%$) indicating that CNNs do not generalize perfectly.
+In this section, we evaluate the ability of the CNN to generalize to the type of examples outside its training set. As noted in table (\ref{table:cnnparams}) we train the CNN using data which was generated using only one inclusion. But we evaluate it on data containing one, two or three inclusions. The training and validation losses for CNN3 are shown in figure (\ref{fig:cnn3losses}). For this network, the average scaled error defined in equation (\ref{eqn:averagescalederror}) is $0.229$ which is only slightly worse than that of CNN1 and the same as that of CNN2 when rounded to three significant digits, which we consider surprising. The standard deviation of the average scaled error is $0.0727$ which is significantly higher than CNN1 and CNN2. The average inclusion scaled error is $-0.187$ and the average background scaled error is $-0.0367$. These indicate that, on average, the shear modulus of the inclusions is underpredicted, and that of the background is predicted accurately. The underprediction of the inclusion stiffness is more severe than the results for CNN1 and CNN2.
+
+The standard deviation of the scaled error is $0.0727$ which is significantly more than that of CNN1 and CNN2. As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. It is seen that the examples appear to be normally distributed around a mean of ${0.229}$ and that $62.8\%$ examples have a scaled error less that $0.25$. This is much worse than the corresponding number for CNN1 ($80\%$) indicating that CNNs do not generalize perfectly.
+
+The maximum and minimum shear moduli in the prediction are $5.37$ and $0.513$.
+
 % Losses for CNN3
 \begin{figure}[!h]
   \centering
@@ -586,6 +609,9 @@ In this section, we evaluate the ability of the CNN to generalize to the type of
 \end{figure}
 %
 \subsection{Discussion}
+We observe encouraging results with good qualitative agreement between the true and predicted shear shear modulus images. The average error according to equation (\ref{eqn:averagescalederror}) is seen to be $\approx{20\%}$. The shear modulus of inclusions with low shear modulus is underpredicted.
+
+We see that the axial strain based neural network (section {\ref{sect:resultscnn1}}) outperforms the axial displacement based network (section \ref{sect:resultscnn2}). We think that exploring the physical meaning of the convolutional filters learned using Fourier analysis as in \cite{paper:pateloberai2019} is a promising direction for investigating the reason for outperformance. The results presented in section (\ref{sect:resultscnn3}) figures (\ref{fig:cnn3resultc}) and (\ref{fig:cnn3resultd}) show that the network has some, though limited, ability to generalize to unseen examples.
 %
 \section{Concluding remarks}
 % Custom activation function
@@ -616,6 +642,8 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \clearpage
 \bibliography{eibib}{}
 \bibliographystyle{plain}
+\end{document}
+% Document ends here
 \appendix
 \section{\label{sect:filters}Filters}
 \subsection{\label{sect:filtcnn1}Filters for CNN1}
@@ -635,6 +663,4 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
   \filterpics{FiltersTanhStrain1}
   \caption{Filters for case 3}
 \end{figure}  
-\end{document}
-% Document ends here
 
