@@ -19,6 +19,8 @@ output = np.apply_over_axes(np.sum,a,[0,1])
 print(f'{output=}')
 print('-'*60)
 
+sys.exit()
+
 # we sum over dimension 0, add an extra dimension 
 # to compensate for loss of dimension
 # then sum over dimension 1
