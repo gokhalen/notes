@@ -7,6 +7,8 @@ Created on Fri Mar 12 09:48:41 2021
 
 import tensorflow as tf
 import numpy as np
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 xvals = np.linspace(-10,10,1024)
