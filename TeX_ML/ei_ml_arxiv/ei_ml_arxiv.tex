@@ -1,5 +1,4 @@
-% Six results 2 - Excellent, 2 Good, 2 Bad. For softplus show halos
-% Average error, histogram of the scaled error, histogram of total dataset
+% ACTIVE VOICE CHECK EVERYWHERE
 
 \documentclass[12pt]{article}
 \usepackage{amsmath}
@@ -31,17 +30,17 @@
 \newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \newcommand{\pdd}[2]{\frac{\partial{{#1}}}{\partial{#2}}}
 % define variables for \mupics command
-\newcommand{\nhghaloesheight}{3.2cm}
+\newcommand{\nhghaloesheight}{3.1cm}
 \newcommand{\nhghaloeswidth}{0.19\linewidth}
 \newcommand{\nhghalfwidth}{0.48\linewidth}
 \newcommand{\nhgtotalheight}{4cm}
 \newcommand{\nhgappwidth}{0.23\linewidth}
-\newcommand{\nhgappheight}{2.3cm}
+\newcommand{\nhgappheight}{2.2cm}
 % mupics ends here
 % filterloop starts here
 \newcommand{\filterpics}[1]{
   \foreach \myvar in {0,...,31}{
-    \begin{subfigure}[b]{2.3cm}
+    \begin{subfigure}[b]{2.2cm}
       \includegraphics[totalheight=2.0cm]{Figures/#1/filter_\myvar_channel_0.png}
       \caption{}
     \end{subfigure}
