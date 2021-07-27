@@ -363,7 +363,7 @@ Finally, we note that as a final post-processing step we can apply thresholding 
 %
 %
 \section{Results}
-We present results for the CNNs described in table (\ref{table:cnnparams}). Their architecture is given in figure (\ref{fig:typical_cnn}) and the layer parameters are given in table (\ref{table:cnnlayerparams}). Every CNN is trained for 384 epochs to put them on a equal footing for comparison. At $\approx{12}$ seconds per epoch, the network takes $\approx{1.5}$ hours to train. We present the best and worst reconstructions, according to equation (\ref{eqn:scalederror}), and two other reconstructions which illustrate the performance of our neural network. We present additional supporting reconstructions in Appendix (\ref{sect:appendix1}).
+We present results for the CNNs described in table (\ref{table:cnnparams}). Their architecture is given in figure (\ref{fig:typical_cnn}) and the layer parameters are given in table (\ref{table:cnnlayerparams}). Every CNN is trained for 384 epochs to put them on a equal footing for comparison. At $\approx{12}$ seconds per epoch, the network takes $\approx{1.5}$ hours to train. All CNNs use the twisted tanh $[0.75,5.25]$ activation. This means that we instruct the CNNs to predict shear moduli approximately in the range $[0.75,5.25]$ as opposed to the true range $[1.0,5.0]$. Thus, we are not assuming perfect knowledge of the upper and lower bounds for the shear modulus in the problem. We present the best and worst reconstructions, according to equation (\ref{eqn:scalederror}), and two other reconstructions which illustrate the performance of our neural network. We present additional supporting reconstructions in Appendix (\ref{sect:appendix1}).
 \subsection{Error metrics}
 We introduce new metrics, namely the \textit{inclusion scaled error} and \textit{background scaled error}, to evaluate the performance of the neural networks. These metrics  measure the average percentage error in the shear modulus in the background or in the inclusion. We define inclusion scaled error for the $i^{th}$ test example $\eta_{i}$ and its average $\eta_{ave}$ as
 \begin{subequations}
@@ -651,7 +651,7 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 %\clearpage
 \begin{appendices}
 \section{\label{sect:appendix1} Additional supporting results}
-We present additional results in figures (\ref{fig:app1result}),(\ref{fig:app2result}) and (\ref{fig:app3result}) in order to provide a better sampling of the results produced by CNN1,CNN2 and CNN3.
+We present additional supporting results in figures (\ref{fig:app1result}),(\ref{fig:app2result}) and (\ref{fig:app3result}) in order to provide a better sampling of the results produced by CNN1,CNN2 and CNN3.
 %\subsection{Additional results for CNN1}
 % Additional results for CNN1
 \begin{figure}[!h]
