@@ -53,7 +53,7 @@
 }  
 \begin{document}
 % bib
-\title{Elasticity imaging using a Convolutional Neural Network}
+\title{Elasticity imaging using a Convolutional Neural Network: Initial results}
 \author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone (Professor, Mechanical Engineering, Boston University, Boston, MA, USA.) for patiently answering many questions about finite elements and for his constructive comments on an earlier version of this document. Conversations with Arnab Majumdar (ArcVisions, Kolkata, India), Michael Richards (Assistant Professor, Department of Biomedical Engineering, Kate Gleason College of Engineering, Rochester Institute of Technology, Rochester, NY, USA) and Mandar Kulkarni (Houston, TX, USA) are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com\\Pune, India.}
 \date{\today}
 \maketitle
@@ -375,13 +375,13 @@ Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, given i
   \centering
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results1New/loss_cnn1.png}
     \subcaption{Loss}
   \end{subfigure}
 %  
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering    
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results1New/val_loss_cnn1.png}
     \subcaption{Validation loss}
   \end{subfigure}
   %
@@ -447,13 +447,13 @@ As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn2hi
   \centering
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results2New/loss_cnn2.png}
     \subcaption{Loss}
   \end{subfigure}
 %  
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results2New/val_loss_cnn2.png}
     \subcaption{Validation loss}
   \end{subfigure}
   %
@@ -522,13 +522,13 @@ As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn3hi
   \centering
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/loss_cnn3.png}
     \subcaption{Loss}
   \end{subfigure}
 %  
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/val_loss_cnn3.png}
    \subcaption{Validation loss}
   \end{subfigure}
   %
@@ -583,7 +583,7 @@ As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn3hi
   \caption{\label{fig:cnn3histo} Histogram and cumulative histogram for CNN3.}
 \end{figure}
 %
-\subsection{\label{sect:lexample} L - shaped example}
+\subsection{\label{sect:lexample} Cross shaped example}
 \subsection{\label{sect:discussion}Discussion}
 We observe encouraging results with good qualitative agreement between the true and predicted shear shear modulus images. Table (\ref{table:cnnstatsummary}) summarizes the performance of the three CNNs evaluated in this work. The average error according to equation (\ref{eqn:averagescalederror}) is seen to be approximately \red{XXX}. The shear modulus of inclusions is under-predicted. The shear modulus of inclusions with low shear modulus and small sized inclusions is significantly under-predicted. The average inclusion scaled error, given in equation (\ref{eqn:averageincscalederror}) evaluated over inclusions having shear modulus in the range $[2.0,3.0]$ yields \red{XXX},\red{XXX} and \red{XXX} for CNN1, CNN2 and CNN3 respectively\footnote{We may be able to use these numbers to create fudge-factors increase the stiffness of the inclusions predicted by the neural network.}. This shows that the strain based networks CNN1 and CNN3 perform worse than usual while detecting inclusions which whose shear modulus is low. The displacement based network CNN2 does not appear to degrade. Its performance while detecting inclusions of low shear modulus is comparable to its performance while detecting inclusions of relatively high shear modulus. The reasons for this should be investigated.
 
@@ -610,7 +610,7 @@ On the basis of the average scaled error, see table (\ref{table:cnnstatsummary})
 \section{Concluding remarks}
 % Custom activation function
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
-In this work, we have presented CNNs capable of predicting shear modulus fields from displacement or strain fields and obtained results that warrant further research. Slight under prediction of the inclusion shear modulus was seen. We used the twisted tanh function as the activation function of the output layer. We observed that with appropriate prior knowledge about the minimum and maximum shear modulus in the problem, the twisted tanh activation function reduces the incidence of 'haloes' (regions of low shear modulus) around the inclusions. The shear modulus of the inclusions with shear modulus close to the background modulus, or small inclusions, was predicted as wisps, while regions of high shear modulus were predicted more accurately.    
+In this work, we have presented CNNs capable of predicting shear modulus fields from displacement or strain fields and obtained results that warrant further research. We use the twisted tanh activation function to constrain the shear modulus prediction as per our prior knowledge. The shear modulus of the inclusions with shear modulus close to the background modulus, or small inclusions, is predicted as wisps, while regions of high shear modulus are predicted more accurately. It is seen that while the CNNs exhibit good performance on the type of examples on which they were trained, they have limited ability to generalize to unseen examples.    
 \subsection{Directions for future work}
 \begin{enumerate}
 \item{We believe that addition of homogeneous examples to the dataset will be a good test for the CNNs evaluated in this work. However, given that the CNNs under-predict the shear modulus of small inclusions, we believe homogeneous examples will be predicted correctly.}
@@ -632,7 +632,7 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \item{Enforcing constraints on the shear modulus is easy in traditional iterative methods. We just supply bound constraints to the optimization algorithm. On the other hand, for the type of problem studied in this work, constraints on the shear modulus values result in constraints on the activation function of the final output layer, and not on the input variables. Applying bound constraints to the shear modulus is hard and requires the use of special activation functions which may get stuck in a local minimum. This problem has been alleviated to a large extent by the use of the twisted tanh activation function. Finally we note that one can solve a non-linearly constrained optimization problem to train the neural network in which the output of the final layer is constrained between allowable values of the shear modulus. However, when an unseen example from the test set is presented, it is not possible to guarantee that this constraint will be satisfied.}
 \item{A hybrid approach combining machine learning and traditional approaches (iterative or direct) will be interesting. We envision that the ML based approach will provide a measure of the confidence in its output. If this is confidence is low, then a solution will be computed using traditional methods and perhaps added to the machine learning training dataset.}
 \item{Extending the method studied in this document to predict multiple parameter fields will be interesting, because the method will have to study the features in the displacement or strain fields and then decide which parameter field was responsible for producing those features. Such cases will occur when we try to predict both $\lambda(x)$ and $\mu(x)$ for linear elasticity both the nonlinear parameter $\gamma(x)$ and the linear parameter $\mu(x)$ as in \cite{paper:gokhale2008}}.
-\item{We think that using millions of training examples may improve the performance of the CNNs evaluated in this work. Using a large number of examples may also help incorporate large ranges of $\mu$ and different boundary conditions. Highly optimized finite element solvers and supporting state of the art computer hardware such as high end clusters of CPUs and GPUs will be required. Fast hard disks will be required for handling large amounts of data.}
+\item{We think that using millions of training examples will improve the performance of the CNNs evaluated in this work. Using a large number of examples may also help incorporate large ranges of $\mu$, complex shapes for the inclusions and many different boundary conditions. Highly optimized finite element solvers and supporting state of the art computer hardware such as high end clusters of CPUs and GPUs and fast hard disks will be required for handling large amounts of data.}
 
 \end{enumerate}
 %\clearpage
