@@ -1,7 +1,8 @@
 % ACTIVE VOICE CHECK EVERYWHERE
-% PRESENT TENSE EVERYWHERE
+% PRESENT TENSE EVERYWHERE EXCEPT LAST CHAPTER
 % QUANTILES? 
 % Manually add y-labels to loss plots
+% Check id of filters with derivatives
 
 \documentclass[10pt]{article}
 \usepackage{amsmath}
@@ -610,7 +611,7 @@ On the basis of the average scaled error, see table (\ref{table:cnnstatsummary})
 \section{Concluding remarks}
 % Custom activation function
 % https://stackoverflow.com/questions/43915482/how-do-you-create-a-custom-activation-function-with-keras
-In this work, we have presented CNNs capable of predicting shear modulus fields from displacement or strain fields and obtained results that warrant further research. We use the twisted tanh activation function to constrain the shear modulus prediction as per our prior knowledge. The shear modulus of the inclusions with shear modulus close to the background modulus, or small inclusions, is predicted as wisps, while regions of high shear modulus are predicted more accurately. It is seen that while the CNNs exhibit good performance on the type of examples on which they were trained, they have limited ability to generalize to unseen examples.    
+In this work, we have presented CNNs capable of predicting shear modulus fields from displacement or strain fields and obtained results that warrant further research. We use the twisted tanh activation function to constrain the shear modulus prediction as per our prior knowledge. The shear modulus of the inclusions with shear modulus close to the background modulus, or small inclusions, is predicted as wisps, while regions of high shear modulus are predicted more accurately. It is seen that while the CNNs exhibit good performance on the type of examples on which they were trained, they have limited ability to generalize to unseen examples. Using bigger data sets containing a large number of examples with different characteristics may alleviate this problem.    
 \subsection{Directions for future work}
 \begin{enumerate}
 \item{We believe that addition of homogeneous examples to the dataset will be a good test for the CNNs evaluated in this work. However, given that the CNNs under-predict the shear modulus of small inclusions, we believe homogeneous examples will be predicted correctly.}
