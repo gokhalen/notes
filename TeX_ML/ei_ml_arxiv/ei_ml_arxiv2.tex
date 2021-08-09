@@ -35,14 +35,14 @@
 \newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \newcommand{\pdd}[2]{\frac{\partial{{#1}}}{\partial{#2}}}
 % define variables for \mupics command
-\newcommand{\nhghaloesheight}{2.8cm}
+\newcommand{\nhghaloesheight}{2.7cm}
 \newcommand{\nhghaloeswidth}{0.19\linewidth}
 \newcommand{\nhghalfwidth}{0.48\linewidth}
 \newcommand{\nhgtotalheight}{4cm}
 \newcommand{\nhgcnnwidth}{0.48\linewidth}
 \newcommand{\nhgcnnheight}{4.0cm}
 \newcommand{\nhgappwidth}{0.23\linewidth}
-\newcommand{\nhgappheight}{2.1cm}
+\newcommand{\nhgappheight}{1.9cm}
 \newcommand{\red}[1]{\textcolor{red}{#1}}
 % mupics ends here
 % filterloop starts here
@@ -380,7 +380,7 @@ The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1lo
 
 Reconstructions are shown in figure (\ref{fig:cnn1result}). Figure (\ref{fig:cnn1resulta}) is our best result according to equation (\ref{eqn:scalederror}), even though it is not visually appealing. Since the inclusion is small and the background is predicted accurately, the scaled error metric, equation (\ref{eqn:scalederror}), is not sensitive to the fact that the inclusion is not predicted accurately. The location of the inclusion is predicted accurately while the shear modulus is under-predicted. In general, the shear modulus of inclusions of low shear modulus and small size is under-predicted. This is a theme in our results. Their reconstruction can be best described as 'wisps'. Figure (\ref{fig:cnn1resultb}) is our worst reconstruction and inclusions are completely missed. In figures (\ref{fig:cnn1resultc}) and (\ref{fig:cnn1resultd}) the location of multiple inclusions is predicted accurately but there is slight error in the shear modulus. We present additional supporting results in figure (\ref{fig:app1result}) in Appendix (\ref{sect:appendix1}).
 
-Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, given in equation (\ref{eqn:scalederror}), is on the x-axis and the y-axis represents the fraction of examples in each bin (number of examples in each bin divided by the total number of examples). We see that the examples appear to be normally distributed around a mean of \red{XXX} with standard deviation \red{XXX} and that \red{XXX} test examples have scaled error of less than \red{XXX}. The maximum and minimum shear moduli in the prediction are \red{XXX} and \red{XXX} as opposed to the true values of $5.0$ and $1.0$. 
+Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, given in equation (\ref{eqn:scalederror}), is on the x-axis and the y-axis represents the fraction of examples in each bin (number of examples in each bin divided by the total number of examples). We see that the examples appear to be normally distributed around a mean of $0.203$ with standard deviation $0.055$ and that $80\%$ of the test examples have scaled error of less than $0.25$. The maximum and minimum shear moduli in the prediction are $5.33$ and $0.599$ as opposed to the true values of $5.0$ and $1.0$. 
 % Losses for CNN1
 \begin{figure}[!h]
   \centering
@@ -434,13 +434,13 @@ Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, given i
   \centering
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results1New/histogram.png}
     \subcaption{\label{fig:cnn1histoa}Histogram}
   \end{subfigure}
 %  
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results1New/cumulative.png}
     \subcaption{\label{fig:cnn1histob}Cumulative histogram}
   \end{subfigure}
   %
@@ -601,16 +601,17 @@ We observe encouraging results with good qualitative agreement between the true 
 
 \begin{table}
   \centering
-  \begin{tabular}{|c|c|c|}
+  \begin{tabular}{|c|c|c|c|}
     \hline
-    \multirow{2}{*}{CNN Name} & Average        & Average inclusion \\
-                              & scaled error   & scaled error      \\
+    \multirow{3}{*}{CNN Name} & Average   & Average      &  Average      \\
+                              & scaled    & inclusion    &  background   \\
+                              & error     & scaled error &  scaled error \\
     \hline
-    CNN1     & & \\
+    CNN1     & & & \\
     \hline
-    CNN2     & & \\
+    CNN2     & & & \\
     \hline
-    CNN3     & & \\
+    CNN3     & & & \\
     \hline
   \end{tabular}
   \caption{\label{table:cnnstatsummary} Errors for the CNNs considered.}
