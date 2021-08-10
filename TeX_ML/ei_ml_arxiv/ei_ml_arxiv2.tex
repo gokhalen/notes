@@ -102,7 +102,7 @@ We believe that solving the inverse problem with CNNs can combine the best chara
 \section{\label{sect:probsetup}Problem setup for data generation}
 The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. We refer the reader to \cite{book:hugheslinear,book:fishbelytschko,book:segelmathcont} for details about the boundary value problem of linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated bilinearly. The problem geometry is shown in figure (\ref{fig:bc}). Plane strain is assumed. The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. There are $65$ nodes in the $x$ direction and $97$ nodes in the $y$ direction. Solving a single training example takes approximately $10$ seconds. Both degrees of freedom are constrained at the pin and only the $y$ degree of freedom is constrained at the rollers. The background shear modulus is $\mu_{back}=1.0$ unit. Since soft tissues are almost incompressible we set the Poisson's ratio to $0.49$ everywhere which renders the elastic medium almost incompressible. This incompressibility causes a numerical problem with the FEM solver which is called mesh locking \cite{book:hugheslinear}. Mesh locking typically manifests itself as low displacements for a given traction. We use selective reduced integration \cite{book:hugheslinear} to avoid this problem. The shear modulus of inclusions is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$.
 
-There are either one, two or three inclusions in the data used to train CNN1 and CNN2 and there is exactly one inclusion in the data used to train CNN3. CNN1 is tested on data similar to its training data and a cross shaped example which lies outside its training data. CNN2 is tested on data similar to its training data. CNN3 is tested on data which lies outside its training data. We train CNN3 with data containing only one inclusion but test it on data containing $1-3$ inclusions. The parameters of the three networks are are listed in table (\ref{table:cnnparams}).
+There are either one, two or three inclusions in the data used to train CNN1 and CNN2 and there is exactly one inclusion in the data used to train CNN3. CNN1 is tested on data similar to its training data and a cross shaped example which lies outside its training data. CNN2 is tested on data similar to its training data. CNN3 is tested on data which lies outside its training data. We train CNN3 with data containing only one inclusion but test it on data containing $1,2$ or $3$ inclusions. The parameters of the three networks are are listed in table (\ref{table:cnnparams}).
 
 $10000$ displacement and strain images are generated and are split into $6000$ training examples, $2000$ validation examples and $2000$ test examples. The input data is scaled by the absolute maximum over all components, computed over the training examples only. When noisy data is used, we add zero mean additive Gaussian noise in the strain or displacement data such that the signal to noise ratio ($\text{SNR}_{\text{dB}}$) is 40dB according to equation (\ref{eqn:snr}). We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data. We make predictions by supplying noisy data to the CNNs as an input.
 \begin{subequations}
@@ -381,7 +381,7 @@ The background scaled error $\xi_{i}$ and its average $\xi_{ave}$ can be defined
 %
 \subsection{\label{sect:resultscnn1}Results for CNN1}
 %
-In this section, we present results using $\epsilon_{yy}$. The parameters for this CNN are given in table (\ref{table:cnnparams}). This CNN is tested on data similar to its training data. Both training and testing data sets contain $1-3$ circular inclusions.
+In this section, we present results using $\epsilon_{yy}$. The parameters for this CNN are given in table (\ref{table:cnnparams}). This CNN is tested on data similar to its training data. Both training and testing data sets contain $1,2$ or $3$ circular inclusions.
 
 The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1losses}). The average inclusion scaled error given in equation (\ref{eqn:averageincscalederror}) is $-0.165$ and the average background scaled error given in equation (\ref{eqn:averagebackscalederror}) is $-0.0215$. These indicate that, on average, the shear modulus of the inclusions is under-predicted. The background, on average, is predicted accurately. See table (\ref{table:cnnstatsummary}) for a comparison across CNNs.
 
@@ -443,13 +443,13 @@ Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, given i
 \end{figure}
 %
 \subsection{\label{sect:resultscnn2}Results for CNN2}
-In this section we present results using $u_y$. The parameters for this CNN are given in table (\ref{table:cnnparams}). This CNN is tested on data similar to its training data. Both training and testing data sets contain $1-3$ circular inclusions.
+In this section we present results using $u_y$. The parameters for this CNN are given in table (\ref{table:cnnparams}). This CNN is tested on data similar to its training data. Both training and testing data sets contain $1,2$ or $3$ circular inclusions.
 
 The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn2losses}). The average inclusion scaled error is $-0.310$ and the average background scaled error is $-0.107$. These indicate that, on average, the shear modulus of the inclusions is under-predicted much more than CNN1. The background is also under-predicted to a larger degree than CNN1. This indicates that using displacements, as opposed to strains, under-predicts the shear modulus. See table (\ref{table:cnnstatsummary}) for a comparison across CNNs.
 
-We present representative reconstructions in figures (\ref{fig:cnn2resulta}) and (\ref{fig:cnn2resultb}). The true shear modulus field in figures (\ref{fig:cnn1result}) and (\ref{fig:cnn2result}) is the same. We have only changed the prediction data from $\epsilon_{yy}$ to $u_{y}$. The errors and reconstructions show that the results using CNN1 are significantly more accurate than CNN2. Visually, one can see that the central inclusion in (\ref{fig:cnn1resulta}) is not clearly captured in figure (\ref{fig:cnn2resultb}). The shear modulus of the inclusions on the lower right is predicted more accurately in figure (\ref{fig:cnn1resultb}) than figure (\ref{fig:cnn2resultb}). We present additional results illustrating the performance of the network in figure (\ref{fig:app2result}) in Appendix (\ref{sect:appendix1}).
+We present representative reconstructions in figures (\ref{fig:cnn2resulta}) and (\ref{fig:cnn2resultb}). These reconstructions are for the same true shear modulus fields for CNN1 shown in figure (\ref{fig:cnn1result}). We have only changed the prediction data from $\epsilon_{yy}$ to $u_{y}$. The errors and reconstructions show that the results using CNN1 are significantly more accurate than CNN2. Visually, one can see that the central inclusion in (\ref{fig:cnn1resulta}) is not clearly captured in figure (\ref{fig:cnn2resultb}). The shear modulus of the inclusions on the lower right is predicted more accurately in figure (\ref{fig:cnn1resultb}) than figure (\ref{fig:cnn2resultb}). We present additional results illustrating the performance of the network in figure (\ref{fig:app2result}) in Appendix (\ref{sect:appendix1}).
 
-As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn2histo}) shows histograms of the scaled error. We see that the examples appear to be normally distributed around a mean of $0.267$ with standard deviation of $0.0551$ and that only $40\%$ test examples have scaled error of less than $0.25$. These numbers are significantly worse than the numbers for CNN1, indicating that strain based CNNs perform better than displacement based CNNs. The reason for this may lie in the filters learned by the two CNNs. The maximum and minimum shear moduli in the prediction are $5.278$ and $0.583$ as opposed to the true values of $5.0$ and $1.0$. 
+Figure (\ref{fig:cnn2histo}) shows histograms of the scaled error. We see that the examples appear to be normally distributed around a mean of $0.267$ with standard deviation of $0.0551$ and that only $40\%$ test examples have scaled error of less than $0.25$. These numbers are significantly worse than the numbers for CNN1, indicating that strain based CNNs perform better than displacement based CNNs. The reason for this may lie in the filters learned by the two CNNs. The maximum and minimum shear moduli in the prediction are $5.278$ and $0.583$ as opposed to the true values of $5.0$ and $1.0$. 
 % Losses for CNN2
 \begin{figure}[!h]
   \centering
@@ -505,13 +505,13 @@ As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn2hi
 \end{figure}
 %
 \subsection{\label{sect:resultscnn3}Results for CNN3}
-In this section, we evaluate the ability of the CNN to generalize to examples outside its training set. We choose CNN3 which is trained using data which was generated using only one inclusion. But we evaluate it on data containing one, two or three inclusions and see some ability to generalize.
+In this section, we evaluate the ability of the CNN to generalize to examples outside its training set. We choose CNN3 which is trained using data which was generated using only one inclusion. But we evaluate it on data containing one, two or three inclusions. The same data was used to train and test CNN1 and CNN2. We see evidence of some ability to generalize.
 
-Figure (\ref{fig:cnn3resulta}) shows accurate prediction of the shear modulus and location of the inclusion. This is not surprising because this example lies within the training space of the inclusion. In figure (\ref{fig:cnn3resultb}) the inclusion on the lower right is completely missed. The size of the inclusions on the upper left is severely under-predicted. In figures (\ref{fig:cnn3resultc}) and (\ref{fig:cnn3resultd}), we see the inclusions with higher shear modulus being accurately predicted and the inclusions with low shear modulus being predicted as wisps. However, in spite of being trained on data containing a single inclusion, the network detects two out of three inclusions. Figures (\ref{fig:cnn3resultc}) and (\ref{fig:cnn3resultd}) indicate that the network has some ability to generalize to unseen examples. Finally, we present additional results illustrating the performance of the network in figure (\ref{fig:app3result}) in Appendix (\ref{sect:appendix1}).
+The training and validation losses for CNN3 are shown in figure (\ref{fig:cnn3losses}). The average inclusion scaled error is $-0.191$ and the average background scaled error is $-0.0459$. As expected, the average inclusion scaled error is worse than CNN1 but better than that of CNN2 which is surprising because, unlike CNN3, CNN2 was tested with data similar to the training data. The average background scaled error is alsoe worse than CNN1 but better than CNN3.
 
-The training and validation losses for CNN3 are shown in figure (\ref{fig:cnn3losses}). The average inclusion scaled error is \red{XXX} and the average background scaled error is \red{XXX}. These indicate that, on average, the shear modulus of the inclusions is under-predicted, and that of the background is predicted accurately.
+We present representative reconstructions in figures (\ref{fig:cnn3resulta}) and (\ref{fig:cnn3resultb}). These reconstructions are for the same true shear modulus fields for CNN1 and CNN2 (see figures (\ref{fig:cnn1result}) and (\ref{fig:cnn2result})). These results are worse than those obtained by CNN1 (figure \ref{fig:cnn1result}) and slightly better than those obtained by CNN2 (figure (\ref{fig:cnn2result})). It is interesting that a CNN trained on examples with only one inclusion in the domain can detect multiple inclusions. The inclusions on the bottom right in figure (\ref{fig:cnn3resultb}) have low shear modulus and are detected only as wisps. We have also observed this phenomenon in other reconstructions. We present additional results illustrating the performance of the network in figure (\ref{fig:app3result}) in Appendix (\ref{sect:appendix1}).
 
-As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. We see that the examples appear to be normally distributed around a mean of \red{XXX} which is only slightly worse than CNN1 and the same as CNN2. The standard deviation is \red{XXX} which is significantly higher than CNN1 and CNN2. \red{XXX} examples have a scaled error less that \red{XXX}. This is much worse than the corresponding number for CNN1 (\red{XXX}) indicating that CNNs do not generalize perfectly. The maximum and minimum shear moduli in the prediction are \red{XXX} and \red{XXX} as opposed to the true values of $5.0$ and $1.0$.
+Figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. We see that the examples appear to be normally distributed around a mean of $0.206$ which is only slightly worse than CNN1 ($0.203$) and better than CNN2 ($0.267$). The standard deviation is $0.0664$ which is higher than CNN1 ($0.0550$) and CNN2 ($0.0551$). $75\%$ examples have a scaled error less that $0.25$. This similar to the corresponding number for CNN1 ($80\%$) indicating that CNNs apppear to generalize well. The maximum and minimum shear moduli in the prediction are $5.363$ and $0.524$ as opposed to the true values of $5.0$ and $1.0$.
 
 % Losses for CNN3
 \begin{figure}[!h]
@@ -535,29 +535,17 @@ As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn3hi
 \begin{figure}[!h]
   \centering
   \begin{subfigure}[c]{\nhghalfwidth}
-    \centering    
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
-    \subcaption{\label{fig:cnn3resulta}Best}
-  \end{subfigure}
-  %
-  \begin{subfigure}[c]{\nhghalfwidth}
-    \centering    
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
-    \subcaption{\label{fig:cnn3resultb}Worst}
+    \centering
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/ex3/mu.png}
+    \subcaption{\label{fig:cnn3resulta} (0.320)}
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
-    \subcaption{\label{fig:cnn3resultc}}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/ex4/mu.png}
+    \subcaption{\label{fig:cnn3resultb} (0.331)}
   \end{subfigure}
-  %
-  \begin{subfigure}[c]{\nhghalfwidth}
-    \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
-    \subcaption{\label{fig:cnn3resultd}}
-  \end{subfigure}
-\caption{\label{fig:cnn3result} Representative results for CNN3. The numbers in the brackets are the scaled errors as defined in equation (\ref{eqn:scalederror}). Figures (c) and (d) are the same test examples presented in figures (c) and (d) of figures (\ref{fig:cnn1result}) and (\ref{fig:cnn2result}) respectively.}  
+\caption{\label{fig:cnn3result} Representative results for CNN3. The numbers in the brackets are the scaled errors as defined in equation (\ref{eqn:scalederror}).}  
 \end{figure}
 %
 % Histograms for CNN3
@@ -566,13 +554,13 @@ As described before in section (\ref{sect:resultscnn1}), figure (\ref{fig:cnn3hi
   \centering
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/histogram.png}
     \subcaption{Histogram}
   \end{subfigure}
 %  
   \begin{subfigure}[c]{\nhghalfwidth}
       \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/dummy.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/cumulative.png}
     \subcaption{Cumulative histogram}
   \end{subfigure}
   %
@@ -618,7 +606,7 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \item{We see that better results are obtained for larger inclusion with larger contrast. Stiffness of smaller inclusions is under-predicted. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions. We also note that from previous experience, the adjoint method \cite{paper:oberai2003,paper:gokhale2008,paper:goenezen2011} is able to predict the small inclusions correctly using noiseless data. It appears that the adjoint method does better than CNNs on the problem of predicting small inclusions.}
 \item{We think that Fourier analysis of these filters, as reported in \cite{paper:pateloberai2019} would be valuable. Using their technique, we can identify some filters in this work as the derivative in the $x$ or $y$ direction, but the physical meaning of the majority of filters is not clear. We believe that after understanding the physical meaning of each filter, better filters could perhaps be constructed manually. On a related note, visualization of intermediate images produced by the convolutional layers is also a promising direction.}
 \item{We have trained the CNN using examples in which the stiffness of the circular inclusion lies between $2.0$ and $5.0$. We call this the training range. The test data also contains examples in the \textit{same} range. Expanding this test range to include examples outside the training range and evaluating the performance of the CNNs will be interesting. We note that we have tested the ability of the CNN to generalize beyond its training set in section (\ref{sect:resultscnn3}), where a CNN trained only one inclusion in its training examples was evaluated on data containing one to three inclusions. We obtained reasonable performance in this case.}
-\item{We used a simple \textit{mean squared error} (which corresponds to the square of the $L^2$ norm in the continuous case) to evaluate the loss function for the neural network. The effect of other losses corresponding to $H^1$ norm or the $L^2$ norm with the addition of the Total Variation Diminishing (TVD) norm will be interesting to evaluate. We think that, based on our experience in \cite{diss:gokhale2007}, using a loss function corresponding to the $H^1$ norm will remove the incidence of regions of low shear modulus adjacent to inclusions. However, it will also penalize sharp discontinuities in the inclusions as well. If we are training with both components of a noiseless displacement field, then one can consider a loss function which is simply the residual obtained when the predicted shear modulus and input fields are plugged into the equilibrium equations of elasticity. Implementing these loss functions will require custom loss functions in TensorFlow perhaps along with custom gradient calculation.}
+\item{We used a simple \textit{mean squared error} (which corresponds to the square of the $L^2$ norm in the continuous case) to evaluate the loss function for the neural network. The effect of other losses corresponding to $H^1$ norm or the $L^2$ norm with the addition of the Total Variation Diminishing (TVD) norm will be interesting to evaluate. We think that, based on our experience in \cite{diss:gokhale2007}, using a loss function corresponding to the $H^1$ norm will remove the incidence of regions of low shear modulus adjacent to inclusions. However, it will also penalize sharp discontinuities in the inclusions as well. If we are training with both components of a noiseless displacement field, then one can consider a loss function which is simply the residual obtained when the predicted shear modulus and input fields are inserted into the equilibrium equations of elasticity. Implementing these loss functions will require custom loss functions in TensorFlow perhaps along with custom gradient calculation.}
 \item{Investigating different network architectures with the aim of yielding better results will be worth investigating. More CNN layers (or less), deeper (or shallower) networks, should be investigated. Other hyperparameters, such as the kernel size for the CNN layers, can be varied as well. It may be worth investigating whether a CNN is required at all and whether a simple dense network can produce similar quality results. The first dense layer contains $128$ nodes. Increasing this number will probably result in better networks, but will also increase the number of weights and hence training time. It may also be worthwhile to replace the full connection of the dense layers with spatially close connections. By this, we mean that after flattening each node in the first dense layer would be connected only to those neurons which are spatially close together in the previous layer.}
 \item{Medical image registration to obtain a displacement field is a difficult process. It would be an important advance if we could train neural networks to work directly with medical images instead of the computed displacement field. This would involve training the CNN by computing thousands of displacement fields by hand and solving an inverse problem and using the predicted shear modulus field as labeled data as input to the CNN. Additional information could be obtained by doctors interpreting medical images and identifying tumors and their mechanical properties.}
 \item{Since the initial choices for the CNN weights are random, we can train the network multiple times and get different values for the network weights. Having thus obtained many CNNs with different weights, we are led to the following two options. One, we can average the weights of the CNNs to obtain an averaged network. Two, we can make multiple predictions with the different CNNs and then average the result. The second option will require large storage because CNNs have millions of parameters. These options should be investigated.}
@@ -635,7 +623,7 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \end{enumerate}
 %\clearpage
 \begin{appendices}
-\section{\label{sect:appendix1} Additional supporting results}
+\section{\label{sect:appendix1} Supporting results}
 We present additional supporting results in figures (\ref{fig:app1result}),(\ref{fig:app2result}) and (\ref{fig:app3result}) in order to provide a better sampling of the results produced by CNN1,CNN2 and CNN3.
 %\subsection{Additional results for CNN1}
 % Additional results for CNN1
