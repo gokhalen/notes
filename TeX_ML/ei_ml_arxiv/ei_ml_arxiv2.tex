@@ -42,7 +42,7 @@
 \newcommand{\nhgcnnwidth}{0.48\linewidth}
 \newcommand{\nhgcnnheight}{4.0cm}
 \newcommand{\nhgappwidth}{0.23\linewidth}
-\newcommand{\nhgappheight}{1.9cm}
+\newcommand{\nhgappheight}{1.7cm}
 \newcommand{\red}[1]{\textcolor{red}{#1}}
 % mupics ends here
 % filterloop starts here
@@ -67,7 +67,7 @@ The shear modulus of palpable nodules (which can be thought of as abnormal and p
 \begin{figure}[!h]
    \centering
     \includegraphics[totalheight=3cm]{Figures/shearmod_new.png}
-  \caption{\label{fig:shearmod} Shear moduli of different types of body tissue. Adapted from Figure (1) in \cite{paper:sarv1998}.}
+  \caption{\label{fig:shearmod} Shear moduli of different types of body tissue. Adapted from figure (1) in \cite{paper:sarv1998}.}
 \end{figure}
 %
 \begin{figure}[!h]
@@ -96,7 +96,7 @@ See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for min
 %
 \subsubsection{Inverse problem solution} The goal in this step is to infer the spatial distribution of the shear modulus from the displacement field. This is called an \textit{inverse problem} because the classical boundary value problem in linear elasticity (referred to as the \textit{forward problem}) is to determine the displacement field given the shear modulus field, the Poisson's ratio field and suitable boundary conditions. See \cite{book:hugheslinear,book:fishbelytschko} for further details. The approaches for inverse problem solution can be divided into two categories: direct and iterative. These are discussed in the subsequent sections.
 \subsubsection{Direct approach} Direct approaches involve solving a partial differential equation (PDE) to obtain the distribution of shear modulus directly: see \cite{paper:raghavan1994,paper:barboneadjwt,paper:albocher}. The coefficients of this PDE depend on the measured displacement field. Such approaches are fast and work well when the measured strain field is completely known and has low noise.
-\subsubsection{Iterative approach} Iterative approaches \cite{paper:oberai2003,paper:gokhale2008,paper:kalle1996,paper:doyley,paper:goenezen2011} involve guessing a distribution for the shear modulus, solving a linear elasticity forward problem to obtain the predicted displacement field, computing the value and the gradient (and/or Hessian) with respect to the shear modulus of an objective function which consists of a user specified norm of the difference between the predicted displacement field and the measured displacement field, and updating the guessed shear modulus distribution using a suitable optimization procedure such as a modified Newton Raphson scheme as in \cite{paper:doyley} or the BFGS scheme as in \cite{paper:gokhale2008,paper:goenezen2011}. Such approaches are typically slower than direct methods, since they require the solution of approximately $50$ to $100$ forward problems, but have the ability to handle incomplete data and complex nonlinear material models such as hyperelasticity.
+\subsubsection{Iterative approach} Iterative approaches \cite{paper:oberai2003,paper:oberaipmb2004,paper:gokhale2008,paper:kalle1996,paper:doyley,paper:goenezen2011} involve guessing a distribution for the shear modulus, solving a linear elasticity forward problem to obtain the predicted displacement field, computing the value and the gradient (and/or Hessian) with respect to the shear modulus of an objective function which consists of a user specified norm of the difference between the predicted displacement field and the measured displacement field, and updating the guessed shear modulus distribution using a suitable optimization procedure such as a modified Newton Raphson scheme as in \cite{paper:doyley} or the BFGS scheme as in \cite{paper:gokhale2008,paper:goenezen2011}. Such approaches are typically slower than direct methods, since they require the solution of approximately $50$ to $100$ forward problems, but have the ability to handle incomplete data and complex nonlinear material models such as hyperelasticity.
 \subsubsection{Solving the inverse problem with CNNs}
 We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer (once time has been spent up front to train the CNN), can accommodate complex constitutive relations, can work with incomplete data (e.g. only a single component of a displacement field) and can work with noisy data. On the other hand, if data which is unlike what the CNN has been trained on is seen, then the performance of the CNN will likely degrade. We investigate this in section (\ref{sect:resultscnn3}). We also note that CNNs do not predict a perfect result in the absence of noise, unlike traditional direct or iterative methods. Finally, we note here that we expect determining multiple material parameters e.g. a linear and a non-linear parameter for hyperelasticity as in \cite{paper:gokhale2008,paper:goenezen2011}or both the Lam\'e parameters for compressible elasticity from the same set of displacement or strain images to be challenging, because the CNN will have to infer two spatially dependent fields from the same data. It is likely that more than one displacement or strain field will be required.
 \section{\label{sect:probsetup}Problem setup for data generation}
@@ -511,7 +511,7 @@ The training and validation losses for CNN3 are shown in figure (\ref{fig:cnn3lo
 
 We present representative reconstructions in figures (\ref{fig:cnn3resulta}) and (\ref{fig:cnn3resultb}). These reconstructions are for the same true shear modulus fields for CNN1 and CNN2 (see figures (\ref{fig:cnn1result}) and (\ref{fig:cnn2result})). These results are worse than those obtained by CNN1 (figure \ref{fig:cnn1result}) and slightly better than those obtained by CNN2 (figure (\ref{fig:cnn2result})). It is interesting that a CNN trained on examples with only one inclusion in the domain can detect multiple inclusions. The inclusions on the bottom right in figure (\ref{fig:cnn3resultb}) have low shear modulus and are detected only as wisps. We have also observed this phenomenon in other reconstructions. We present additional results illustrating the performance of the network in figure (\ref{fig:app3result}) in Appendix (\ref{sect:appendix1}).
 
-Figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. We see that the examples appear to be normally distributed around a mean of $0.206$ which is only slightly worse than CNN1 ($0.203$) and better than CNN2 ($0.267$). The standard deviation is $0.0664$ which is higher than CNN1 ($0.0550$) and CNN2 ($0.0551$). $75\%$ examples have a scaled error less that $0.25$. This similar to the corresponding number for CNN1 ($80\%$) indicating that CNNs apppear to generalize well. The maximum and minimum shear moduli in the prediction are $5.363$ and $0.524$ as opposed to the true values of $5.0$ and $1.0$.
+Figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. We see that the examples appear to be normally distributed around a mean of $0.206$ which is only slightly worse than CNN1 ($0.203$) and better than CNN2 ($0.267$). The standard deviation is $0.0664$ which is higher than CNN1 ($0.0550$) and CNN2 ($0.0551$). $75\%$ examples have a scaled error less that $0.25$. This similar to the corresponding number for CNN1 ($80\%$) indicating that CNNs trained on one inclusion apppear to generalize well to detecting multiple inclusions. This result suggests that it is may not be necessary to train CNNs with data containing multiple inclusions. The maximum and minimum shear moduli in the prediction are $5.363$ and $0.524$ as opposed to the true values of $5.0$ and $1.0$.
 
 % Losses for CNN3
 \begin{figure}[!h]
@@ -568,7 +568,14 @@ Figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. We see that t
 \end{figure}
 %
 \subsection{\label{sect:resultscross} Cross shaped example}
-Unlike Oberai PMB 2004 complicated inclusions are not detected.
+Figure (\ref{fig:resultcross}) shows reconstructions obtained when CNN1 is presented with data that is completely unlike its training data. The data is the axial strain $\epsilon_{yy}$ corresponding to the true shear modulus field in figure (\ref{fig:resultcross}). The reconstruction in figure (\ref{fig:resultcross}) shows that the CNN1 can predict that there is an inclusion but cannot detect its exact shape. This result shows that if CNNs studied in this work are presented with data unlike their training data, good results may not be obtained. This is unlike traditional iterative methods \cite{paper:oberaipmb2004} which can capture inclusions with complicated shapes.
+%
+\begin{figure}[!h]
+  \centering
+  \includegraphics[totalheight=\nhgtotalheight]{Figures/ResultCross/mu.png}
+  \caption{\label{fig:resultcross} Result for cross shaped inclusion using CNN1. True shear modulus (left), prediction (right).}
+\end{figure}
+%
 \subsection{\label{sect:discussion}Discussion}
 We observe encouraging results with good qualitative agreement between the true and predicted shear shear modulus images. Table (\ref{table:cnnstatsummary}) summarizes the performance of the three CNNs evaluated in this work. The average error according to equation (\ref{eqn:averagescalederror}) is seen to be approximately \red{XXX}. The shear modulus of inclusions is under-predicted. The shear modulus of inclusions with low shear modulus and small sized inclusions is significantly under-predicted. The average inclusion scaled error, given in equation (\ref{eqn:averageincscalederror}) evaluated over inclusions having shear modulus in the range $[2.0,3.0]$ yields \red{XXX},\red{XXX} and \red{XXX} for CNN1, CNN2 and CNN3 respectively\footnote{We may be able to use these numbers to create fudge-factors increase the stiffness of the inclusions predicted by the neural network.}. This shows that the strain based networks CNN1 and CNN3 perform worse than usual while detecting inclusions which whose shear modulus is low. The displacement based network CNN2 does not appear to degrade. Its performance while detecting inclusions of low shear modulus is comparable to its performance while detecting inclusions of relatively high shear modulus. The reasons for this should be investigated.
 
@@ -581,11 +588,11 @@ We observe encouraging results with good qualitative agreement between the true 
                               & scaled    & inclusion    &  background   \\
                               & error     & scaled error &  scaled error \\
     \hline
-    CNN1     & & & \\
+    CNN1                      & $0.203$   & $-0.165$     & $-0.0215$     \\
+    \hline                    
+    CNN2                      & $0.267$   & $-0.310$     & $-0.107$      \\
     \hline
-    CNN2     & & & \\
-    \hline
-    CNN3     & & & \\
+    CNN3                      & $0.203$   & $-0.191$     & $-0.0459$     \\
     \hline
   \end{tabular}
   \caption{\label{table:cnnstatsummary} Errors for the CNNs considered.}
