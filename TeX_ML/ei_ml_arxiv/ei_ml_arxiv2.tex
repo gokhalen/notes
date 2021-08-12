@@ -46,14 +46,14 @@
 \newcommand{\red}[1]{\textcolor{red}{#1}}
 % mupics ends here
 % filterloop starts here
-\newcommand{\filterpics}[1]{
-  \foreach \myvar in {0,...,31}{
-    \begin{subfigure}[b]{2.2cm}
-      \includegraphics[totalheight=2.0cm]{Figures/#1/filter_\myvar_channel_0.png}
-      \caption{}
-    \end{subfigure}
-  }
-}  
+%\newcommand{\filterpics}[1]{
+%  \foreach \myvar in {0,...,31}{
+%    \begin{subfigure}[b]{2.2cm}
+%      \includegraphics[totalheight=2.0cm]{Figures/#1/filter_\myvar_channel_0.png}
+%      \caption{}
+%    \end{subfigure}
+%  }
+%}  
 \begin{document}
 % bib
 \title{Elasticity imaging using a Convolutional Neural Network: Initial results}
@@ -795,62 +795,6 @@ We present additional supporting results in figures (\ref{fig:app1result}),(\ref
 %
 \end{appendices}
 \clearpage
-\bibliography{eibib}{}
+\bibliography{ei_ml_arxiv2}{}
 \bibliographystyle{plain}
 \end{document}
-%
-% Document ends here
-\appendix
-\section{\label{sect:filters}Filters}
-\subsection{\label{sect:filtcnn1}Filters for CNN1}
-% solves 'Counter too large' problem
-\renewcommand*{\thesubfigure}{\arabic{subfigure}}
-\begin{figure}[!h]
-  \filterpics{FiltersTanhStrain3}
-  \caption{Filters for case 1}
-\end{figure}  
-\subsection{Filters for CNN2}
-\begin{figure}[!h]
-  \filterpics{FiltersTanhDisp3}
-  \caption{Filters for case 2}
-\end{figure}  
-\subsection{Filters for CNN3}
-\begin{figure}[!h]
-  \filterpics{FiltersTanhStrain1}
-  \caption{Filters for case 3}
-\end{figure}  
-
-\begin{figure}[!h]
-  \centering
-  %
-  \begin{subfigure}[c]{\nhghaloeswidth}
-    \centering
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/dispstrainfields/exx.png}
-    \subcaption{$\epsilon_{xx}$}
-  \end{subfigure}
-  %
-  \begin{subfigure}[c]{\nhghaloeswidth}
-    \centering    
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/dispstrainfields/eyy.png}
-    \subcaption{$\epsilon_{yy}$}
-  \end{subfigure}
-  %
-  \begin{subfigure}[c]{\nhghaloeswidth}
-  \centering    
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/dispstrainfields/exy.png}
-    \subcaption{$\epsilon_{xy}$}
-  \end{subfigure}
-  %
-  \begin{subfigure}[c]{\nhghaloeswidth}
-  \centering    
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/dispstrainfields/ux.png}
-    \subcaption{$u_{x}$}
-  \end{subfigure}
-  %
-  \begin{subfigure}[c]{\nhghaloeswidth}
-      \centering
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/dispstrainfields/uy.png}
-    \subcaption{$u_{y}$}
-  \end{subfigure}
-  \caption{\label{fig:exampdispstrain} Examples of strain fields (a),(b),(c) and displacement fields (d),(e).}
-\end{figure}
