@@ -364,7 +364,7 @@ We present results for the CNNs described in table (\ref{table:cnnparams}). Thei
 
 
 \subsection{Error metrics}
-We introduce new metrics, namely the \textit{inclusion scaled error} and \textit{background scaled error}, to evaluate the performance of the neural networks. These metrics  measure the average percentage error in the shear modulus in the background or in the inclusion. We define inclusion scaled error for the $i^{th}$ test example $\eta_{i}$ and its average $\eta_{ave}$ as
+We introduce new metrics, namely the \textit{inclusion scaled error} and \textit{background scaled error}, to evaluate the performance of the neural networks. These metrics  measure the average percentage error in the shear modulus in the background or in the inclusion. We denote the inclusion scaled error for the $i^{th}$ test example by $\eta_{i}$ and its average by $\eta_{ave}$. They are defined as 
 \begin{subequations}
   \begin{align}
   \eta_{i} &\coloneqq \frac{1}{n_{inc_i}}\sum_{j=1}^{n_{inc_i}}{\Bigg (}\frac{\mu^{i,predicted}_{j}-\mu^{i,true}_{j}}{\mu^{i,true}_{j}}{\Bigg )},  &\label{eqn:incscalederror}\\
@@ -373,7 +373,7 @@ We introduce new metrics, namely the \textit{inclusion scaled error} and \textit
 \end{subequations}
 In the above equations, $\mu_{j}^{i,true}$ is the $j^{th}$ component of a vector $\mu^{i,true}$ containing true values of the shear modulus for the $i^{th}$ test example, \textit{restricted to the true inclusion(s)} only. $\mu_{j}^{i,predicted}$ is the $j^{th}$ component of a vector $\mu^{i,predicted}$ containing corresponding predictions. $n_{inc_i}$ is the number of nodes in the inclusion(s) for the $i^{th}$ test example. $n_{test}$ is the number of test examples, in our case $2000$. The quantities $\eta_i$ and $\eta_{ave}$ capture how accurately the shear modulus of the inclusions is predicted. Positive values of $\eta_i$ and $\eta_{ave}$ indicate over-prediction. Negative values indicate under-prediction.
 
-The background scaled error $\xi_{i}$ and its average $\xi_{ave}$ can be defined similarly, by replacing $n_{inc_i}$ in equations (\ref{eqn:incscalederror}) and (\ref{eqn:averageincscalederror})  with $n_{back_i}$ (the number of nodes in the background) and restricting the vectors $\mu^{i,true}$ and $\mu^{i,predicted}$ to the background only.
+The background scaled error for the $i^{th}$ example $\xi_{i}$ and its average $\xi_{ave}$ can be defined similarly, by replacing $n_{inc_i}$ in equations (\ref{eqn:incscalederror}) and (\ref{eqn:averageincscalederror})  with $n_{back_i}$ (the number of nodes in the background) and restricting the vectors $\mu^{i,true}$ and $\mu^{i,predicted}$ to the background only.
 
 \begin{subequations}
   \begin{align}
