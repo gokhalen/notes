@@ -56,7 +56,7 @@
 %}  
 \begin{document}
 % bib
-\title{Elasticity imaging using a Convolutional Neural Network: Initial results}
+\title{Elasticity imaging using a Convolutional Neural Network}
 \author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone (Professor, Mechanical Engineering, Boston University, Boston, MA, USA.) for patiently answering many questions about finite elements and for his constructive comments on an earlier version of this document. Conversations with Arnab Majumdar (ArcVisions, Kolkata, India), Michael Richards (Assistant Professor, Department of Biomedical Engineering, Kate Gleason College of Engineering, Rochester Institute of Technology, Rochester, NY, USA) and Mandar Kulkarni (Houston, TX, USA) are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com\\Pune, India.}
 \date{\today}
 \maketitle
@@ -124,7 +124,7 @@ In this work, the finite element solver \cite{misc:fypy} and associated scripts 
 \subsection{Review}
 In recent years, neural networks have been applied to various applications such as image classification \cite{paper:hinton2017}, hand written digit recognition \cite{paper:kulkarni2018}, solving differential equations and symbolic integration \cite{misc:lample2019}, solving complex partial differential equations such as the Navier-Stokes equation \cite{misc:anandkumar2020}, self-driving cars \cite{misc:agnihotri2019,misc:nvidiaselfdriving2016}, chaos \cite{paper:pathak2018}, natural language processing \cite{misc:googlenlp}, face recognition \cite{conf:taigman2014} and playing board games such as chess \cite{paper:alphazero}. Several effective Machine Learning frameworks such as Google's TensorFlow \cite{misc:tensorflow} (which we use in this work), Facebook's PyTorch \cite{incollect:pytorch}, Scikit-Learn \cite{paper:scikit-learn} are freely available. See \cite{misc:compdeep} for a complete list. We do not cover the theory of neural networks in this work. We refer the interested reader to \cite{book:aggarwal,book:goodfellow,book:chollet,misc:cs231n,misc:andrewng,misc:udemy} and references therein for detailed information about neural networks.
 \subsection{Neural networks and elasticity imaging}
-Given the success achieved by neural networks on the wide variety of applications cited in the previous section, it is natural to explore the application of neural networks to the inverse problem of elasticity imaging and several recent efforts \cite{paper:pateloberai2019,misc:gu2020,paper:hoeriginsana2016} have done so. In \cite{paper:pateloberai2019}, the authors use a convolutional neural network to classify specimens into elastically heterogeneous or elastically nonlinear. In \cite{paper:hoeriginsana2016}, the authors use a neural network to estimate strains and stress and then calculate elastic parameters. In \cite{misc:gu2020}, the authors use a neural network which predicts elasticity distributions using residual force maps to update the weights of the neural network.
+Given the success achieved by neural networks on the wide variety of applications cited in the previous section, it is natural to explore the application of neural networks to the inverse problem of elasticity imaging and several recent efforts \cite{paper:pateloberai2019,misc:gu2020,paper:hoeriginsana2016} have done so. In \cite{paper:pateloberai2019}, the authors use a convolutional neural network to classify specimens into elastically heterogeneous or elastically nonlinear. Their goal is to move directly from displacements to diagnosis, circumventing the solution of the elasticity imaging inverse problem. In \cite{paper:hoeriginsana2016}, the authors use a neural network to estimate strains and stress and then calculate elastic parameters. In \cite{misc:gu2020}, the authors use a neural network which predicts elasticity distributions using residual force maps to update the weights of the neural network.
 
 In contrast, in this work we compute the shear modulus field from the displacement or strain field using a CNN\footnote{We choose CNNs as opposed to other types of neural networks because of the success they have achieved in image classification \cite{paper:hinton2017}.}. There are no physical constraints involved in our work. It is purely a mapping problem from the space of displacement or strain fields to the space of the shear modulus fields. The input data for our CNN is a set of strain or displacement fields or components thereof. For each input there is a known corresponding target shear modulus field. Starting from an initial random guess of the weights, the CNN predicts shear modulus fields, compares them with the target fields to compute the loss function and its gradient with respect to the weights of the neural network. The weights are updated using the gradient in an appropriate optimization algorithm such as Adam \cite{misc:kingma2017adam}. Thus the CNN learns weights for its filters and other parameters. Using this learned information, the CNN is able to predict a shear modulus field from the input data of strain or displacement fields which is seen in figure (\ref{fig:schematic_inv}).\\
 \subsection{Need for neural networks}
@@ -158,13 +158,13 @@ Since we are working with almost incompressible linear elasticity, we know \cite
 \begin{align}
   \epsilon_{xx}+\epsilon_{yy}\approx{0} \implies \pdd{u_x}{x} + \pdd{u_y}{y} \approx{0} \label{eqn:strainincomp}. 
 \end{align}
-In addition, since our problem setup is much closer to a compression rather than shear problem, $\epsilon_{xy}$ is close to zero almost everywhere. Furthermore, $\epsilon_{xy}$ is noisy in practice because it involves differentiating $u_{x}$ which is often known inaccurately. We therefore choose to not work with $\epsilon_{xy}$. Equation (\ref{eqn:strainincomp}) links $\epsilon_{xx}$ with $\epsilon_{yy}$ and also $u_x$ with $u_y$. Therefore, effectively, there is only one independent component of strain or displacement. In elasticity imaging, we typically choose the displacement component along the direction of compression because it can be estimated much more accurately than the transverse component. Since our compression is along the $y$ direction, we therefore choose $u_y$ and $\epsilon_{yy}$ as the independent components of displacement and strain and we restrict our attention to only single channel images which represent either $u_y$ or $\epsilon_{yy}$.
+In addition, since our problem setup is much closer to a compression rather than shear problem, $\epsilon_{xy}$ is close to zero almost everywhere. Furthermore, $\epsilon_{xy}$ is noisy in practice because it involves differentiating $u_{x}$ which is often known inaccurately. We therefore choose to not work with $\epsilon_{xy}$. Equation (\ref{eqn:strainincomp}) links $\epsilon_{xx}$ with $\epsilon_{yy}$ and also $u_x$ with $u_y$. Therefore, effectively, there is only one independent component of strain or displacement. In elasticity imaging using ultrasound, we typically choose the displacement component along the direction of ultrasound propagation because it can be estimated much more accurately than the transverse component. In this work, we choose $u_y$ and $\epsilon_{yy}$ as the independent components of displacement and strain and we restrict our attention to only single channel images which represent either $u_y$ or $\epsilon_{yy}$.
 
 The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam} \cite{misc:kingma2017adam} with default TensorFlow settings. After training, we choose the model with the best validation loss make predictions. No regularization or dropout is used.
 
 We train three CNNs whose parameters are are listed in table (\ref{table:cnnparams}). There are either one, two or three inclusions in the data used to train CNN1 and CNN2 and there is exactly one inclusion in the data used to train CNN3. CNN1 is tested on data similar to its training data and a cross shaped example which lies outside its training data. CNN2 is tested on data similar to its training data. CNN3 is tested on data which lies outside its training data. Specifically, we train CNN3 with data containing only one inclusion but test it on data containing $1,2$ or $3$ inclusions. 
 
-Each CNN has approximately $3.35$ million train-able parameters. We have $6000$ training images, each with $65\times97$ data points for the shear modulus. Hence, the total number of data points for the shear modulus are $6000\times97\times65=37.8$ million, approximately $11.3$ times the number of parameters being estimated. 
+Each CNN has approximately $3.3$ million train-able parameters. We have $6000$ training images, each with $65\times97$ data points for the shear modulus. Hence, the total number of data points for the shear modulus are $6000\times97\times65=37.8$ million, approximately $11$ times the number of parameters being estimated. 
 %
 \begin{center}
 \begin{table}
@@ -606,12 +606,11 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \subsection{Directions for future work}
 \begin{enumerate}
 \item{We believe that addition of homogeneous examples to the dataset will be a good test for the CNNs evaluated in this work. However, given that the CNNs under-predict the shear modulus of small inclusions, we believe homogeneous examples will be predicted correctly.}
-\item{We think that training the CNN with displacement or strain data generated using random values for the shear modulus at each node and seeing if it learns the inverse operator from the displacement (or strain) fields to shear modulus fields will be interesting. Training with other complex shapes for the shear modulus will also be interesting.}
+\item{We think that training the CNN with displacement or strain data generated using random values for the shear modulus at each node, or perturbing the shear modulus of only one node relative to the background, and seeing if it learns the inverse operator from the displacement (or strain) fields to shear modulus fields will be interesting. Training with other complex shapes for the shear modulus will also be interesting.}
 \item{All examples in the current work have the same boundary condition. Incorporating boundary conditions into the neural network will be an interesting advance.}
-\item{Training with examples in which shear modulus of only one node is changed relative to the background. It would be interesting, if based on this information, the CNN can process a displacement field and understand that the stiffness of only certain nodes needs to be changed.}
-\item{We see that better results are obtained for larger inclusion with larger contrast. Stiffness of smaller inclusions is under-predicted. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions. We also note that from previous experience, the adjoint method \cite{paper:oberai2003,paper:gokhale2008,paper:goenezen2011} is able to predict the small inclusions correctly using noiseless data. It appears that the adjoint method does better than CNNs on the problem of predicting small inclusions.}
+\item{We see that better results are obtained for larger inclusion with larger contrast. Stiffness of smaller inclusions and inclusions with low shear modulus is under-predicted. Designing a network to accurately image small inclusions will be interesting. We note that having material properties and displacements on the same mesh may lead to unconverged displacements for smaller inclusions. These unconverged displacements will not have enough features/information to be able to predict stiffness fields from them. It may be useful to make the displacement mesh much finer than the shear modulus mesh so as to resolve features created by small inclusions. We also note that from previous experience, the adjoint method \cite{paper:oberai2003,paper:gokhale2008,paper:goenezen2011} is able to predict the small inclusions correctly using noiseless data. It appears that the adjoint method does better than CNNs on the problem of predicting small inclusions.}
 \item{We think that Fourier analysis of these filters, as reported in \cite{paper:pateloberai2019} would be valuable. Using their technique, we can identify some filters in this work as the derivative in the $x$ or $y$ direction, but the physical meaning of the majority of filters is not clear. We believe that after understanding the physical meaning of each filter, better filters could perhaps be constructed manually. On a related note, visualization of intermediate images produced by the convolutional layers is also a promising direction.}
-\item{We have trained the CNN using examples in which the stiffness of the circular inclusion lies between $2.0$ and $5.0$. We call this the training range. The test data also contains examples in the \textit{same} range. Expanding this test range to include examples outside the training range and evaluating the performance of the CNNs will be interesting. We note that we have tested the ability of the CNN to generalize beyond its training set in section (\ref{sect:resultscnn3}), where a CNN trained only one inclusion in its training examples was evaluated on data containing one to three inclusions. We obtained reasonable performance in this case.}
+\item{We have trained the CNN using examples in which the stiffness of the circular inclusion lies between $2.0$ and $5.0$. The test data also contains examples in the \textit{same} range. Expanding the range of the test data to include examples outside the training range and evaluating the performance of the CNNs will be interesting.}
 \item{We used a simple \textit{mean squared error} (which corresponds to the square of the $L^2$ norm in the continuous case) to evaluate the loss function for the neural network. The effect of other losses corresponding to $H^1$ norm or the $L^2$ norm with the addition of the Total Variation Diminishing (TVD) norm will be interesting to evaluate. We think that, based on our experience in \cite{diss:gokhale2007}, using a loss function corresponding to the $H^1$ norm will remove the incidence of regions of low shear modulus adjacent to inclusions. However, it will also penalize sharp discontinuities in the inclusions as well. If we are training with both components of a noiseless displacement field, then one can consider a loss function which is simply the residual obtained when the predicted shear modulus and input fields are inserted into the equilibrium equations of elasticity. Implementing these loss functions will require custom loss functions in TensorFlow perhaps along with custom gradient calculation.}
 \item{Investigating different network architectures with the aim of yielding better results will be worth investigating. More CNN layers (or less), deeper (or shallower) networks, should be investigated. Other hyperparameters, such as the kernel size for the CNN layers, can be varied as well. It may be worth investigating whether a CNN is required at all and whether a simple dense network can produce similar quality results. The first dense layer contains $128$ nodes. Increasing this number will probably result in better networks, but will also increase the number of weights and hence training time. It may also be worthwhile to replace the full connection of the dense layers with spatially close connections. By this, we mean that after flattening each node in the first dense layer would be connected only to those neurons which are spatially close together in the previous layer.}
 \item{Medical image registration to obtain a displacement field is a difficult process. It would be an important advance if we could train neural networks to work directly with medical images instead of the computed displacement field. This would involve training the CNN by computing thousands of displacement fields by hand and solving an inverse problem and using the predicted shear modulus field as labeled data as input to the CNN. Additional information could be obtained by doctors interpreting medical images and identifying tumors and their mechanical properties.}
@@ -747,48 +746,48 @@ We present additional supporting results in figures (\ref{fig:app1result}),(\ref
   \begin{subfigure}[c]{\nhgappwidth}
     \centering    
     \includegraphics[totalheight=\nhgappheight]{Figures/AppendixNew/CNN3/ex1/mu.png}
-    \subcaption{\label{fig:app3resulta}}
+    \subcaption{\label{fig:app3resulta} (0.0754)}
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhgappwidth}
     \centering    
     \includegraphics[totalheight=\nhgappheight]{Figures/AppendixNew/CNN3/ex2/mu.png}
-    \subcaption{\label{fig:app3resultb}}
+    \subcaption{\label{fig:app3resultb} (0.0131)}
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhgappwidth}
     \centering
     \includegraphics[totalheight=\nhgappheight]{Figures/AppendixNew/CNN3/ex3/mu.png}
-    \subcaption{\label{fig:app3resultc} }
+    \subcaption{\label{fig:app3resultc} (0.161) }
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhgappwidth}
     \centering
     \includegraphics[totalheight=\nhgappheight]{Figures/AppendixNew/CNN3/ex4/mu.png}
-    \subcaption{\label{fig:app3resultd}}
+    \subcaption{\label{fig:app3resultd} (0.181)}
   \end{subfigure}
     \begin{subfigure}[c]{\nhgappwidth}
     \centering    
     \includegraphics[totalheight=\nhgappheight]{Figures/AppendixNew/CNN3/ex5/mu.png}
-    \subcaption{\label{fig:app3resulte}}
+    \subcaption{\label{fig:app3resulte} (0.199)}
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhgappwidth}
     \centering    
     \includegraphics[totalheight=\nhgappheight]{Figures/AppendixNew/CNN3/ex6/mu.png}
-    \subcaption{\label{fig:app3resultf}}
+    \subcaption{\label{fig:app3resultf} (0.223)}
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhgappwidth}
     \centering
     \includegraphics[totalheight=\nhgappheight]{Figures/AppendixNew/CNN3/ex7/mu.png}
-    \subcaption{\label{fig:app3resultg}}
+    \subcaption{\label{fig:app3resultg} (0.249)}
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhgappwidth}
     \centering
     \includegraphics[totalheight=\nhgappheight]{Figures/AppendixNew/CNN3/ex8/mu.png}
-    \subcaption{\label{fig:app3resulth}}
+    \subcaption{\label{fig:app3resulth} (0.305)}
   \end{subfigure}
 \caption{\label{fig:app3result} Additional results for CNN3 in increasing order of the scaled error (in brackets) as defined in equation (\ref{eqn:scalederror}). True results are on the left and predictions on the right.}  
 \end{figure}
