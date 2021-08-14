@@ -239,7 +239,7 @@ f(x) &= \tanh(x) + 0.01x \qquad &&\text{twisted tanh activation} \label{eqn:twis
 \caption{\label{fig:activations} Graphs of activation functions for equations (\ref{eqn:softplus}-\ref{eqn:twisttanh}).}
 \end{figure}
 %
-We consider the functions given in equations (\ref{eqn:softplus}-\ref{eqn:twisttanh}) as activation functions for the output layer and choose the twisted tanh function, given in equation (\ref{eqn:twisttanh}), as the output layer activation. All our work is carried out using the twisted tanh activation function, unless specified otherwise.
+We consider the functions given in equations (\ref{eqn:softplus}-\ref{eqn:twisttanh}) as activation functions for the output layer and choose the twisted tanh function, given in equation (\ref{eqn:twisttanh}), as the output layer activation. All our work, apart from the comparisons in section (\ref{sect:compsofttanh}), is carried out using the twisted tanh activation function.
 
 The softplus activation function (\ref{eqn:softplus}) has range $(0,\infty)$ and thus it respects the physical positivity constraint on the shear modulus: $\mu(x)>0$ for reasonable materials \cite{book:segelmathcont}. The drawback of the softplus activation function is that it produces regions in which the shear modulus is very close to zero. We call such regions \textit{haloes}. See table (\ref{table:muminmax}) and figure (\ref{fig:haloes}).
 
