@@ -100,7 +100,7 @@ See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for min
 \subsubsection{Solving the inverse problem with CNNs}
 We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer (once time has been spent up front to train the CNN), can accommodate complex constitutive relations, can work with incomplete data (e.g. only a single component of a displacement field) and can work with noisy data.
 
-On the other hand, if data which is unlike what the CNN has been trained on is seen, then the performance of the CNN will likely degrade. We investigate this in section (\ref{sect:resultscnn3}). We also note that CNNs do not predict a perfect result in the absence of noise, unlike traditional direct or iterative methods.
+On the other hand, if data which is unlike what the CNN has been trained on is seen, then the performance of the CNN will likely degrade. We investigate this in sections  (\ref{sect:resultscnn3}) and (\ref{sect:resultscross}). We also note that CNNs do not predict a perfect result in the absence of noise, unlike traditional direct or iterative methods.
 
 Finally, we note here that we expect determining multiple material parameters e.g. a linear and a non-linear parameter for hyperelasticity as in \cite{paper:gokhale2008,paper:goenezen2011}or both the Lam\'e parameters for compressible elasticity from the same set of displacement or strain images to be challenging, because the CNN will have to infer two spatially dependent fields from the same data. It is likely that more than one displacement or strain field will be required.
 \section{\label{sect:probsetup}Problem setup for data generation}
@@ -200,11 +200,11 @@ Each CNN has approximately $3.3$ million train-able parameters. We have $6000$ t
 % 
 \begin{subequations}
 \begin{align}
-f(x) &= &\ln(1+\exp(x)) \qquad &\text{softplus activation}\label{eqn:softplus}\\
-f(x) &= &\frac{1}{1+\exp(-x)} \qquad &\text{logistic activation} \label{eqn:logistic}\\
-f(x) &= &\tanh(x) \qquad &\text{tanh activation} \label{eqn:tanh}\\
+f(x) &= & \ln(1+\exp(x)) \qquad &\text{softplus activation}\label{eqn:softplus}\\
+f(x) &= & \frac{1}{1+\exp(-x)}  \qquad &\text{logistic activation} \label{eqn:logistic}\\
+f(x) &= & \tanh(x)  \qquad &\text{tanh activation} \label{eqn:tanh}\\
 %\text{softplusmin activation} \qquad f(x) &=& \min(\ln(1+\exp(x)),1.0)\label{eqn:softplusmin} \\
-f(x) &= &\tanh(x) + 0.01x \qquad &\text{twisted tanh activation} \label{eqn:twisttanh}
+f(x) &= & \tanh(x) + 0.01x \qquad &\text{twisted tanh activation} \label{eqn:twisttanh}
 \end{align}
 \label{eqn:activations}
 \end{subequations}
@@ -250,7 +250,7 @@ To avoid this we add, as noted in \cite{bookchap:lecun98b}, a \textit{twisting t
 We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mean that we are using the twisted tanh activation function with the training shear modulus data being scaled such that the interval $[\mu_{lower},\mu_{upper}]$ is mapped linearly to $[-1,1]$. The true range of the shear modulus for all the examples in this work is $[1.0,5.0]$, as noted before in section (\ref{sect:probsetup}).
 
 \subsection{\label{sect:compsofttanh} Comparison: softplus and twisted tanh}
-In order to compare the softplus and twisted tanh activations, we define a metric which we call the scaled error. We  define the scaled error for the $i^{th}$  test example $\zeta_{i}$ and the average scaled error $\zeta_{ave}$ as
+In order to compare the softplus and twisted tanh activations, we define a metric which we call the scaled error. We denote the scaled error for the $i^{th}$  test example by $\zeta_{i}$ and the average scaled error by $\zeta_{ave}$. They are defined as 
 \begin{subequations}
   \begin{align}
   \zeta_{i} &\coloneqq \frac{\|\mu^{i,predicted} - \mu^{i,true}\|_{2}}{\|\mu^{i,true}\|_{2}}  &\label{eqn:scalederror}\\
