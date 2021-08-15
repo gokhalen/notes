@@ -5,6 +5,8 @@ Created on Tue Jun  8 16:49:37 2021
 @author: aa
 """
 
+import sys
+
 class Base(object):
     def __new__(cls,basename,basemarks):
         print('__new__ in Base')
@@ -39,6 +41,7 @@ class Child(Base):
 c = Child('nachiket','gokhale',89,100)
 print(f'{c.name=},{c.basename=},{c.marks=},{c.basemarks=}')        
         
+sys.exit()
         
 # __init__ and __new__ do not take the same arguments        
 class Student():
