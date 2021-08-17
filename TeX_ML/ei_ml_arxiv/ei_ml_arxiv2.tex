@@ -385,7 +385,7 @@ The background scaled error for the $i^{th}$ example $\xi_{i}$ and its average $
 %
 \subsection{\label{sect:resultscnn1}Results for CNN1}
 %
-In this section, we present results using $\epsilon_{yy}$. The parameters for this CNN are given in table (\ref{table:cnnparams}). This CNN is tested on data similar to its training data. Both training and testing data sets contain $1,2$ or $3$ circular inclusions.
+In this section, we present results using the axial strain in the $y$ direction, $\epsilon_{yy}$. The parameters for this CNN are given in table (\ref{table:cnnparams}). This CNN is tested on data similar to its training data. Both training and testing data sets contain $1,2$ or $3$ circular inclusions.
 
 The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn1losses}). The average inclusion scaled error given in equation (\ref{eqn:averageincscalederror}) is $-0.165$ and the average background scaled error given in equation (\ref{eqn:averagebackscalederror}) is $-0.0215$. These indicate that, on average, the shear modulus of the inclusions is under-predicted. The background, on average, is predicted accurately. See table (\ref{table:cnnstatsummary}) for a comparison across CNNs.
 
@@ -447,7 +447,7 @@ Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, given i
 \end{figure}
 %
 \subsection{\label{sect:resultscnn2}Results for CNN2}
-In this section we present results using $u_y$. The parameters for this CNN are given in table (\ref{table:cnnparams}). This CNN is tested on data similar to its training data. Both training and testing data sets contain $1,2$ or $3$ circular inclusions.
+In this section we present results using the displacement field in the $y$ direction, $u_y$. The parameters for this CNN are given in table (\ref{table:cnnparams}). This CNN is tested on data similar to its training data. Both training and testing data sets contain $1,2$ or $3$ circular inclusions.
 
 The training and validation losses for CNN1 are shown in figure (\ref{fig:cnn2losses}). The average inclusion scaled error is $-0.310$ and the average background scaled error is $-0.107$. These indicate that, on average, the shear modulus of the inclusions is under-predicted much more than CNN1. The background is also under-predicted to a larger degree than CNN1. This indicates that using displacements, as opposed to strains, under-predicts the shear modulus. See table (\ref{table:cnnstatsummary}) for a comparison across CNNs.
 
@@ -509,7 +509,7 @@ Figure (\ref{fig:cnn2histo}) shows histograms of the scaled error. We see that t
 \end{figure}
 %
 \subsection{\label{sect:resultscnn3}Results for CNN3}
-In this section, we evaluate the ability of the CNN to generalize to examples outside its training set. We choose CNN3 which is trained using data which was generated using only one inclusion. But we evaluate it on data containing one, two or three inclusions. The same data was used to train and test CNN1 and CNN2. We see evidence of some ability to generalize.
+In this section, we evaluate the ability of the CNN to generalize to examples outside its training set. We choose CNN3, see table (\ref{table:cnnparams}), which is trained using data which was generated using only one inclusion. But we evaluate it on data containing one, two or three inclusions. The same data was used to train and test CNN1 and CNN2. We see evidence of some ability to generalize.
 
 The training and validation losses for CNN3 are shown in figure (\ref{fig:cnn3losses}). The average inclusion scaled error is $-0.191$ and the average background scaled error is $-0.0459$. As expected, the average inclusion scaled error is worse than CNN1 but better than that of CNN2 which is surprising because, unlike CNN3, CNN2 was tested with data similar to the training data. The average background scaled error is also worse than CNN1 but better than CNN3.
 
