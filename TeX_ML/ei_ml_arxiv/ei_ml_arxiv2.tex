@@ -5,7 +5,7 @@
 % Check id of filters with derivatives
 
 \documentclass[12pt]{article}
-\usepackage[hscale=0.85,vscale=0.8]{geometry}
+\usepackage[hscale=0.8,vscale=0.8]{geometry}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage[title]{appendix}
@@ -36,14 +36,24 @@
 %\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \newcommand{\pdd}[2]{\frac{\partial{{#1}}}{\partial{#2}}}
 % define variables for \mupics command
+% Haloes dimensions
 \newcommand{\nhghaloesheight}{2.7cm}
 \newcommand{\nhghaloeswidth}{0.19\linewidth}
+% General purpose dimensions
 \newcommand{\nhghalfwidth}{0.48\linewidth}
 \newcommand{\nhgtotalheight}{4cm}
+% Loss dimensions
+\newcommand{\nhglossheight}{4cm}
+\newcommand{\nhglosswidth}{0.48\linewidth}
+% CNN results dimensions
 \newcommand{\nhgcnnwidth}{0.48\linewidth}
 \newcommand{\nhgcnnheight}{4.0cm}
+% Appendix dimensions
 \newcommand{\nhgappwidth}{0.23\linewidth}
-\newcommand{\nhgappheight}{2.5cm}
+\newcommand{\nhgappheight}{2.8cm}
+% Histogram dimensions
+\newcommand{\nhghistowidth}{0.48\linewidth}
+\newcommand{\nhghistoheight}{4cm}
 %\newcommand{\red}[1]{\textcolor{red}{#1}}
 % mupics ends here
 % filterloop starts here
@@ -396,15 +406,15 @@ Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, given i
 % Losses for CNN1
 \begin{figure}[!h]
   \centering
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhglosswidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results1New/loss_cnn1.png}
+    \includegraphics[totalheight=\nhglossheight]{Figures/Results1New/loss_cnn1_new.png}
     \subcaption{Loss}
   \end{subfigure}
 %  
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhglosswidth}
     \centering    
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results1New/val_loss_cnn1.png}
+    \includegraphics[totalheight=\nhglossheight]{Figures/Results1New/val_loss_cnn1_new.png}
     \subcaption{Validation loss}
   \end{subfigure}
   %
@@ -432,15 +442,15 @@ Figure (\ref{fig:cnn1histo}) shows histograms in which the scaled error, given i
 \begin{figure}[!h]
 \captionsetup[subfigure]{justification=centering}
   \centering
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhghistowidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results1New/histogram.png}
+    \includegraphics[totalheight=\nhghistoheight]{Figures/Results1New/histogram_new.png}
     \subcaption{\label{fig:cnn1histoa}Histogram}
   \end{subfigure}
 %  
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhghistowidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results1New/cumulative.png}
+    \includegraphics[totalheight=\nhghistoheight]{Figures/Results1New/cumulative_new.png}
     \subcaption{\label{fig:cnn1histob}Cumulative histogram}
   \end{subfigure}
   %
@@ -458,15 +468,15 @@ Figure (\ref{fig:cnn2histo}) shows histograms of the scaled error. We see that t
 % Losses for CNN2
 \begin{figure}[!h]
   \centering
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhglosswidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results2New/loss_cnn2.png}
+    \includegraphics[totalheight=\nhglossheight]{Figures/Results2New/loss_cnn2_new.png}
     \subcaption{Loss}
   \end{subfigure}
 %  
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhglosswidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results2New/val_loss_cnn2.png}
+    \includegraphics[totalheight=\nhglossheight]{Figures/Results2New/val_loss_cnn2_new.png}
     \subcaption{Validation loss}
   \end{subfigure}
   %
@@ -494,15 +504,15 @@ Figure (\ref{fig:cnn2histo}) shows histograms of the scaled error. We see that t
 \begin{figure}[!h]
 \captionsetup[subfigure]{justification=centering}
   \centering
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhghistowidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results2New/histogram.png}
+    \includegraphics[totalheight=\nhghistoheight]{Figures/Results2New/histogram_new.png}
     \subcaption{\label{fig:cnn2histoa}Histogram}
   \end{subfigure}
 %  
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhghistowidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results2New/cumulative.png}
+    \includegraphics[totalheight=\nhghistoheight]{Figures/Results2New/cumulative_new.png}
     \subcaption{\label{fig:cnn2histob}Cumulative histogram}
   \end{subfigure}
   %
@@ -521,15 +531,15 @@ Figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. We see that t
 % Losses for CNN3
 \begin{figure}[!h]
   \centering
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhglosswidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/loss_cnn3.png}
+    \includegraphics[totalheight=\nhglossheight]{Figures/Results3New/loss_cnn3_new.png}
     \subcaption{Loss}
   \end{subfigure}
 %  
-  \begin{subfigure}[c]{\nhghalfwidth}
+  \begin{subfigure}[c]{\nhglosswidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/val_loss_cnn3.png}
+    \includegraphics[totalheight=\nhglossheight]{Figures/Results3New/val_loss_cnn3_new.png}
    \subcaption{Validation loss}
   \end{subfigure}
   %
@@ -550,7 +560,7 @@ Figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. We see that t
     \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/ex4/mu.png}
     \subcaption{\label{fig:cnn3resultb} (0.331)}
   \end{subfigure}
-\caption{\label{fig:cnn3result} Representative results for CNN3. The numbers in the brackets are the scaled errors as defined in equation (\ref{eqn:scalederror}).}  
+\caption{\label{fig:cnn3result} Representative results for CNN3. The numbers in the brackets are the scaled errors as defined in equation (\ref{eqn:scalederror}). These are the same test examples presented in figures (\ref{fig:cnn1result}) and (\ref{fig:cnn2result}).}  
 \end{figure}
 %
 % Histograms for CNN3
@@ -559,13 +569,13 @@ Figure (\ref{fig:cnn3histo}) shows histograms of the scaled error. We see that t
   \centering
   \begin{subfigure}[c]{\nhghalfwidth}
     \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/histogram.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/histogram_new.png}
     \subcaption{\label{fig:cnn3histoa}Histogram}
   \end{subfigure}
 %  
   \begin{subfigure}[c]{\nhghalfwidth}
       \centering
-    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/cumulative.png}
+    \includegraphics[totalheight=\nhgtotalheight]{Figures/Results3New/cumulative_new.png}
     \subcaption{\label{fig:cnn3histob}Cumulative histogram}
   \end{subfigure}
   %
