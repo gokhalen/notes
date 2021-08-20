@@ -200,13 +200,13 @@ Each CNN has approximately $3.3$ million train-able parameters. We have $6000$ t
 \subsubsection{\label{sect:outputact} Output layer activations}
 % 
 \begin{subequations}
-\begin{align}
-f(x) &= \ln(1+\exp(x))  \qquad &&\text{softplus activation} \label{eqn:softplus}\\
-f(x) &= \frac{1}{1+\exp(-x)} \qquad &&\text{logistic activation} \label{eqn:logistic}\\
-f(x) &= \tanh(x)   \qquad &&\text{tanh activation} \label{eqn:tanh}\\
+\begin{flalign}
+&& f(x) &= \ln(1+\exp(x))  \qquad &&\text{softplus activation} \label{eqn:softplus}\\
+&& f(x) &= \frac{1}{1+\exp(-x)} \qquad &&\text{logistic activation} \label{eqn:logistic}\\
+&& f(x) &= \tanh(x)   \qquad &&\text{tanh activation} \label{eqn:tanh}\\
 %\text{softplusmin activation} \qquad f(x) &=& \min(\ln(1+\exp(x)),1.0)\label{eqn:softplusmin} \\
-f(x) &= \tanh(x) + 0.01x \qquad &&\text{twisted tanh activation} \label{eqn:twisttanh}
-\end{align}
+&& f(x) &= \tanh(x) + 0.01x \qquad &&\text{twisted tanh activation} \label{eqn:twisttanh}
+\end{flalign}
 \label{eqn:activations}
 \end{subequations}
 %
