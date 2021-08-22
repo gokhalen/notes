@@ -37,7 +37,7 @@
 \newcommand{\pdd}[2]{\frac{\partial{{#1}}}{\partial{#2}}}
 % define variables for \mupics command
 % Haloes dimensions
-\newcommand{\nhghaloesheight}{2.7cm}
+\newcommand{\nhghaloesheight}{3.7cm}
 \newcommand{\nhghaloeswidth}{0.19\linewidth}
 % General purpose dimensions
 \newcommand{\nhghalfwidth}{0.48\linewidth}
@@ -71,7 +71,7 @@
 \author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone (Professor, Mechanical Engineering, Boston University, Boston, MA, USA.) for patiently answering many questions about finite elements and for his constructive comments on an earlier version of this document. Conversations with Arnab Majumdar (ArcVisions, Kolkata, India), Michael Richards (Assistant Professor, Department of Biomedical Engineering, Kate Gleason College of Engineering, Rochester Institute of Technology, Rochester, NY, USA) and Mandar Kulkarni (Houston, TX, USA) are gratefully acknowledged and appreciated.}\\gokhalen@gmail.com\\Pune, India.}
 \date{\today}
 \maketitle
-\abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible, isotropic, linear elastic medium in plane strain using displacement or strain field data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Imaging the shear modulus field therefore can lead to high-contrast medical images. Our prediction problem is as follows: \textit{Given a displacement or strain field (or its components), predict the corresponding shear modulus field}. Our CNN is trained using 6000 training examples consisting of a displacement or strain field and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
+\abstract{We explore the application of a Convolutional Neural Network (CNN) using labeled data (supervised learning) to image the shear modulus field of an almost incompressible, isotropic, linear elastic medium in plane strain using displacement or strain field data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Imaging the shear modulus field therefore can lead to high-contrast medical images. Our imaging problem is as follows: \textit{Given a displacement or strain field (or its components), predict the corresponding shear modulus field}. Our CNN is trained using 6000 training examples consisting of a displacement or strain field and a corresponding shear modulus field. We present encouraging results which warrant further research and show the promise of this methodology.}
 \section{Introduction}
 The shear modulus of palpable nodules (which can be thought of as abnormal and potentially cancerous growths in soft tissue) is approximately an order of magnitude higher than the stiffness of the background of normal glandular tissue \cite{paper:sarv1998}. See also figure (\ref{fig:shearmod}). It follows then, that imaging the shear modulus field of soft tissue results in a high-contrast imaging method because the elevated shear modulus of suspicious growths will stand out clearly against the lower shear modulus of the background of normal tissue. Elasticity Imaging (EI) is a broad term that refers to methods which image the shear modulus (or other mechanical properties) of soft tissue in various ways. See \cite{paper:gao1996,paper:parker2010,book:alamgarra2019,bookchap:oberaibarbone2019} for comprehensive reviews of the field.
 %
@@ -89,7 +89,7 @@ The shear modulus of palpable nodules (which can be thought of as abnormal and p
 %
 \subsection{Steps involved in elasticity imaging}
 Elasticity Imaging typically consists of the three steps of image acquisition, image registration, inverse problem solution. These steps are discussed in the following sections.
-\subsubsection{Image acquisition} Images of soft tissue undergoing deformation due to applied excitation are acquired using various imaging modalities such as ultrasound or magnetic resonance imaging. While time dependent images can be acquired, we shall consider here only two images: a \textit{pre-deformation image} acquired before force is applied and a \textit{post-deformation image} acquired after force is applied. This process is shown in figure (\ref{fig:prepostimage}) for ultrasound imaging. Also see figure (2) in \cite{paper:konofagou2004}.
+\subsubsection{Image acquisition} Images of soft tissue undergoing deformation due to applied excitation are acquired using various medical imaging modalities such as ultrasound or magnetic resonance imaging. While time dependent images can be acquired, we shall consider here only two images: a \textit{pre-deformation image} acquired before force is applied and a \textit{post-deformation image} acquired after force is applied. This process is shown in figure (\ref{fig:prepostimage}) for ultrasound imaging. Also see figure (2) in \cite{paper:konofagou2004}.
 \subsubsection{Image registration} The goal in this step is to find a map which transforms the pre-deformation image into the post-deformation image. For every point in the pre-deformation image we aim to find its location in the post-deformation image typically by matching image intensity. See figure (\ref{fig:registschematic}). This gives us the \textit{displacement field} between the two images which is often referred to as the \textit{measured displacement field}.
 
 Differentiating the displacement field with respect to spatial coordinates yields the strain field. If $u_x(x,y)$ and $u_{y}(x,y)$ are the $x$ and $y$ components of the displacement field, then the strain field is given by equation (\ref{eqn:straindef}). $\epsilon_{xx}$ and $\epsilon_{yy}$ are referred to as \textit{axial strains}. $\epsilon_{xy}$ is the \textit{shear strain}.
@@ -97,27 +97,41 @@ Differentiating the displacement field with respect to spatial coordinates yield
 \label{eqn:straindef}
 \epsilon_{xx} = \pdd{u_{x}}{x} \qquad \epsilon_{yy} = \pdd{u_{y}}{y} \qquad \epsilon_{xy} = \frac{1}{2}\Big(\pdd{u_{x}}{y} + \pdd{u_{y}}{x}\Big)
 \eeq
-See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for minimization based approaches for computing the displacement field. See \cite{paper:ophir1991,paper:ophir1996,paper:alam1998} and references therein for cross-correlation based approaches. In our work, we generate displacement fields from known shear modulus fields using the finite element method (FEM) \cite{book:hugheslinear,book:fishbelytschko} and add appropriate noise to mimic the noise when displacement fields are computed from experimentally acquired images. 
+See \cite{paper:richards2009,paper:gokhale2004,paper:pellot-barakat2004} for minimization based approaches for computing the displacement field. See \cite{paper:ophir1991,paper:ophir1996,paper:alam1998} and references therein for cross-correlation based approaches. In our work, we generate displacement fields from known shear modulus fields using the finite element method (FEM) \cite{book:hugheslinear,book:fishbelytschko} and add an appropriate level of additive white Gaussian noise to mimic the noise when displacement fields are computed from experimentally acquired images. 
 %
 \begin{figure}[!h]
   \centering
   \includegraphics[totalheight=4cm]{Figures/registnew.png}
-  \caption{\label{fig:registschematic} A schematic figure of image registration. For points $X^1$ and $X^2$ in the pre-deformation image on the left, we aim to find their location in the post-deformation image on the right. Doing this for every point in the pre-deformation image yields a displacement field.}
+  \caption{\label{fig:registschematic} A schematic figure of image registration. For points $X^1$ and $X^2$ in the pre-deformation image on the left, we aim to find their location in the post-deformation image on the right by finding the displacements $u^1$ and $u^2$. Doing this for every point in the pre-deformation image yields a displacement field.}
 \end{figure}
 %
-\subsubsection{Inverse problem solution} The goal in this step is to infer the spatial distribution of the shear modulus from the displacement field. This is called an \textit{inverse problem} because the classical boundary value problem in linear elasticity (referred to as the \textit{forward problem}) is to determine the displacement field given the shear modulus field, the Poisson's ratio field and suitable boundary conditions. See \cite{book:hugheslinear,book:fishbelytschko} for further details. The approaches for inverse problem solution can be divided into two categories: direct and iterative. These are discussed in the subsequent sections.
+\subsubsection{Inverse problem solution} The goal in this step is to infer the spatial distribution of the shear modulus from the displacement field. This is called an \textit{inverse problem} because the classical boundary value problem in linear elasticity (referred to as the \textit{forward problem}) is to determine the displacement field given the shear modulus field, the Poisson's ratio field and suitable boundary conditions. See \cite{book:hugheslinear,book:fishbelytschko,book:segelmathcont} for further details on the boundary value problem of linear elasticity and its solution by FEM.
+
+The approaches for inverse problem solution can be divided into two categories: direct and iterative. These are discussed in the subsequent sections.
 \subsubsection{Direct approach} Direct approaches involve solving a partial differential equation (PDE) to obtain the distribution of shear modulus directly: see \cite{paper:raghavan1994,paper:barboneadjwt,paper:albocher}. The coefficients of this PDE depend on the measured displacement field. Such approaches are fast and work well when the measured strain field is completely known and has low noise.
-\subsubsection{Iterative approach} Iterative approaches \cite{paper:oberai2003,paper:oberaipmb2004,paper:gokhale2008,paper:kalle1996,paper:doyley,paper:goenezen2011} involve guessing a distribution\footnote{We may also use CNNs to generate a good initial guess for iterative approaches.} for the shear modulus, solving a linear elasticity forward problem to obtain the predicted displacement field, computing the value and the gradient (and/or Hessian) with respect to the shear modulus of an objective function which consists of a user specified norm of the difference between the predicted displacement field and the measured displacement field, and updating the guessed shear modulus distribution using a suitable optimization procedure such as a modified Newton Raphson scheme as in \cite{paper:doyley} or the BFGS scheme as in \cite{paper:gokhale2008,paper:goenezen2011}. Such approaches are typically slower than direct methods, since they require the solution of approximately $50$ to $100$ forward problems, but have the ability to handle incomplete data and complex nonlinear material models such as hyperelasticity.
+\subsubsection{Iterative approach} Iterative approaches \cite{paper:oberai2003,paper:oberaipmb2004,paper:gokhale2008,paper:kallel1996,paper:doyley,paper:goenezen2011} involve guessing\footnote{We may also use CNNs to generate this initial guess.} a distribution for the shear modulus, solving a linear elasticity forward problem to obtain the predicted displacement field, computing the value of an objective function and its gradient (and perhaps Hessian) with respect to the shear modulus. This objective function is a user specified norm of the difference between the predicted displacement field and the measured displacement field. The guessed shear modulus distribution is updated using a suitable optimization procedure such as a modified Newton Raphson scheme as in \cite{paper:doyley,paper:kallel1996} or the BFGS scheme as in \cite{paper:gokhale2008,paper:oberaipmb2004,paper:oberai2003,paper:goenezen2011,paper:richards2009,diss:gokhale2007}. Such approaches are typically slower than direct methods, since they require the solution of approximately $50$ to $100$ forward problems, but have the ability to handle incomplete data (knowing only one component of the displacement or strain field) and complex nonlinear material models such as hyperelasticity \cite{paper:gokhale2008,paper:goenezen2011}.
 \subsubsection{Solving the inverse problem with CNNs}
-We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer (once time has been spent up front to train the CNN), can accommodate complex constitutive relations, can work with incomplete data (e.g. only a single component of a displacement field) and can work with noisy data.
+Conceptually, the solution of the inverse problem using a CNN is shown in figure (\ref{fig:schematic_inv}).
+%
+\begin{figure}[!h]
+   \centering
+    \includegraphics[totalheight=4cm]{Figures/schematic_inv/schematic_inv.png}
+  \caption{\label{fig:schematic_inv} Solving the inverse problem using CNNs. The CNN maps the displacement or strain field (or components thereof) to a shear modulus field.}
+\end{figure}
+%
+We believe that solving the inverse problem with CNNs can combine the best characteristics of the direct and iterative approaches. The CNN based approach can yield a quick answer (once time has been spent up front to train the CNN), can accommodate complex constitutive relations, can work with incomplete data (e.g. only a single component of a displacement field) and can handle noisy data.
 
-On the other hand, if data which is unlike what the CNN has been trained on is seen, then the performance of the CNN will likely degrade. We investigate this in sections  (\ref{sect:resultscnn3}) and (\ref{sect:resultscross}). We also note that CNNs do not predict a perfect result in the absence of noise, unlike traditional direct or iterative methods.
+On the other hand, we think that if data which is unlike what the CNN has been trained on is seen, then the performance of the CNN will likely degrade. We investigate this in sections  (\ref{sect:resultscnn3}) and (\ref{sect:resultscross}). We also note that CNNs do not predict a perfect result in the absence of noise, unlike traditional direct or iterative methods.
 
-Finally, we note here that we expect determining multiple material parameters e.g. a linear and a non-linear parameter for hyperelasticity as in \cite{paper:gokhale2008,paper:goenezen2011}or both the Lam\'e parameters for compressible elasticity from the same set of displacement or strain images to be challenging, because the CNN will have to infer two spatially dependent fields from the same data. It is likely that more than one displacement or strain field will be required.
-\section{\label{sect:probsetup}Problem setup for data generation}
-The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. We refer the reader to \cite{book:hugheslinear,book:fishbelytschko,book:segelmathcont} for details about the boundary value problem of isotropic, almost incompressible, linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated bilinearly. The problem geometry is shown in figure (\ref{fig:bc}). Plane strain is assumed. The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. There are $65$ nodes in the $x$ direction and $97$ nodes in the $y$ direction. Solving a single training example takes approximately $10$ seconds. Both degrees of freedom are constrained at the pin and only the $y$ degree of freedom is constrained at the rollers. The background shear modulus is $\mu_{back}=1.0$ unit. Since soft tissues are almost incompressible we set the Poisson's ratio to $0.49$ everywhere which renders the elastic medium almost incompressible. This incompressibility causes a numerical problem with the FEM solver which is called mesh locking \cite{book:hugheslinear}. Mesh locking typically manifests itself as low displacements for a given traction. We use selective reduced integration \cite{book:hugheslinear} to avoid this problem. The shear modulus of inclusions is a constant and is a random number ranging from $\mu_{min}=2.0$ to $\mu_{max}=5.0$. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ to $0.15$.
+Finally, we note here that we expect determining multiple material parameters e.g. a linear and a non-linear parameter for hyperelasticity as in \cite{paper:gokhale2008,paper:goenezen2011}or both the Lam\'e parameters for compressible linear elasticity from the same set of displacement or strain images to be challenging, because the CNN will have learn how to infer two spatially dependent fields from the same data. It is likely that more than one displacement or strain field will be required and that separate CNNs will be required for each material parameter.
+%%
+%%
+\section{\label{sect:probsetup}Data generation for CNNs} 
+The displacement or strain field data required for the CNN is generated using a linear finite element solver named FyPy (\textbf{Fy}nite Elements in \textbf{Py}thon) \cite{misc:fypy}. We refer the reader to \cite{book:hugheslinear,book:fishbelytschko,book:segelmathcont} for details about the boundary value problem of isotropic, almost incompressible, linear elasticity and its solution using finite elements. Both displacements and material properties are interpolated bilinearly. The problem geometry is shown in figure (\ref{fig:bc}). Plane strain is assumed. The length (in the $x$ direction) is $1.0$ unit. The breadth (in the $y$ direction) is 1.5 units. There are $65$ nodes in the $x$ direction and $97$ nodes in the $y$ direction. Both degrees of freedom are constrained at the pin and only the $y$ degree of freedom is constrained at the rollers. The background shear modulus is $\mu_{back}=1.0$ unit. Since soft tissues are almost incompressible we set the Poisson's ratio to $0.49$ everywhere which renders the elastic medium almost incompressible. This incompressibility causes a numerical problem with the FEM solver which is called mesh locking \cite{book:hugheslinear}. Mesh locking typically manifests itself as unphysically low displacements for a given traction. We use selective reduced integration \cite{book:hugheslinear} to avoid this problem. The shear modulus of inclusions is a constant and is a random number ranging from $\mu_{min}=2.0$ units to $\mu_{max}=5.0$ units. There are no homogeneous examples. The radius of the inclusion is a random number ranging from $0.05$ units to $0.15$ units.
 
-$10000$ displacement and strain images are generated and are split into $6000$ training examples, $2000$ validation examples and $2000$ test examples. The input data is scaled by the absolute maximum over all channels, computed over the training examples only. When noisy data is used, we add zero mean additive Gaussian noise in the strain or displacement data such that the signal to noise ratio ($\text{SNR}_{\text{dB}}$) is 40dB according to equation (\ref{eqn:snr}). It is stated in We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data. We make predictions by supplying noisy data to the CNNs as an input. We use 40dB noise because it has been used in prior work \cite{paper:doyley,paper:oberai2003}.
+Solving a single training example takes approximately $5$ seconds. See section (\ref{sect:computresour}) for details of computational resources used. $10000$ displacement and strain images are generated and are split into $6000$ training examples, $2000$ validation examples and $2000$ test examples. The input data is scaled by the absolute maximum over all channels, computed over the training examples only.
+
+When noisy data is used, we add zero mean additive Gaussian noise in the strain or displacement data such that the signal to noise ratio ($\text{SNR}_{\text{dB}}$) is 40dB according to equation (\ref{eqn:snr}). We use 40dB noise because it has been used in prior work \cite{paper:doyley}. We do not train CNNs with noisy data. Training of the CNN is always carried out on noiseless data. We make predictions by supplying noisy data to the CNNs as an input. 
 \begin{subequations}
 \begin{align}
   \text{SNR}_{\text{dB}} &= 20\log_{10}{\Bigg (}\frac{\|\text{signal}\|_{2}}{\|\text{noise}\|_{2}}{\Bigg )} \label{eqn:snr} \text{ where, }\\
@@ -132,8 +146,8 @@ $10000$ displacement and strain images are generated and are split into $6000$ t
   \caption{\label{fig:bc}Boundary conditions and material properties used in this work. }
 \end{figure}
 %
-\subsection{Hardware and software used}
-In this work, the finite element solver \cite{misc:fypy} and associated scripts for generating and post-processing the data are written in Python 3.8. While the elements are accelerated using Numba \cite{conf:numba}, we believe that much better performance can be obtained by writing the solver in C/C++/Fortran or Julia or using high-quality open source solvers like FEniCS \cite{paper:fenics} or deal.II \cite{paper:deal.ii}. Each FE input file is 3.3MB and output file is 1.1MB and total dataset size is approximately 49GB. Simple text based JSON files were used for input output because of their simplicity. The simulations to generate data and train the CNN were carried out on an Intel i5-11400F 2.6 Ghz processor with 6 physical and 12 logical cores and 16 GB RAM. The OS used was Windows 10 running WSL2 with Ubuntu Linux. TensorFlow 2.4 was used.
+\subsection{\label{sect:computresour} Computational resources}
+In this work, the finite element solver \cite{misc:fypy} and associated scripts for generating and post-processing the data are written in Python 3.8. The "spsolve" sparse direct solver from SciPy \cite{} was used for solving the linear systems generated by FEM. While the elements are accelerated using Numba \cite{conf:numba}, we believe that much better performance can be obtained by writing the solver in C/C++/Fortran or Julia or using high-quality open source solvers like FEniCS \cite{paper:fenics} or deal.II \cite{paper:deal.ii}. Each FE input file is 3.3MB and output file is 1.1MB and total dataset size is approximately 49GB. Simple text based JSON files were used for input output because of their simplicity. The simulations to generate data and train the CNN were carried out on an Intel i5-11400F 2.6 Ghz processor with 6 physical and 12 logical cores and 16 GB RAM. The OS used was Windows 10 running WSL2 with Ubuntu Linux. TensorFlow 2.4 was used.
 %
 \section{Neural networks}
 \subsection{Review}
@@ -155,13 +169,6 @@ Consider the following algorithm to solve the elasticity imaging problem.
 \end{enumerate}
 
 The problem with the above algorithm is that the storage required in step (3) and the search space in step (4) is beyond enormous. There are ${n_{\mu}}^{n_{nodes}}$ possible shear modulus fields. Consider $n_{nodes}=1000$ and $n_{\mu}=10$, yielding $10^{1000}$ possible shear modulus fields, an enormous number. We need an algorithm to search this large search space efficiently, and hence, the need for neural networks.
-%
-\begin{figure}[!h]
-   \centering
-    \includegraphics[totalheight=4cm]{Figures/schematic_inv/schematic_inv.png}
-  \caption{\label{fig:schematic_inv} Solving the inverse problem using CNNs. The CNN maps the displacement or strain field (or components thereof) to a shear modulus field.}
-\end{figure}
-%
 \subsection{\label{sect:cnnarch} CNN architecture used in this work}
 Figure (\ref{fig:typical_cnn}) shows the architecture of the CNN we use in this work. We implement this architecture in TensorFlow. The parameters of the layers are given in table (\ref{table:cnnlayerparams}).
 
@@ -297,31 +304,31 @@ Referring to figure (\ref{fig:haloes}), we see that the 'haloes' seen in figures
   %
   \begin{subfigure}[c]{\nhghaloeswidth}
   \centering    
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1/mutrue.png}
+    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1_hot/mutrue.png}
     \caption{\label{fig:haloes_true} True}
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhghaloeswidth}
   \centering    
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1/musoftplus.png}
+    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1_hot/musoftplus.png}
     \caption{\label{fig:haloes_softplus} Softplus}
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhghaloeswidth}
     \centering
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1/mutanhshiftp50.png}
+    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1_hot/mutanhshiftp50.png}
     \caption{\label{fig:haloes_tanhp50} Twisted 1}            
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhghaloeswidth}
     \centering
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1/mutanhshiftp25.png}
+    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1_hot/mutanhshiftp25.png}
     \caption{\label{fig:haloes_tanhp25} Twisted 2}        
   \end{subfigure}
   %
   \begin{subfigure}[c]{\nhghaloeswidth}
     \centering
-    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1/mutanhshift0.png}
+    \includegraphics[totalheight=\nhghaloesheight]{Figures/softplus_halos_new/ex1_hot/mutanhshift0.png}
     \caption{\label{fig:haloes_tanhp0} Twisted 3}    
   \end{subfigure}     
   %
