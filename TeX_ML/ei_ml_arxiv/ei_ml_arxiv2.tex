@@ -602,7 +602,7 @@ Figure (\ref{fig:resultcross}) shows reconstructions obtained when CNN1 is prese
 \end{figure}
 %
 \subsection{\label{sect:discussion}Discussion}
-We observe encouraging results with good qualitative agreement between the true and predicted shear shear modulus images. Table (\ref{table:cnnstatsummary}) summarizes the performance of the three CNNs evaluated in this work. The shear modulus of inclusions is, in general, under-predicted. The shear modulus of inclusions with low shear modulus and small sized inclusions is significantly under-predicted, resulting in predictions that can be best described as 'wisps'.
+We observe encouraging results with good agreement between the true and predicted shear shear modulus images. Table (\ref{table:cnnstatsummary}) summarizes the performance of the three CNNs evaluated in this work. The shear modulus of inclusions is, in general, under-predicted. The shear modulus of inclusions with low shear modulus and small sized inclusions is significantly under-predicted, resulting in predictions that can be best described as 'wisps'.
 
 The average inclusion scaled error, given in equation (\ref{eqn:averageincscalederror}) evaluated over inclusions having shear modulus in the range $[2.0,3.0]$ yields $-0.206$,$-0.347$ and $-0.247$ for CNN1, CNN2 and CNN3 respectively\footnote{We may be able to use these numbers to create fudge-factors increase the stiffness of the inclusions predicted by the neural network.}. This shows that all three networks perform worse than usual while detecting inclusions which whose shear modulus is low. 
 
