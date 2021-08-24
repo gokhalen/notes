@@ -1,0 +1,26 @@
+# for single inclusion problem
+# best,worst (for CNN1),and another two
+
+# ALL MU NUMBERS ARE DIRECT ENTRIES INTO THE PREDICTION ARRAY
+# FIRST 4 NUMBERS ARE MAIN ENTRIES NEXT 8 ARE APPENDIX ENTRIES
+# OF WHICH THE LAST TWO ARE USED
+# CNN1
+# munumbers = [1517,1935,521,1087,1381,625,1366,852,719,1813,72,1912] 
+# CNN1 errors [0.0705,0.476,0.0298,0.247,0.0838,0.137,0.168,0.185,0.205,0.222
+#                       0.243,0.264]
+
+# CNN2
+# munumbers = [1517,1935,521,1087,43,1495,120,1552,1204,1828,721,180]
+# CNN2 errors [0.157,0.03976,0.327,0.346,0.156,0.205,0.227,0.247,
+#                       0.265,0.283,0.312,0.359]  
+#                        
+
+# CNN3 
+# munumbers = [1517,1935,521,1087,967,615,1008,14,147,1657,702,1126]
+# Appendix CNN3 Errors = [0.0611,0.261,0.321, 0.331,0.0754,0.131,0.161,0.181,0.199,0.223,0.249,0.305]
+# sorted numbers - 9,253,500,757,1001,1257,1507,1848
+
+
+# load data
+# this index controls which data is loaded CNN1/CNN2/CNN3
+
