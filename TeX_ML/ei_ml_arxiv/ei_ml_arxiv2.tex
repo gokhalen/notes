@@ -8,6 +8,7 @@
 \usepackage{amsfonts}
 \usepackage[title]{appendix}
 \usepackage{algorithm}
+\usepackage{changepage}
 \usepackage{algpseudocode}
 \usepackage{mathtools}
 %https://tex.stackexchange.com/questions/337/how-to-change-certain-pages-into-landscape-portrait-mode
@@ -67,6 +68,7 @@
 % Drawing Neural network
 \newcommand{\nhgtikzboxwidth}{12cm}
 \newcommand{\nhgnodehrule}{\vspace{2mm}\hrule\vspace{2mm}}
+
 %\newcommand{\red}[1]{\textcolor{red}{#1}}
 % mupics ends here
 % filterloop starts here
@@ -169,7 +171,7 @@ Given the success achieved by neural networks on the wide variety of application
 
 In contrast, in this work we compute the shear modulus field from the displacement or strain field using a CNN\footnote{We choose CNNs as opposed to other types of neural networks because of the success they have achieved in image classification. See, for example, \cite{paper:hinton2017}.}. There are no physical constraints involved in our work. It is purely a mapping problem from the space of displacement or strain fields to the space of the shear modulus fields. The input data for our CNN is a strain or displacement field. While multiple components of strain or displacement may be used, we use only $\epsilon_{yy}$ and $u_y$ in this work. See section (\ref{sect:cnnarch}) for more details. For each input displacement or strain field, there is a known corresponding target shear modulus field. Such a pair makes a training, validation or testing example. Starting from an initial random guess of the weights, the CNN predicts shear modulus fields, compares them with the target fields to compute the loss (objective) function and its gradient with respect to the weights of the neural network. The weights are updated using the gradient in an appropriate optimization algorithm such as Adam \cite{misc:kingma2017adam}. Thus the CNN learns weights for its filters and connection weights. Using this learned information, the CNN is able to predict a shear modulus field from the input data of strain or displacement fields which is seen in figure (\ref{fig:schematic_inv}).
 \subsection{Need for neural networks}
-At this point, it is worth asking the questions: Are neural networks really necessary? Would a brute-force algorithm, such as algorithm (\ref{algo:brute_ei}), suffice?.
+{At this point, it is worth asking the questions: Are neural networks really necessary? Would a brute-force algorithm, such as algorithm (\ref{algo:brute_ei}), suffice?.\par}
 %
 %\begin{enumerate}
 %\item{Let there be $n_{nodes}$ nodes used to discretize the shear modulus and displacement fields.}
@@ -177,18 +179,36 @@ At this point, it is worth asking the questions: Are neural networks really nece
 %\item{Solve and store displacement fields corresponding to every possible discrete shear modulus field.}
 %\item{When an unknown displacement field is encountered, find the closest displacement field from step (3) and output the corresponding shear modulus field as the answer.}
 %\end{enumerate}
-\begin{algorithm}
-\caption{\label{algo:brute_ei}A brute force algorithm for elasticity imaging.}  
-\begin{algorithmic}[1]
-  \State Let there be $n_{nodes}$ nodes used to discretize the shear modulus and displacement fields.
-  \State Let the shear modulus at each node be allowed to take $n_{\mu}$ discrete values.
-  \State \label{algo:brute_ei_3} Store displacement fields corresponding to every possible discrete shear modulus field. 
-  \State \label{algo:brute_ei_4} When an unknown displacement field is encountered, find the closest displacement field from step (\ref{algo:brute_ei_3}) and output the corresponding shear modulus field as the answer.
-\end{algorithmic}
-\end{algorithm}
+%\noindent\hspace*{-.1\textwidth}%
+%\begin{minipage}{9cm}
+%\begin{algorithm}
+%\caption{\label{algo:brute_ei}A brute force algorithm for elasticity imaging.}  
+%\begin{algorithmic}[1]
+%  \State Let there be $n_{nodes}$ nodes used to discretize the shear modulus and displacement fields.
+%  \State Let the shear modulus at each node be allowed to take $n_{\mu}$ discrete values.
+%  \State \label{algo:brute_ei_3} Store displacement fields corresponding to every possible discrete shear modulus field. 
+%  \State \label{algo:brute_ei_4} When an unknown displacement field is encountered, find the closest displacement field from step (\ref{algo:brute_ei_3}) and output the corresponding shear modulus field as the answer.
+%\end{algorithmic}
+%\end{algorithm}
+%\end{minipage}
+{\centering
+\begin{minipage}{.9\linewidth}
+  \begin{algorithm}[H]
+    \caption{\label{algo:brute_ei}A brute force algorithm for elasticity imaging.}
+    \begin{algorithmic}[1]
+      \State Let there be $n_{nodes}$ nodes used to discretize the shear modulus and displacement fields.
+      \State Let the shear modulus at each node be allowed to take $n_{\mu}$ discrete values.
+      \State \label{algo:brute_ei_3} Store displacement fields corresponding to every possible discrete shear modulus field. 
+      \State \label{algo:brute_ei_4} When an unknown displacement field is encountered, find the closest displacement field from step (\ref{algo:brute_ei_3}) and output the corresponding shear modulus field as the answer.
+    \end{algorithmic}    
+ \end{algorithm}
+\end{minipage}
+\par
+}
+\vspace{4mm}
 The problem with algorithm (\ref{algo:brute_ei}) is that the storage required in step (\ref{algo:brute_ei_3}) and the search space in step (\ref{algo:brute_ei_4}) is beyond enormous. There are ${n_{\mu}}^{n_{nodes}}$ possible shear modulus fields. Consider $n_{nodes}=1000$ and $n_{\mu}=10$, yielding $10^{1000}$ possible shear modulus fields, an enormous number. We need an algorithm to search this large search space efficiently, and hence, the need for neural networks.
 \subsection{\label{sect:cnnarch} CNN architecture used in this work}
-Figure (\ref{fig:cnn_arch}) shows the architecture and parameters of the CNN we use in this work. We implement \cite{misc:mlscripts} this architecture in TensorFlow \cite{misc:tensorflow}. This architecture is essentially the same the one used in the deep learning example in \cite{misc:udemy} in which it was used to classify images into two categories: 'cat' or 'dog'.
+Figure (\ref{fig:cnn_arch}) shows the architecture and parameters of the CNN we use in this work. This architecture is essentially the same the one used in the deep learning example in \cite{misc:udemy} in which it was used to classify images into two categories: 'cat' or 'dog'.
 
 The first and second dimensions in the input represent the number of nodes in the $y$ and $x$ direction respectively. The last dimension represents the number of channels in the image. In color image-processing the number of channels is typically $3$, one channel each for the three colors red, green and blue (RGB). In our case, the number of channels is the number of components of the displacement or strain field used in our problem. If we use all three components of the strain field $\epsilon_{xx},\epsilon_{yy}$ and $\epsilon_{xy}$, then the number of channels is $3$. If we use only one component of the strain field, say $\epsilon_{yy}$, then the number of channels is $1$. Since we are working with almost incompressible linear elasticity, we know \cite{book:hugheslinear} that:
 \begin{align}
