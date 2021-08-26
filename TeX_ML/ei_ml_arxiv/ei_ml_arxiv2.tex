@@ -44,7 +44,7 @@
 %\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \newcommand{\pdd}[2]{\frac{\partial{{#1}}}{\partial{#2}}}
 % activation dimensions
-\newcommand{\nhgactfuncheight}{4.0cm}
+\newcommand{\nhgactfuncheight}{3.5cm}
 \newcommand{\nhgactfuncwidth}{0.48\linewidth}
 % Haloes dimensions
 \newcommand{\nhghaloesheight}{3.7cm}
@@ -195,6 +195,11 @@ The first and second dimensions in the input represent the number of nodes in th
   \epsilon_{xx}+\epsilon_{yy}\approx{0} \implies \pdd{u_x}{x} + \pdd{u_y}{y} \approx{0} \label{eqn:strainincomp}. 
 \end{align}
 In addition, since our problem setup is much closer to a compression rather than shear problem, $\epsilon_{xy}$ is close to zero almost everywhere. Furthermore, $\epsilon_{xy}$ is noisy in practice because it involves differentiating $u_{x}$ which is often known inaccurately. We therefore choose to not work with $\epsilon_{xy}$. Equation (\ref{eqn:strainincomp}) links $\epsilon_{xx}$ with $\epsilon_{yy}$ and also $u_x$ with $u_y$. Therefore, effectively, there is only one independent component of strain or displacement. In elasticity imaging using ultrasound, we typically choose to work with the displacement or strain component along the direction of ultrasound propagation because it can be estimated much more accurately than the transverse component. In this work, we choose $u_y$ and $\epsilon_{yy}$ as the independent components of displacement and strain and we restrict our attention to only single channel images which represent either $u_y$ or $\epsilon_{yy}$.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Figures/convnet_fig_nach.png}
+  \caption{\label{fig:cnn_arch}CNN architecture used in this work. This figure was generated using \url{https://github.com/gwding/draw_convnet}.}
+\end{figure}  
 %
 %\begin{center}
 \begin{table}
@@ -227,18 +232,18 @@ We train three CNNs whose parameters are are listed in table (\ref{table:cnnpara
 
 Each CNN has approximately $3.3$ million train-able parameters. We have $6000$ training images, each with $65\times97$ data points for the shear modulus. Hence, the total number of data points for the shear modulus are $6000\times97\times65=37.8$ million, approximately $11$ times the number of parameters being estimated.
 
-\begin{landscape}
-  %https://tex.stackexchange.com/a/28601/220415 - see egreg's comment
-  \centering
-  \vspace*{\fill}
-%\vfill
-\fbox{\includegraphics[width=\linewidth]{Figures/convnet_fig_nach.png}}
-\captionof{figure}{\label{fig:cnn_arch}CNN architecture used in this work. This figure was generated using \url{https://github.com/gwding/draw_convnet}.}
-\vfill
-\end{landscape}
-%
 The \textit{loss function} is \textit{mean squared error} and the optimizer is \textit{Adam} \cite{misc:kingma2017adam} with default TensorFlow settings. After training, we choose the model with the best validation loss make predictions. No regularization or dropout is used.
-
+%
+%\begin{landscape}
+  %https://tex.stackexchange.com/a/28601/220415 - see egreg's comment
+% \centering
+%  \vspace*{\fill}
+%%\vfill
+%\fbox{\includegraphics[width=\linewidth]{Figures/convnet_fig_nach.png}}
+%\captionof{figure}{\label{fig:cnn_arch}CNN architecture used in this work. This figure was generated using \url{https://github.com/gwding/draw_convnet}.}
+%\vfill
+%\end{landscape}
+%
 \subsubsection{\label{sect:outputact} Output layer activations}
 %
 We consider the functions given in equations (\ref{eqn:softplus}-\ref{eqn:twisttanh}) as activation functions for the output layer and choose the twisted tanh function, given in equation (\ref{eqn:twisttanh}), as the output layer activation. All our work, apart from the comparisons in section (\ref{sect:compsofttanh}), is carried out using the twisted tanh activation function.
@@ -296,18 +301,6 @@ We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mea
 We close by commenting that enforcing constraints on the shear modulus is easy in traditional iterative methods because we can just supply bound constraints to the optimization algorithm. On the other hand, for neural networks, constraining the shear modulus requires constraining the range of the output layer activation which causes the gradients of the activation function to be zero, as the input goes further away from zero. This problem can be alleviated by using the twisted tanh activation.
 
 \subsection{\label{sect:compsofttanh} Reduction of haloes using twisted tanh}
-Referring to figure (\ref{fig:haloes}), we see that the \textit{haloes} seen in figures (\ref{fig:haloes_softplus}) and (\ref{fig:haloes_tanhp50}) are almost eliminated in figures (\ref{fig:haloes_tanhp25}) and (\ref{fig:haloes_tanhp0}). We see that the more accurately we know the true range of the shear modulus, the lesser the \textit{haloes} and closer the the maximum and minimum values of the predicted modulus, over all test examples, are to the true maximum and minimum values. We also find that the average scaled error, defined above in equation (\ref{eqn:averagescalederror}), decreases as the known bounds $[\mu_{lower},\mu_{upper}]$ approach true bounds $[1.0,5.0]$, as seen in table (\ref{table:muminmax}). The scaled error for the $i^{th}$  test example by $\zeta_{i}$ and the average scaled error by $\zeta_{ave}$ are defined as 
-\begin{subequations}
-  \begin{align}
-  \zeta_{i} &\coloneqq \frac{\|\mu^{i,predicted} - \mu^{i,true}\|_{2}}{\|\mu^{i,true}\|_{2}},&\zeta_{ave} &\coloneqq \frac{\sum_{i=1}^{n_{test}}\zeta_{i}}{n_{test}} &\label{eqn:averagescalederror}
-  \end{align}
-\end{subequations}
-where $\mu^{i,predicted}$ and $\mu^{i,true}$ are vectors containing the predicted and true values of the shear modulus for the $i^{th}$ test example and $n_{test}$ is the number of test examples. $\|\cdot\|_2$ is the Euclidean norm defined in equation (\ref{eqn:eucnorm}).
-
-
-
-  We conclude that it is possible to minimize haloes with accurate knowledge about the minimum and maximum shear modulus in the problem in the twisted tanh activation.
-% Finally, we note that as a final post-processing step we can apply thresholding (use of minimum and maximum functions) to restrict the output of the neural network to a desired range. Also note that, because the minimum and maximum functions are not differentiable everywhere, we do not recommend their use in training the neural network. This is because the backpropagation algorithm for neural network training requires derivatives.
 \begin{table}
   \centering
   \begin{tabular}{|c|c|c|c|}
@@ -363,6 +356,16 @@ where $\mu^{i,predicted}$ and $\mu^{i,true}$ are vectors containing the predicte
   \caption{\label{fig:haloes} Reconstructions using the softplus activation function show regions of very low shear modulus (haloes), typically adjoining inclusions. Twisted 1, Twisted 2 and Twisted 3 correspond to the twisted tanh $[0.5, 5.5]$, twisted tanh $[0.75,5.25]$ and twisted tanh $[1.0,5.0]$ activations. The better our prior knowledge about the shear modulus, the lesser the haloes. These figures are on the same color scale. See also table (\ref{table:muminmax}).}
 \end{figure}
 %
+The scaled error for the $i^{th}$  test example by $\zeta_{i}$ and the average scaled error by $\zeta_{ave}$ are defined as 
+\begin{subequations}
+  \begin{align}
+  \zeta_{i} &\coloneqq \frac{\|\mu^{i,predicted} - \mu^{i,true}\|_{2}}{\|\mu^{i,true}\|_{2}},&\zeta_{ave} &\coloneqq \frac{\sum_{i=1}^{n_{test}}\zeta_{i}}{n_{test}} &\label{eqn:averagescalederror}
+  \end{align}
+\end{subequations}
+where $\mu^{i,predicted}$ and $\mu^{i,true}$ are vectors containing the predicted and true values of the shear modulus for the $i^{th}$ test example and $n_{test}$ is the number of test examples. $\|\cdot\|_2$ is the Euclidean norm defined in equation (\ref{eqn:eucnorm}).
+
+Referring to figure (\ref{fig:haloes}), we see that the \textit{haloes} seen in figures (\ref{fig:haloes_softplus}) and (\ref{fig:haloes_tanhp50}) are almost eliminated in figures (\ref{fig:haloes_tanhp25}) and (\ref{fig:haloes_tanhp0}). We see that the more accurately we know the true range of the shear modulus, the lesser the \textit{haloes} and closer the the maximum and minimum values of the predicted modulus, over all test examples, are to the true maximum and minimum values. We also find that the average scaled error, defined above in equation (\ref{eqn:averagescalederror}), decreases as the known bounds $[\mu_{lower},\mu_{upper}]$ approach true bounds $[1.0,5.0]$, as seen in table (\ref{table:muminmax}). We conclude that it is possible to minimize haloes with accurate knowledge about the minimum and maximum shear modulus in the problem in the twisted tanh activation.
+% Finally, we note that as a final post-processing step we can apply thresholding (use of minimum and maximum functions) to restrict the output of the neural network to a desired range. Also note that, because the minimum and maximum functions are not differentiable everywhere, we do not recommend their use in training the neural network. This is because the backpropagation algorithm for neural network training requires derivatives.
 %\begin{figure}[!h] 
 %   \centering
 %    \includegraphics[totalheight=12cm]{Figures/cnn_arch.png}
@@ -624,7 +627,7 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \subsection{Directions for future work}
 \begin{enumerate}
 \item{We believe that addition of homogeneous examples to the dataset will be a good test for the CNNs evaluated in this work. However, given that the CNNs under-predict the shear modulus of small inclusions, we believe homogeneous examples will be predicted correctly. Another direction would be to first classify the test or prediction example under consideration as homogeneous or non-homogeneous and then reconstruct the shear modulus field if it is deemed to be non-homogeneous.}
-\item{We think that training the CNN with displacement or strain data generated using random values for the shear modulus at each node, or perturbing the shear modulus of only one node relative to the background, and seeing if it learns the inverse operator from the displacement (or strain) fields to shear modulus fields will be an interesting research direction.}% Training with other complex shapes for the shear modulus will also be an interesting research direction.
+\item{We think that training the CNN with displacement or strain data generated using random values for the shear modulus at each node, or perturbing the shear modulus of only one node relative to the background, and seeing if it learns the inverse operator from the displacement (or strain) fields to shear modulus fields will be interesting.}% Training with other complex shapes for the shear modulus will also be an interesting research direction.
 %\item{All examples in the current work have the same boundary condition. Incorporating boundary conditions into the neural network will be an interesting advance. Incorporating additional parameters such as boundary conditions into the neural network will necessitate an increase in the number of training examples.}
 \item{We see that better results are obtained for large inclusions with high contrast. Stiffness of smaller inclusions and inclusions with low shear modulus is under-predicted. Designing a network to accurately image small inclusions will be interesting. We note that, this this work,  material properties and displacements were on the same mesh. This may lead to unconverged displacements for smaller inclusions which may not have enough features/information to be of use in predicting small inclusions. We also note that from previous experience, the adjoint method \cite{paper:oberai2003,paper:oberaipmb2004,paper:gokhale2008} is able to predict the small inclusions correctly using noiseless data. It appears that the adjoint method does better than CNNs on the problem of predicting small inclusions.}
 \item{We think that Fourier analysis of these filters, as reported in \cite{paper:pateloberai2019} would be valuable. Using their technique, we can identify some filters in this work as the derivative in the $x$ or $y$ direction, but the physical meaning of the majority of filters is not clear. We believe that after understanding the physical meaning of each filter, better filters could perhaps be constructed manually. On a related note, visualization of intermediate images produced by the convolutional layers is also a promising direction.}
@@ -639,9 +642,9 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 %\item{Multiple displacement fields: In \cite{paper:barbonegokhale,paper:barbonebamber} the authors show that a single strain or displacement field is not sufficient to predict the shear modulus field uniquely and multiple displacement fields are required for unique prediction of the shear modulus field. The use of multiple displacement fields can be considered within our current framework by increasing the number of channels the input images. See Section (\ref{sect:cnnarch}).} 
 \item{Assuming that inclusions are roughly circular, we can consider several other problems. Given a displacement field, strain field or shear modulus field (computed by any inversion procedure) we may train a CNN to compute : 1) Whether or not inclusions exist in the domain. This is the \textit{binary classification problem}. Our experience with this suggests that this problem can solved accurately in the absence of noise. 2) The number of inclusions in the problem 3) The shear modulus of each inclusion 4) The location of the center of each inclusion. 5) The radius of each inclusion.}
 %\item{Enforcing constraints on the shear modulus is easy in traditional iterative methods. We just supply bound constraints to the optimization algorithm. On the other hand, for the type of problem studied in this work, constraints on the shear modulus values result in constraints on the activation function of the final output layer, and not on the optimization variables. Applying bound constraints to the shear modulus is hard and requires the use of special activation functions which may result in the optimization getting stuck because the derivative of the activation function vanishes. We note that in this work, this problem has been alleviated to a large extent by the use of the twisted tanh activation function. Finally we note that one can solve a non-linearly constrained optimization problem to train the neural network in which the output of the final layer is constrained between allowable values of the shear modulus. However, when an unseen example from the test set is presented, it is not possible to guarantee that this constraint will be satisfied.}
-\item{A hybrid approach combining machine learning and traditional approaches (iterative or direct) will be interesting. We envision that the ML based approach will provide a measure of the confidence in its output. If this is confidence is low, then a solution will be computed using traditional direct or iterative methods and perhaps added to the machine learning training dataset.}
+\item{A hybrid approach combining machine learning and traditional approaches (iterative or direct) will be interesting. We envision that the ML based approach will provide a measure of the confidence in its output. If this is confidence is low, then a solution will be computed using traditional direct or iterative methods and added to the dataset.}
 \item{Extending the method studied in this document to predict multiple parameter fields will be interesting, because the method will have to examine the features in the displacement or strain fields and then decide which parameter field was responsible for producing those features. Such cases will occur when we try to predict both $\lambda(x)$ and $\mu(x)$ for linear elasticity both the nonlinear parameter $\gamma(x)$ and the linear parameter $\mu(x)$ as in \cite{paper:gokhale2008}. We think separate CNNs for each material parameter will be required. We will also need to use multiple displacement fields \cite{paper:barbonegokhale,paper:barbonebamber} by increasing the number of channels in our input data. Use of multiple displacement fields will also help to predict the shear modulus field uniquely.}
-\item{We think that using millions of training examples will improve the performance of the CNNs evaluated in this work. Using a large number of examples will also help incorporate large ranges of $\mu$, complex shapes for the inclusions, many different boundary conditions, and training with many noisy displacement or strain fields generated from noiseless fields. These noisy fields, corresponding to different realizations of noise, will correspond to the same true shear modulus field. Highly optimized finite element solvers and supporting state of the art computer hardware such as high end clusters of CPUs and GPUs and fast storage such as SSDs will be required for data generation and CNN training.}
+\item{We think that using millions of training examples will improve the performance of the CNNs evaluated in this work. Using a large number of examples will also help incorporate large ranges of $\mu$, complex inclusion shapes, different boundary conditions, and training with many noisy displacement or strain fields generated from noiseless fields. These noisy fields, corresponding to different realizations of noise, will correspond to the same true shear modulus field. Highly optimized finite element solvers and state of the art computer hardware such as high end clusters of CPUs and GPUs and fast storage such as SSDs will be required for data generation and CNN training.}
 \end{enumerate}
 %\clearpage
 \begin{appendices}
