@@ -6,6 +6,7 @@
 \usepackage[hscale=0.8,vscale=0.8]{geometry}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{booktabs}
 \usepackage[title]{appendix}
 \usepackage{algorithm}
 \usepackage{changepage}
@@ -35,6 +36,9 @@
 \setlength\parindent{20pt}
 \SetWatermarkText{Draft}
 \SetWatermarkScale{10}
+%
+% for booktabs
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
 %
 \newcommand{\beq}{\begin{equation}}
 \newcommand{\eeq}{\end{equation}}
@@ -220,33 +224,27 @@ In addition, since our problem setup is much closer to a compression rather than
   \caption{\label{fig:cnn_arch}CNN architecture used in this work. This figure was generated using \url{https://github.com/gwding/draw_convnet}.}
 \end{figure}  
 %
-%\begin{center}
-\begin{table}
-  \centering
-  \begin{tabular}{|c|c|c|}
-    \hline
-    \multirow{2}{*}{CNN Name} &  \multirow{2}{*}{Training data}           & \multirow{2}{*}{Prediction data}\\
-                              &                                           &  \\
-     \hline
-     \multirow{3}{*}{CNN1}    &  $\epsilon_{yy}$                           &  {$\epsilon_{yy}$ + 40dB noise}\\
-                              &  noiseless                                & 1) 1-3 inclusions (similar to training)\\
-                              &  1-3 inclusions                           & 2) cross shaped example\\
-     \hline
-     \multirow{3}{*}{CNN2}    &  $u_{y}$                                   & {$u_{y}$ + 40dB noise}\\
-                              &  noiseless                                 &  1-3 inclusions \\
-                              &  1-3 inclusions                            & (similar to training)\\  
-     \hline
-     \multirow{3}{*}{CNN3}    &  $\epsilon_{yy}$                           & {$\epsilon_{yy}$ + 40dB noise}\\
-                              &  noiseless                                & 1-3 inclusions \\
-                              &  1 inclusion                              & not similar to training\\
-
-    \hline
+\begin{table}\centering
+  \ra{1.3}
+  \begin{tabular}{ccc}
+    \toprule
+    %\multirow{2}{*}{CNN Name} &  \multirow{2}{*}{Training data}  & \multirow{2}{*}{Prediction data}\\
+    {CNN Name} &  {Training data}  & {Prediction data}\\
+    %&                                  &  \\
+    \midrule
+    \multirow{3}{*}{CNN1}    &  $\epsilon_{yy}$                           &  {$\epsilon_{yy}$ + 40dB noise}\\
+                              &  noiseless                                & 1-3 inclusions (similar to training)\\
+                              &  1-3 inclusions                           & cross shaped example\\
+     \midrule
+     \multirow{2}{*}{CNN2}    &  $u_{y}$, noiseless                        & {$u_{y}$ + 40dB noise}\\
+                              &  1-3 inclusions                            &  1-3 inclusions (similar to training)\\
+     \midrule
+     \multirow{2}{*}{CNN3}    &  $\epsilon_{yy}$, noiseless                & {$\epsilon_{yy}$ + 40dB noise}\\
+                              &  1 inclusion                               & 1-3 inclusions (not similar to training)\\
+    \bottomrule
   \end{tabular}
   \caption{\label{table:cnnparams} Table of CNNs trained and their parameters. All CNNs use the twisted tanh [0.75,5.25] activation function (see section (\ref{sect:outputact})). CNN1 and CNN2 have the same true shear modulus fields. All CNNs are trained on data containing circular inclusions.} 
 \end{table}
-%\end{center}
-%
-
 We train three CNNs whose parameters are are listed in table (\ref{table:cnnparams}). There are either $1,2$ or $3$ circular inclusions in each training example used to train CNN1 and CNN2 and there is exactly one circular inclusion in each training example used to train CNN3. CNN1 and CNN2 are tested on data similar to their training data. That is, the test data also consists of a displacement or strain field corresponding to  $1,2$ or $3$ circular inclusions.  CNN1 is additionally tested on a cross shaped example which lies outside its training data, because it is not circular. We train CNN3 with data containing only $1$ inclusion but test it on data containing $1,2$ or $3$ inclusions. 
 
 Each CNN has approximately $3.3$ million train-able parameters. We have $6000$ training images, each with $65\times97$ data points for the shear modulus. Hence, the total number of data points for the shear modulus are $6000\times97\times65=37.8$ million, approximately $11$ times the number of parameters being estimated.
@@ -319,20 +317,18 @@ We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mea
 
 % \subsection{\label{sect:compsofttanh} Reduction of haloes using twisted tanh}
 \begin{table}
+  \ra{1.3}
   \centering
-  \begin{tabular}{|c|c|c|c|}
-    \hline
+  \begin{tabular}{cccc}
+    \toprule
     \multirow{2}{*}{Activation}  & \multirow{2}{*}{Minimum $\mu$} & \multirow{2}{*}{Maximum $\mu$} & {Average}\\
                                  &                                &                                & scaled error\\
-    \hline
+    \midrule
     softplus                     &    0.0613    &  6.86       &  0.221 \\
-    \hline
     twisted tanh $[0.5, 5.5]$    &    0.392     &  5.54       & 0.215  \\     
-    \hline
     twisted tanh $[0.75,5.25]$   &    0.626     &  5.34       & 0.197  \\
-    \hline
     twisted tanh $[1.0, 5.0]$    &    0.805     &  5.07       & 0.191\\
-    \hline
+    \bottomrule
   \end{tabular}
   \caption{\label{table:muminmax} Maximum and minimum values of the shear modulus (over all test examples) and the scaled error for CNNs using the softplus and twisted tanh activation functions. We see that the more accurate our prior knowledge of the shear modulus, the more accurate the predictions. See also figure (\ref{fig:haloes}). See equation (\ref{eqn:averagescalederror}) for the definition of the average scaled error.}
 \end{table}
@@ -376,7 +372,7 @@ We note that, when we write: ``twisted tanh $[\mu_{lower},\mu_{upper}]$'' we mea
 In order to compare the softplus and twisted tanh activations we define two metrics: the \textit{scaled error} and the \textit{average scaled error}. We denote the scaled error for the $i^{th}$  test example by $\zeta_{i}$ and the average scaled error by $\zeta_{ave}$. They are defined as 
 \begin{subequations}
   \begin{align}
-  \zeta_{i} &\coloneqq \frac{\|\mu^{i,predicted} - \mu^{i,true}\|_{2}}{\|\mu^{i,true}\|_{2}},&\zeta_{ave} &\coloneqq \frac{\sum_{i=1}^{n_{test}}\zeta_{i}}{n_{test}} &\label{eqn:averagescalederror}
+  \zeta_{i} &\coloneqq \frac{\|\mu^{i,predicted} - \mu^{i,true}\|_{2}}{\|\mu^{i,true}\|_{2}} &\text{and} &&\zeta_{ave} &\coloneqq \frac{\sum_{i=1}^{n_{test}}\zeta_{i}}{n_{test}}. &\label{eqn:averagescalederror}
   \end{align}
 \end{subequations}
 where $\mu^{i,predicted}$ and $\mu^{i,true}$ are vectors containing the predicted and true values of the shear modulus for the $i^{th}$ test example and $n_{test}$ is the number of test examples. $\|\cdot\|_2$ is the Euclidean norm defined in equation (\ref{eqn:eucnorm}).
@@ -401,16 +397,15 @@ We train each CNN for 384 epochs to put them on a equal footing for comparison. 
 We introduce two metrics, the \textit{inclusion scaled error} and \textit{background scaled error}, to evaluate the performance of the neural networks. These metrics  measure the average percentage error in the shear modulus in the background or in the inclusion. We denote the inclusion scaled error for the $i^{th}$ test example by $\eta_{i}$ and its average by $\eta_{ave}$. They are defined as 
 \begin{subequations}
   \begin{align}
-  \eta_{i} &\coloneqq \frac{1}{n_{inc_i}}\sum_{j=1}^{n_{inc_i}}{\Bigg (}\frac{\mu^{i,predicted}_{j}-\mu^{i,true}_{j}}{\mu^{i,true}_{j}}{\Bigg )},  & \eta_{ave} &\coloneqq \frac{\sum_{i=1}^{n_{test}}\eta_{i}}{n_{test}}. &\label{eqn:averageincscalederror}
+  \eta_{i} &\coloneqq \frac{1}{n_{inc_i}}\sum_{j=1}^{n_{inc_i}}{\Bigg (}\frac{\mu^{i,predicted}_{j}-\mu^{i,true}_{j}}{\mu^{i,true}_{j}}{\Bigg )} &\text{and}  && \eta_{ave} &\coloneqq \frac{\sum_{i=1}^{n_{test}}\eta_{i}}{n_{test}}. &\label{eqn:averageincscalederror}
   \end{align}
 \end{subequations}
 In the above equations, $\mu_{j}^{i,true}$ is the $j^{th}$ component of a vector $\mu^{i,true}$ containing true values of the shear modulus for the $i^{th}$ test example, \textit{restricted to the true inclusion(s)} only. $\mu_{j}^{i,predicted}$ is the $j^{th}$ component of a vector $\mu^{i,predicted}$ containing corresponding predictions. $n_{inc_i}$ is the number of nodes in the inclusion(s) for the $i^{th}$ test example. $n_{test}$ is the number of test examples. The quantities $\eta_i$ and $\eta_{ave}$ capture how accurately the shear modulus of the inclusions is predicted. Positive values of $\eta_i$ and $\eta_{ave}$ indicate over-prediction. Negative values indicate under-prediction.
 
-The background scaled error for the $i^{th}$ example $\xi_{i}$ and its average $\xi_{ave}$ can be defined similarly, by replacing $n_{inc_i}$ in equation (\ref{eqn:averageincscalederror})  with $n_{back_i}$ (the number of nodes in the background) and restricting the vectors $\mu^{i,true}$ and $\mu^{i,predicted}$ to the background only.
-
+The background scaled error for the $i^{th}$ example $\xi_{i}$ and its average $\xi_{ave}$ can be defined similarly, by replacing $n_{inc_i}$ in equation (\ref{eqn:averageincscalederror})  with $n_{back_i}$ (the number of nodes in the background) and restricting the vectors $\mu^{i,true}$ and $\mu^{i,predicted}$ to the background only. They are defined as 
 \begin{subequations}
   \begin{align}
-  \xi_{i} &\coloneqq \frac{1}{n_{back_i}}\sum_{j=1}^{n_{back_i}}{\Bigg (}\frac{\mu^{i,predicted}_{j}-\mu^{i,true}_{j}}{\mu^{i,true}_{j}}{\Bigg )},  & \xi_{ave} &\coloneqq \frac{\sum_{i=1}^{n_{test}}\xi_{i}}{n_{test}}. &\label{eqn:averagebackscalederror}
+  \xi_{i} &\coloneqq \frac{1}{n_{back_i}}\sum_{j=1}^{n_{back_i}}{\Bigg (}\frac{\mu^{i,predicted}_{j}-\mu^{i,true}_{j}}{\mu^{i,true}_{j}}{\Bigg )} &\text{and} && \xi_{ave} &\coloneqq \frac{\sum_{i=1}^{n_{test}}\xi_{i}}{n_{test}}. &\label{eqn:averagebackscalederror}
   \end{align}
 \end{subequations}
 
@@ -617,24 +612,61 @@ We observe encouraging results with good agreement between the true and predicte
 
 The average inclusion scaled error, given in equation (\ref{eqn:averageincscalederror}) evaluated over inclusions having shear modulus in the range $[2.0,3.0]$ yields $-0.206$,$-0.347$ and $-0.247$ for CNN1, CNN2 and CNN3 respectively. This shows that all three networks perform worse than usual while detecting inclusions which whose shear modulus is low. 
 
-\begin{table}
-  \centering
-  \begin{tabular}{|c|c|c|c|}
-    \hline
+%\begin{table}
+%  \centering
+%  \begin{tabular}{|c|c|c|c|}
+%    \hline
+%    \multirow{3}{*}{CNN Name} & Average   & Average      &  Average      \\
+%                              & scaled    & inclusion    &  background   \\
+%                              & error     & scaled error &  scaled error \\
+%    \hline
+%    CNN1                      & $0.203$   & $-0.165$     & $-0.0215$     \\
+%    \hline                    
+%    CNN2                      & $0.267$   & $-0.309$     & $-0.107$      \\
+%    \hline
+%    CNN3                      & $0.206$   & $-0.191$     & $-0.0459$     \\
+%    \hline
+%  \end{tabular}
+%  \caption{\label{table:cnnstatsummary} Errors for the CNNs considered.}
+%\end{table}
+%
+\begin{table}\centering
+  \ra{1.3}
+  \begin{tabular}{cccc}
+    \toprule
     \multirow{3}{*}{CNN Name} & Average   & Average      &  Average      \\
                               & scaled    & inclusion    &  background   \\
                               & error     & scaled error &  scaled error \\
-    \hline
+    \midrule
     CNN1                      & $0.203$   & $-0.165$     & $-0.0215$     \\
-    \hline                    
+%    \hline                    
     CNN2                      & $0.267$   & $-0.309$     & $-0.107$      \\
-    \hline
+%    \hline
     CNN3                      & $0.206$   & $-0.191$     & $-0.0459$     \\
-    \hline
+  \bottomrule  
   \end{tabular}
   \caption{\label{table:cnnstatsummary} Errors for the CNNs considered.}
-\end{table}  
-
+\end{table}
+%
+%\begin{table}\centering
+%\ra{1.3}
+%\begin{tabular}{@{}rrrrcrrrcrrr@{}}\toprule
+%& \multicolumn{3}{c}{$w = 8$} & \phantom{abc}& \multicolumn{3}{c}{$w = 16$} &
+%\phantom{abc} & \multicolumn{3}{c}{$w = 32$}\\
+%\cmidrule{2-4} \cmidrule{6-8} \cmidrule{10-12}
+%& $t=0$ & $t=1$ & $t=2$ && $t=0$ & $t=1$ & $t=2$ && $t=0$ & $t=1$ & $t=2$\\ \midrule
+%$dir=1$\\
+%$c$ & 0.0790 & 0.1692 & 0.2945 && 0.3670 & 0.7187 & 3.1815 && -1.0032 & -1.7104 & -21.7969\\
+%$c$ & -0.8651& 50.0476& 5.9384&& -9.0714& 297.0923& 46.2143&& 4.3590& 34.5809& 76.9167\\
+%$c$ & 124.2756& -50.9612& -14.2721&& 128.2265& -630.5455& -381.0930&& -121.0518& -137.1210& -220.25%00\\
+%$dir=0$\\
+%$c$ & 0.0357& 1.2473& 0.2119&& 0.3593& -0.2755& 2.1764&& -1.2998& -3.8202& -1.2784\\
+%$c$ & -17.9048& -37.1111& 8.8591&& -30.7381& -9.5952& -3.0000&& -11.1631& -5.7108& -15.6728\\
+%$c$ & 105.5518& 232.1160& -94.7351&& 100.2497& 141.2778& -259.7326&& 52.5745& 10.1098& -140.2130\\
+%\bottomrule
+%\end{tabular}
+%\caption{Caption}
+%\end{table}
 On the basis of the average scaled error, table (\ref{table:cnnstatsummary}),  CNN1 outperforms CNN3 which in turn outperforms CNN2. From cumulative histograms shown in figures (\ref{fig:cnn1histob}),(\ref{fig:cnn2histob}) and (\ref{fig:cnn3histob}), the fraction of examples classified with average scaled error less than $0.25$ was $0.80$ for CNN1 and $0.40$ for CNN2 and $0.75$ for CNN3. Thus, the strain based networks CNN1 and CNN2 are more accurate at predicting the value of the shear modulus of the inclusion than the displacement based network CNN3. We think that exploring the physical meaning of the convolutional filters learned using Fourier analysis as in \cite{paper:pateloberai2019} is a promising direction for investigating the reason for out-performance.
 
 The results presented in section (\ref{sect:resultscnn3}) show that a CNN trained on one inclusion in the domain can generalize to multiple inclusions in the domain. The result in section (\ref{sect:resultscross}) shows that CNN1, trained on circular inclusions, does not generalize perfectly to non-circular examples. 
@@ -946,4 +978,30 @@ We present additional supporting results in figures (\ref{fig:app1result}),(\ref
 \end{tikzpicture}   
     \caption{\label{fig:typical_cnn}CNN architecture used in this work. This architecture is essentially the same the one used in the deep learning example in \cite{misc:udemy} in which it was used to classify images into two categories: 'cat' or 'dog'.}
 \end{figure}
+%
+%\begin{center}
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+    \multirow{2}{*}{CNN Name} &  \multirow{2}{*}{Training data}           & \multirow{2}{*}{Prediction data}\\
+                              &                                           &  \\
+     \hline
+     \multirow{3}{*}{CNN1}    &  $\epsilon_{yy}$                           &  {$\epsilon_{yy}$ + 40dB noise}\\
+                              &  noiseless                                & 1) 1-3 inclusions (similar to training)\\
+                              &  1-3 inclusions                           & 2) cross shaped example\\
+     \hline
+     \multirow{3}{*}{CNN2}    &  $u_{y}$                                   & {$u_{y}$ + 40dB noise}\\
+                              &  noiseless                                 &  1-3 inclusions \\
+                              &  1-3 inclusions                            & (similar to training)\\  
+     \hline
+     \multirow{3}{*}{CNN3}    &  $\epsilon_{yy}$                           & {$\epsilon_{yy}$ + 40dB noise}\\
+                              &  noiseless                                & 1-3 inclusions \\
+                              &  1 inclusion                              & not similar to training\\
+
+    \hline
+  \end{tabular}
+  \caption{\label{table:cnnparams} Table of CNNs trained and their parameters. All CNNs use the twisted tanh [0.75,5.25] activation function (see section (\ref{sect:outputact})). CNN1 and CNN2 have the same true shear modulus fields. All CNNs are trained on data containing circular inclusions.} 
+\end{table}
+%\end{center}
 %
