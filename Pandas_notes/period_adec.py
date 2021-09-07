@@ -26,3 +26,15 @@ print(p.asfreq('D',how='end'))
 p = pd.Period('2007',freq='A-JUL')
 print(p.asfreq('D',how='start'))
 print(p.asfreq('D',how='end'))
+
+# now from high frequency to low freq
+# this defines a period of one month
+p = pd.Period('Aug-2007','M')
+# now we are getting a bigger period from p
+# we are asking in which year period ending in June
+# does Aug-2007 lie
+# the answer is July-1-2007 to Jun-30-2008
+p2 = p.asfreq('A-JUN')
+# we can check the start and end dates
+print(p2.asfreq('D',how='start'))
+print(p2.asfreq('D',how='end'))
