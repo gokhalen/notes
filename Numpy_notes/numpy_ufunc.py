@@ -18,3 +18,11 @@ myadd = np.frompyfunc(myadd, 2, 1)
 
 print(myadd([1, 2, 3, 4], [5, 6, 7, 8]))
 print(type(myadd))
+
+
+# you get reductions and other special funcs for free
+
+print(myadd.reduce([[1,1],[2,2],[2,2]]))
+
+# also notice how in all examples we passed lists
+# and they were all converted to np arrays
