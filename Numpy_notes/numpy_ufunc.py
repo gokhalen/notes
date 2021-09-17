@@ -26,3 +26,16 @@ print(myadd.reduce([[1,1],[2,2],[2,2]]))
 
 # also notice how in all examples we passed lists
 # and they were all converted to np arrays
+# you also get axis and other arguments for free
+
+print(myadd.reduce([[1,1],[2,2],[2,2]],axis=1))
+
+arr = np.arange(15).reshape((3,5))
+
+# this throws a ValueError
+# myadd.accumulate(arr,axis=1)
+# luckily 
+# https://stackoverflow.com/a/27912352/13560598
+# shows a way around
+
+print(myadd.accumulate(arr,dtype=object,axis=1).astype(int))
