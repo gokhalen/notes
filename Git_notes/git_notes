@@ -28,3 +28,5 @@
 More: https://www.drupixels.com/blog/git-tags-guide-create-delete-push-tags-remote-and-much-more
 
 delete this and this and this
+
+6) To show graph: git log --all --decorate --oneline --graph
