@@ -1,0 +1,28 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Random binary classifier}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Introduction}
+Chollet in his book Deep Learning with Python, on page 82 says: 'With a balanced binary classification
+problem, the accuracy reached by a purely random classifier would be 50\%.'. This was not obvious to me.\\
+
+So basically we have a vector ${\bf{x}}$ of large length $n$, which contains either $0$ or $1$ with 50\% probability. This is our label vector, which is given. We now guess a vector ${\bf{y}}$, which contains either $0$ or $1$ with 50\% probability. We want to know how many entries in ${\bf{x}}$ and ${\bf{y}}$ match. That is we are interested in
+\beq
+\sum_{i=1}^{i=n} (x_{i} == y_{i}), 
+\eeq
+where $x_{i} == y_{i}$ yields $1$ if true, and $0$ otherwise.\\
+
+Without loss of generality, rearrange ${\bf{x}}$ so that the first half contains $0$ and the last half contains $1$.  Now, when we guess $\mathbf{y}$ for the first half of ${\mathbf{x}}$, we are going to get 50\% entries 0 and the other 50\% 1. So we get 50\% entries correct for the first half of ${\bf{x}}$. Similarly for the second half of ${\mathbf{x}}$ we are going to get 50\% entries correct and 50\% entries wrong. Combining the two halves, we are going to get 50\% entries correct.
+
+\end{document}
