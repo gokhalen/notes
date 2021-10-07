@@ -1,0 +1,22 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Recurrent neural networks}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Introduction}
+This is an exposition of Recurrent Neural Networks in Chollet pg 203. The input $I$ is of shape $(n_{batchsize},n_{lookback},n_{variables})$. This means that we have $n_{batchsize}$ time series, each with data at $n_{lookback}$ time-points for each of the $n_{variables}$. For each time series, the recurrent layer marches through $n_{lookback}$ time steps. The recurrent layer marches the output through time using the following equations:
+\beq
+y_{t+1} = \text{activation}(U_0\cdot{s_t} + W_0\cdot{x_t} + C_t\cdot{V_0} + b_{0}).
+\eeq
+Here $U_0,W_0,C_t \in \mathbb{R}^{n_{output}\times{n_{variables}}}$, $b_0 \in \mathbb{R}^{n_{output}}$, are internal weights which will be learned. $s_{t},x_{t} \in \mathbb{R}^{n_{variables}}$ are internal state and input data respectively and '$\cdot$' is a matrix-vector product. Other quantities will be marched through time using appropriate update equations. The above equation generates data which can be put into the shape $(n_{batchsize},n_{lookback},n_{output})$. If recurrent layers are stacked, then the full array is passed on to the next layer. Otherwise only the output at the final time is extracted resulting in an array of shape $(n_{batchsize},1,n_{output})$ which can be reshaped to $(n_{batchsize},n_{output})$.
+\end{document}
