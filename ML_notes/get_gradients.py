@@ -67,4 +67,15 @@ gradients = tape.gradient(loss,layer1.trainable_weights)
 # gradients[0] apparently contains all the weights connecting the input
 # to layer1. There are nveclength*nunits here
 # gradient[1] is the gradient wrt weights associated with the bias 
-print(f'{gradients=}')
+print(f'Functional {gradients=}')
+
+# if we want to apply it to the seq_model we can do
+layer_list = list(seq_model.layers)
+with tf.GradientTape() as tape:
+    logits1 = layer_list[0](x_train)
+    logits2 = layer_list[1](logits1)
+    logits3 = layer_list[2](logits2)
+    loss    = loss_fn(y_train.reshape((-1,1)),logits3)
+
+gradients = tape.gradient(loss,layer_list[0].trainable_weights)
+print(f'Sequential {gradients=}')
