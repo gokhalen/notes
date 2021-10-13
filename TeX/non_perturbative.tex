@@ -1,0 +1,43 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\limz}{\lim_{x\rightarrow{0}}}
+\usepackage{amsmath}
+\usepackage[hyphens]{url}
+\begin{document}
+\title{Non perturbative}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Introduction}
+I was browsing \url{https://en.wikipedia.org/wiki/Non-perturbative} and the page said that $f(x)=\exp(-\frac{1}{x^2})$ has all derivatives equal to zero at $x=0$. I tried to prove, $f'(0)=0$, but it is not trivial.
+\section{Proof}
+\ber
+f'(x) &=& \dd{\exp(-\frac{1}{x^2})}{x} \\
+      &=& \exp(-\frac{1}{x^2}) \dd{-\frac{1}{x^2}}{x} \\
+      &=& \exp(-\frac{1}{x^2})\frac{2}{x^3} \\
+      &=& 2\frac{\exp(-\frac{1}{x^2})}{x^3} \label{eqn:base}
+\eer
+To evaluate $f'(0)$ put $x=0$ in (\ref{eqn:base}) and see that it is of the form $\frac{0}{0}$. So we try L'H\^{o}pital's rule.
+\ber
+f'(0) &=& \lim_{x\rightarrow{0}}2\frac{\exp(-\frac{1}{x^2})}{x^3} \\
+&=& 2\lim_{x\rightarrow{0}}\frac{2\frac{\exp(-\frac{1}{x^2})}{x^3}}{3x^2} \\
+&=& \frac{4}{3}\lim_{x\rightarrow{0}}\frac{\exp(-\frac{1}{x^2})}{x^5}
+\eer
+This is not going anywhere: the power of $x$ in the denominator has actually increased. Using \url{https://math.stackexchange.com/questions/1258219/formula-for-the-nth-derivative-of-e-1-x2}, we rearrange (\ref{eqn:base}) as
+\beq
+f'(x) = 2\frac{\frac{1}{x^3}}{\exp(\frac{1}{x^2})} 
+\eeq
+Since this is of the form $\frac{\infty}{\infty}$ we can use L'H\^{o}pital's rule, assuming the limit of the derivative of the denominator is not zero.
+\ber
+f'(0) &=& 2 \limz \frac{ -3x^{-4}}{-2\frac{\exp(\frac{1}{x^2})}{x^3}} \\
+&=& 3 \limz \frac{ x^{-4}}{\frac{ \exp(\frac{1}{x^2})}{x^3}}   \\
+&=& 3 \limz \frac{ x^{-1}}{ \exp(\frac{1}{x^2})} \\
+&=& 3 \limz \frac{ -x^{-2}}{ -2\exp(\frac{1}{x^2})\frac{1}{x^3}} \qquad \text{ using L'H\^{o}pital's rule. }\\
+&=& \frac{3}{2}\limz \frac{x}{\exp(\frac{1}{x^2})}\\
+&=& 0
+\eer
+\end{document}

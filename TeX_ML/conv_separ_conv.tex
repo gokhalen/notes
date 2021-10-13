@@ -1,0 +1,32 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[hyphens]{url}
+\usepackage{amssymb} 
+\usepackage[utf8]{inputenc} 
+%\usepackage[ngerman]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{hyperref}
+\begin{document}
+\title{Conv2D and SeparableConv2D}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Introduction}
+We look at how use of separable convolutional layers lead to a decrease in the number of weights and thus may be speedier to train and prevent overfitting.
+\section{Conv2D}
+Let the dimension of each filter be $3\times3$ and let there be $n_{input\_chan}$ channels in the image. If we want to produce an output image with $n_{output\_chan}$ channels, then the tensor of the filter has the shape $(n_{output\_chan},3,3,n_{input\_chan})$. Note that the last dimension of the filter tensor has to be the same as the number of dimensions in the input channel because we are summing over them at every position in the input image. To produce each output channel, we need $3*3*n_{input\_channel}$ weights. In the special case $n_{input\_channel}=3$, we need 3*3*3 = 27 weights to produce a single channel in the output. Thus, to produce 3 channels in the output, we need $3*27=81$ weights
+\section{SeparableConv2D}
+This appears to work in the special case where $n_{input\_chan}=n_{output\_chan}=n$. The $i^{th}$ output channel is produced by convolving the $i^{th}$ $3\times3$ filter with the $i^{th}$ channel \textit{only}. Thus each channel requires only $3*3=9$ weights. In contrast in Conv2D, in the previous section, the $i^{th}$ output requires $3*3*n_{input\_chan}$ weights. This is where the saving in weights comes from. So, to get all $n$ output channels using Separable 2D, will take $n*3*3$ weights as oopposed to $n*3*3*n$ weights if full convolution (Conv2D) was used. 
+\section{References}
+1. Chollet's deeplearning book\\
+2. \url{https://medium.com/@zurister/depth-wise-convolution-and-depth-wise-separable-convolution-37346565d4ec}
+\end{document}
