@@ -1,0 +1,23 @@
+from keras.models import Sequential
+from keras import layers
+
+height      = 64
+width       = 64
+channels    = 4
+num_classes = 10
+
+model = Sequential()
+
+#model.add(layers.Conv2D(32,3,
+#                        activation='relu',
+#                        input_shape=(height,width,channels)
+#                        ))
+
+
+model.add(layers.SeparableConv2D(32,3,
+                                 activation='relu',
+                                 input_shape=(height,width,channels)
+                                 ))
+
+
+model.compile(optimizer='rmsprop', loss='categorical_crossentropy')

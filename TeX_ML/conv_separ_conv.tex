@@ -22,10 +22,21 @@
 \maketitle
 \section{Introduction}
 We look at how use of separable convolutional layers lead to a decrease in the number of weights and thus may be speedier to train and prevent overfitting.
-\section{Conv2D}
-Let the dimension of each filter be $3\times3$ and let there be $n_{input\_chan}$ channels in the image. If we want to produce an output image with $n_{output\_chan}$ channels, then the tensor of the filter has the shape $(n_{output\_chan},3,3,n_{input\_chan})$. Note that the last dimension of the filter tensor has to be the same as the number of dimensions in the input channel because we are summing over them at every position in the input image. To produce each output channel, we need $3*3*n_{input\_channel}$ weights. In the special case $n_{input\_channel}=3$, we need 3*3*3 = 27 weights to produce a single channel in the output. Thus, to produce 3 channels in the output, we need $3*27=81$ weights
-\section{SeparableConv2D}
-This appears to work in the special case where $n_{input\_chan}=n_{output\_chan}=n$. The $i^{th}$ output channel is produced by convolving the $i^{th}$ $3\times3$ filter with the $i^{th}$ channel \textit{only}. Thus each channel requires only $3*3=9$ weights. In contrast in Conv2D, in the previous section, the $i^{th}$ output requires $3*3*n_{input\_chan}$ weights. This is where the saving in weights comes from. So, to get all $n$ output channels using Separable 2D, will take $n*3*3$ weights as oopposed to $n*3*3*n$ weights if full convolution (Conv2D) was used. 
+\section{\label{sect:conv2d}Conv2D}
+Let the dimension of each filter be $3\times3$ and let there be $n_{input\_chan}$ channels in the image. If we want to produce an output image with $n_{output\_chan}$ channels, then the tensor of the filter has the shape $(n_{output\_chan},3,3,n_{input\_chan})$. Note that the last dimension of the filter tensor has to be the same as the number of dimensions in the input channel because we are summing over them at every position in the input image. To produce each output channel, we need $3*3*n_{input\_channel} + 1$ weights (the additional $1$ is for biasing). In the special case $n_{input\_channel}=3$, we need 3*3*3 + 1 = 28 weights to produce a single channel in the output. Thus, to produce $32$ channels in the output, we need $32*28=896$ weights (agrees with TensorFlow's model.summary())
+\section{\label{sect:separableconv2d}SeparableConv2D}
+This process works in two steps. In the first step, the channels of the input image are treated separately and an intermediate image is created which has $n_{input\_chan}$ channels. In the second step, a standard Conv2D layer is used to create the desired number of output channels. \\
+
+In the first step, to create the intermediate image with $n_{input\_chan}$ channels, the $i^{th}$ output channel is produced by convolving the $i^{th}$ $3\times3$ filter with the $i^{th}$ channel \textit{only}. Thus each channel requires only $3*3=9$ weights (we have skipped biasing here). So, to get all $n_{input\_chan}$ output channels will take $n_{input\_chan}*9$ weights. \\
+
+In the second step, we can take these $n_{input\_chan}$ output channels and mix them to produce $n_{output\_chan}$ channels, by using a Conv2D layer which has $n_{output\_chan}$ number of $1\times1\times{n_{input\_chan}}$ convolutional filters. The tensor of the filters in the layer has shape $(n_{output\_chan},1,1,n_{input\_chan})$. The number of weights in these $n_{separable\_output}$ convolutional filters is $n_{output\_chan}\times{n_{input\_chan}}+n_{output\_chan}$ (the additional $1$ weight is for biasing).\\
+
+The first step needs 3*9=27 weights. The second step requires $32*3+32=128$ weights. The total is $155$ which checks out with TensorFlow.
+
+\section{TF Code}
+\begin{center}
+  \lstinputlisting[language=Python]{conv\_separ\_conv.python}
+\end{center} 
 \section{References}
 1. Chollet's deeplearning book\\
 2. \url{https://medium.com/@zurister/depth-wise-convolution-and-depth-wise-separable-convolution-37346565d4ec}
