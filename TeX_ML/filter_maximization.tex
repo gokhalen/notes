@@ -1,0 +1,41 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[hyphens]{url}
+\usepackage{amssymb} 
+\usepackage[utf8]{inputenc} 
+%\usepackage[ngerman]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{hyperref}
+\begin{document}
+\title{Filter maximization}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Introduction}
+In Chollet's Deeplearning book in Section 5.4.2, 'Visualizing Filters', we define the loss as \\
+
+loss = K.mean(layer\_output[:, :, :, filter\_index]) \\
+
+
+After, computing the gradient of this loss, we \textit{maximize} it. The trick lies in this line:\\
+
+input\_img\_data += grads\_value * step\\
+
+To minimize, the update has a -ve sign, for maximization the sign is positive.
+
+Since the convolutional layer weights can be negative, leading to negative values in layer\_output, we might be perhaps better off maximizing:\\
+
+loss = K.mean(layer\_output[:, :, :, filter\_index]*layer\_output[:,:,:,filter\_index]) \\
+
+
+
+\end{document}
