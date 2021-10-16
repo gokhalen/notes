@@ -25,6 +25,7 @@ In Chollet's Deeplearning book in Section 5.4.2, 'Visualizing Filters', we defin
 
 loss = K.mean(layer\_output[:, :, :, filter\_index]) \\
 
+This loss represents the strength of the layer output \\
 
 After, computing the gradient of this loss, we \textit{maximize} it. The trick lies in this line:\\
 
@@ -35,6 +36,13 @@ To minimize, the update has a -ve sign, for maximization the sign is positive.
 Since the convolutional layer weights can be negative, leading to negative values in layer\_output, we might be perhaps better off maximizing:\\
 
 loss = K.mean(layer\_output[:, :, :, filter\_index]*layer\_output[:,:,:,filter\_index]) \\
+
+or if we are not worried about differentiability, \\
+
+loss = K.abs(K.mean(layer\_output[:, :, :, filter\_index]))
+
+
+
 
 
 
