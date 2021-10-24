@@ -135,5 +135,14 @@ This gives rise to the identity we have used before:
 \beq
 \phi^T\phi = \mathbb{I}^{k\times{k}}
 \eeq
+\section{POD}
+Why do we seek a projector? We seek a projector so that we can project the ODEs onto a lower dimensional basis, resulting in fewer odes to be marched in time. Suppose we are solving
+
+\ber
+\dd{w(t)}{t} = f(w(t),t) \qquad \text{ where } w \in \mathbb{R}^{N}
+\eer
+
+Once we have a projector say $\Sigma \in \mathbb{R}^{k\times{N}}$, we can multiply both sides of the above equation by $\Sigma$ to get a lower dimensional system. The singular value decomposition and the method of snapshots essentially provide a way to compute the projector $\Sigma$.
+
 \end{document}
 
