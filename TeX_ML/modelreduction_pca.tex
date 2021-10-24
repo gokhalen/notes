@@ -1,0 +1,139 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[hyphens]{url}
+\usepackage{amssymb} 
+\usepackage[utf8]{inputenc} 
+%\usepackage[ngerman]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{tikz}
+\definecolor {processblue}{cmyk}{0.96,0,0,0}
+\usetikzlibrary {positioning}
+\usepackage{hyperref}
+\begin{document}
+\title{Backpropagation}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Principal Component Analysis}
+As per Andrew Ng's notes, PCA goes like the following. First take the features $x^{(i)} \in \mathbb{R}^n$ which are assumed to have zero mean and and also perhaps scaled by the variance/standard deviation and construct the matrix
+
+\ber
+\Sigma = \frac{1}{m}\sum_{i=0}^{m}x^{(i)}{x^{(i)}}^{T}
+\eer
+%
+SVD of $\Sigma$ gives
+\beq
+\Sigma = USV^{T} \qquad U,S,V \in \mathbb{R}^{n\times{n}}
+\eeq
+Pick the first $k$ columns of $U$:
+\beq
+\hat{U} = U[:,0:k]  \qquad \hat{U} \in \mathbb{R}^{n\times{k}}
+\eeq
+Define new variables:
+\beq
+z^{(i)}   = {\hat{U}}^{T}x^{(i)} \qquad z^{(i)} \in \mathbb{R}^{k},\,\, {\hat{U}}^{T} \in \mathbb{R}^{k\times{n}}
+\eeq
+Now training data becomes $(z^{(0)},y^{(0)}), (z^{(1)},y^{(1)}), \cdots, (z^{(m)},y^{(m)})$. If needed, the original variables can be recovered using
+\beq
+x^{(i)} = \hat{U}z^{(i)}
+\eeq
+
+%
+%
+\subsection{Aside} 
+The matrix $\Sigma$ is symmetric-positive-semi-definite. To see this define:
+\beq
+a_{pq}^{(i)} = x^{(i)}_{p}{x^{(i)}_{q}}
+\eeq
+We have:
+\ber
+y_{p}a_{pq}^{(i)}y_{q} &=& y_{p}x^{(i)}_{p}{x^{(i)}_{q}}y_{q}  \\
+&=& (y_{c}x^{(i)}_{c})({x^{(i)}_{c}}y_{c}) \text{ ... switching dummy inidces to }c\\
+&=& (y_{c}x^{(i)}_{c}) \ge 0
+\eer
+Since, $\Sigma$ is a sum of all $a^{i}$, it is also symmetric-positive-semi-definite.
+\section{Model reduction in mechanics}
+We are typically interested in solving the system
+\beq
+\label{eqn:kxeqf}
+Kx = f \qquad \text{where } K\in\mathbb{R}^{n\times{n}} \text{ and } x,f \in \mathbb{R}^n
+\eeq
+$K$ is symmetric positive definite with distinct eigenvalues. We typically solve for $k$ eigenvectors of $K$ with $k \ll n$. We construct a matrix $\phi$ whose columns are the $k$ eigenvectors of $K$. So $\phi \in \mathbb{R}^{n\times{k}}$. We define new variables $y$
+\beq
+x = \phi{y} \qquad \text{ or equivalently } y = \phi^Tx
+\eeq
+This is possible because the eigenvectors of symmetric positive definite matrices with distinct eigenvalues are orthogoal. This gives
+\beq
+\phi^Tx = \phi^T\phi y = y \qquad \text{ since } \phi^T\phi = \mathbb{I}^{k\times{k}}, \qquad \mathbb{I} \text{ is the identity matrix.}
+\eeq
+Using the above equation in equation (\ref{eqn:kxeqf}) we get
+\beq
+K\phi{y} = f
+\eeq
+Multiplying by $\phi^T$ gives a square $k\times{k}$ system
+\beq
+\phi^TK\phi{y} = \phi^Tf
+\eeq
+\subsection{Aside 1}
+Saying $x=\phi{y}$ is equivalent to saying $x=y_{1}\phi_{1}+\cdots+y_{k}\phi_{k}$ where $\phi_m$ is the $m^{\text{th}}$ column of $\phi$, i.e. the $m^{\text{th}}$ eigenvector and $y_m$ is the $m^{\text{th}}$ component of $y$. This is the conventional expansion of $x$ using the significant eigenfunctions of $K$. To see this, consider the following small example
+\ber
+\begin{pmatrix}
+  \phi_{00} & \phi_{01} \\
+  \phi_{10} & \phi_{11} \\
+  \phi_{20} & \phi_{21} \\
+  \phi_{30} & \phi_{31} \\
+\end{pmatrix}
+\begin{pmatrix}
+  y_0 \\
+  y_1
+\end{pmatrix}
+=\begin{pmatrix}
+  \phi_{00}y_0 + \phi_{01}y_1 \\
+  \phi_{10}y_0 + \phi_{11}y_1 \\
+  \phi_{20}y_0 + \phi_{21}y_1 \\
+  \phi_{30}y_0 + \phi_{31}y_1\\
+\end{pmatrix}
+=y_0\begin{pmatrix}
+  \phi_{00}  \\
+  \phi_{10}  \\
+  \phi_{20}  \\
+  \phi_{30}  \\
+\end{pmatrix}
++
+y_1\begin{pmatrix}
+  \phi_{01}  \\
+  \phi_{11}  \\
+  \phi_{21}  \\
+  \phi_{31}  \\
+\end{pmatrix}
+\eer
+\subsection{Aside 2}
+Let $K\in\mathbb{R}^{n\times{n}} $ be a symmetric positive definite matrix with $n$ distinct eigenvalues. Let $x$ and $y$ be eigenvectors associated with $\lambda_x$ and $\lambda_y$. We have
+\beq
+Kx=\lambda_xx \implies y^TKx = \lambda_xy^Tx
+\eeq
+But,
+\beq
+y^TKx = (Ky)^Tx = (\lambda_yy)^Tx = \lambda_yy^Tx
+\eeq
+We must have
+\beq
+\lambda_xy^Tx = \lambda_yy^Tx
+\eeq
+Since $\lambda_x\ne\lambda_y$, we must have $y^Tx=0$.
+This gives rise to the identity we have used before:
+\beq
+\phi^T\phi = \mathbb{I}^{k\times{k}}
+\eeq
+\end{document}
+
