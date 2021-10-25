@@ -6,6 +6,16 @@
 \newcommand{\nn}{\nonumber}
 \newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\bw}{{\mathbf{w}}}
+\newcommand{\bff}{\mathbf{f}}
+\newcommand{\bPi}{\mathbf{\Pi}}
+\newcommand{\bQ}{{\mathbf{Q}}}
+\newcommand{\bq}{{\mathbf{q}}}
+\newcommand{\bK}{{\mathbf{K}}}
+\newcommand{\bU}{{\mathbf{U}}}
+\newcommand{\bS}{{\mathbf{S}}}
+\newcommand{\bV}{{\mathbf{V}}}
+
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage[hyphens]{url}
@@ -25,9 +35,10 @@
 \date{\today}
 \maketitle
 \section{Principal Component Analysis}
-As per Andrew Ng's notes, PCA goes like the following. First take the features $x^{(i)} \in \mathbb{R}^n$ which are assumed to have zero mean and and also perhaps scaled by the variance/standard deviation and construct the matrix
+According to Ng, we use PCA for data compression or visualization. As per Andrew Ng's notes, PCA goes like the following. First take the features $x^{(i)} \in \mathbb{R}^n$ which are assumed to have zero mean and and also perhaps scaled by the variance/standard deviation and construct the matrix
 
 \ber
+\label{eqn:discretexxt}
 \Sigma = \frac{1}{m}\sum_{i=0}^{m}x^{(i)}{x^{(i)}}^{T}
 \eer
 %
@@ -135,14 +146,57 @@ This gives rise to the identity we have used before:
 \beq
 \phi^T\phi = \mathbb{I}^{k\times{k}}
 \eeq
-\section{POD}
-Why do we seek a projector? We seek a projector so that we can project the ODEs onto a lower dimensional basis, resulting in fewer odes to be marched in time. Suppose we are solving
+%\section{POD}
+%Why do we seek a projector? We seek a projector so that we can project the ODEs onto a lower dimensional basis, resulting in fewer odes to be marched in time. Suppose we are solving
 
-\ber
-\dd{w(t)}{t} = f(w(t),t) \qquad \text{ where } w \in \mathbb{R}^{N}
-\eer
+%\ber
+%\dd{w(t)}{t} = f(w(t),t) \qquad \text{ where } w \in \mathbb{R}^{N}
+%\eer
 
-Once we have a projector say $\Sigma \in \mathbb{R}^{k\times{N}}$, we can multiply both sides of the above equation by $\Sigma$ to get a lower dimensional system. The singular value decomposition and the method of snapshots essentially provide a way to compute the projector $\Sigma$.
+%Once we have a projector say $\Sigma \in \mathbb{R}^{k\times{N}}$, we can multiply both sides of the above equation by $\Sigma$ to get a lower dimensional system. The singular value decomposition and the method of snapshots essentially provide a way to compute the projector $\Sigma$.
+
+\section{Proper Orthogonal Decomposition}
+This treatment is from \url{https://web.stanford.edu/group/frg/course_work/CME345/CA-CME345-Ch4.pdf}. Consider the following system of odes which can come from a discretization in space.
+
+\beq
+\label{eqn:podgovern}
+\dd{\bw(t)}{t} = \bff(\bw(t),t)
+\eeq
+
+Here $\bw,\bff \in \mathbb{R}^{N}$, where $N$ is a large number. Integrating this system in time takes large computational resources. So we want to convert it to a smaller system. This can be done by multiplying with an orthogonal matrix $\bPi\in\mathbb{R}^{k\times{N}}$ where $k\ll N$. Note that when a matrix multiplies a vector, we get a new vector we get a new vector whose components are the original vector multiplied by the rows of the matrix. If the rows have unit magnitude and are orthogonal to each other, then the new vector is the projection of the original vector E.g. Let $\bQ\in\mathbb{R}^{k\times{N}}$ be a matrix whose rows are orthogonal to each other.
+\beq
+\bQ = \begin{pmatrix} \bq_1^T\\ \bq_2^T\\ .\\ . \\ \bq_k^T\end{pmatrix} \text{ then }
+\bQ\bw = \begin{pmatrix} \bq_1^T\bw\\ \bq_2^T\bw\\ .\\ . \\ \bq_k^T\bw\end{pmatrix}
+\eeq
+We intend to multiply equation (\ref{eqn:podgovern}) with $\bPi$ to get a lower dimensional system. That is 
+\beq
+\label{eqn:podgovernproj}
+\dd{\bPi\bw(t)}{t} = \bPi\bff(\bw(t),t)
+\eeq
+The projection reduces the dimension of the system from $N$ to $k$, because $\bPi\bw,\bPi\bff \in \mathbb{R}^{k}$.\\
+
+The question now is: how to find the projector $\bPi$?. We want $\bPi$ such that the following quantity $J(\bPi)$ is minimized.
+
+\beq
+\label{eqn:jmin}
+J(\bPi)=\int_{0}^{T} \|\bw(t)-\bPi\bw(t)\|_2^2
+\eeq
+
+The following theorem comes to the rescue and gives us a way to compute $\bPi$. Define $\hat{\bK}\in \mathbb{R}^{N\times{N}}$ be
+
+\beq
+\label{eqn:continuousxxt}
+\hat{\bK} = \int_{0}^{T} \bw(t)\bw(t)^T dt
+\eeq
+
+Let $\hat{\lambda}_1,\hat{\lambda}_2,\hat{\lambda}_3,\cdots,\hat{\lambda}_N \ge 0$ be its eigenvalues and $\hat{\phi}_i$ be the associated eigenvectors. Then, if we are looking for an operator $\bPi$ of rank $k$ that minimizes equation (\ref{eqn:jmin}), then the range of the operator is spanned by the eigenvectors $\hat{\phi}_1,\hat{\phi}_2,\cdots,\hat{\phi}_k$ asssociated with the eigenvalues $\hat{\lambda}_1,\hat{\lambda}_2,\hat{\lambda}_3,\cdots,\hat{\lambda}_k \ge 0$. This means that we can take the SVD of $\hat{\bK}=\bU\bS\bV^T$ and take the first $k$ columns of $\bU$ to get $\bPi$. But since $\hat{\bK}$ is a large and dense matrix, the SVD of it is intractable. Farhat dicusses ways to get around this, using the method of snapshots and other tricks.
+
+\section{Connection with PCA as used in Data Science}
+We want to find an orthogonal projector us that minimizes a discrete version of equation (\ref{eqn:jmin}). This equation is given by
+\beq
+J = \sum_{i=0}^{m}\|x^{(i)}-\bPi{x^{(i)}}\|_2^2
+\eeq
+The rest of the theory is pretty much the same as POD theory. Equation (\ref{eqn:discretexxt}) is a discrete analog of (\ref{eqn:continuousxxt}).
 
 \end{document}
 
