@@ -1,0 +1,175 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\bw}{{\mathbf{w}}}
+\newcommand{\bff}{\mathbf{f}}
+\newcommand{\bPi}{\mathbf{\Pi}}
+\newcommand{\bQ}{{\mathbf{Q}}}
+\newcommand{\bq}{{\mathbf{q}}}
+\newcommand{\bK}{{\mathbf{K}}}
+\newcommand{\bU}{{\mathbf{U}}}
+\newcommand{\bS}{{\mathbf{S}}}
+\newcommand{\bV}{{\mathbf{V}}}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[hyphens]{url}
+\usepackage{amssymb} 
+\usepackage[utf8]{inputenc} 
+%\usepackage[ngerman]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{cancel}
+\definecolor {processblue}{cmyk}{0.96,0,0,0}
+\usetikzlibrary {positioning}
+\usepackage{hyperref}
+\begin{document}
+\title{Bayesian statistics in Python}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Bayes theorem}
+Source: \url{https://analyticsindiamag.com/a-guide-to-bayesian-statistics-in-python-for-beginners/}
+Bayes theorem:
+\beq
+P(A|B)P(B) = P(B|A)P(A) 
+\eeq
+Proof: Draw Venn Diagrams
+\ber
+P(A|B) = \frac{n_{A\cap{B}}}{n_B} \implies P(A|B)n_B = n_{A\cap{B}}\\
+P(B|A) = \frac{n_{A\cap{B}}}{n_A} \implies P(B|A)n_A = n_{A\cap{B}}
+\eer
+Above equations imply
+\ber
+P(A|B)n_B = P(B|A)n_B
+\eer 
+Divide both sides by n and use $P(A)=n_A/n$ and $P(B)=n_B/n$
+\beq
+\label{eqn:bayesidentity}
+P(A|B)\frac{n_B}{n} = P(B|A)\frac{n_B}{n} \implies P(A|B)P(B) = P(B|A)P(B)
+\eeq
+\section{Prior probability}
+$P(A)$ and $P(B)$ are prior probabilities of $A$ and $B$. These are global, universal probabilities, without taking into account any additional evidence.
+\section{Likelihood function and posterior probability}
+\ber
+P(A|B) = \frac{P(B|A)P(A)}{P(B)}, \qquad P(B|A) = \frac{P(A|B)P(B)}{P(A)}
+\eer
+In the formula on the left $P(A|B)$ is the posterior, $P(B|A)$ is the likelihood.\\
+In the formula on the right $P(B|A)$ is the posterior, $P(A|B)$ is the likelihood.
+\section{An identity}
+The problem solved in the above mentioned link is: For example, suppose we have 2 buckets A and B. 
+In bucket A we have 30 blue balls and 10 yellow balls, while in bucket B we have 20 blue and 20 yellow balls.
+We are required to choose one ball. We have picked a blue ball. What is the chance that we have picked 
+it from bucket A? A simple solution is There are 50 blue balls. 30 in bucket A and 20 in bucket B
+So, given that we have picked a blue ball the probability we have picked it from A is 30/50 = 0.6\\
+
+The link above solves this using the formula below, which is not obvious. Therefore we explain it.
+
+\ber
+\frac{P(Blue|A)P(A)}{P(Blue|A)P(A) + P(Blue|B)P(B)} = P(A/Blue)
+\eer
+
+Using equation (\ref{eqn:bayesidentity}) the denominator of the LHS becomes
+
+\beq
+P(A|Blue)P(Blue) + P(B|Blue)P(Blue) = P(Blue)*\cancelto{1}{(P(A|Blue) + P(B|Blue))}
+\eeq
+The second term is $1$ because once a blue ball has been selected, it has to come from $A$ or $B$. So, the denominator becomes $P(Blue)$. The LHS simplifies to
+\beq
+\frac{P(Blue|A)P(A)}{P(Blue)} = \frac{P(A|Blue)P(Blue)}{P(Blue)} = P(A|Blue)
+\eeq
+\section{Analytics India Mag Problem: SE post}
+Related SO post: \url{https://math.stackexchange.com/questions/4288910/bayes-theorem-selecting-balls}
+I'm trying to solve the problem defined here: \url{https://analyticsindiamag.com/a-guide-to-bayesian-statistics-in-python-for-beginners/} but I cannot understand the explanation of the second part. The first part of the problem, which is:
+
+\textbf{Part 1}
+For example, suppose we have 2 buckets A and B. In bucket A we have 30 blue balls and 10 yellow balls, while in bucket B we have 20 blue and 20 yellow balls. We are required to choose one ball. What is the chance that we choose bucket A?
+
+
+{\textbf{Solution}} Let event $A$ be selecting bucket A. Let event $B$ be selecting bucket B. Let $Blue$ be the event of selcting blue ball and $Yellow$ be the event of selecting the yellow ball.  We are asked to find $P(A|Blue)$. By Bayes' theorem
+
+\beq
+P(A|Blue) = \frac{P(Blue|A)P(A)}{P(Blue)}
+\eeq
+
+Since a blue ball has to be picked from bucket A or B we can write
+
+\beq
+P(Blue) = P(Blue|A)P(A) + P(Blue|B)P(B)
+\eeq
+
+So our equation becomes
+
+\ber
+P(A|Blue) &=& \frac{P(Blue|A)P(A)}{P(Blue|A)P(A) + P(Blue|B)P(B)}\\
+          &=& \frac{(3/4)*(1/2)}{(3/4)*(1/2)+(1/2)*(1/2)} \\
+          &=& 0.6
+\eer
+
+Similarly,
+
+\ber
+P(B|Blue)   &=& 0.4 \\
+P(A|Yellow) &=& \frac{1}{3}\\
+P(B|Yellow) &=& \frac{2}{3}
+\eer
+
+
+
+{\textbf{Part 2}} We put back the ball chosen in Part 1. We choose another ball again, this time it turns out to be yellow. What is the probability that both times we choose the ball from bucket A?.
+
+{\textbf{This, I do not understand}}.
+
+It seems to me that we have two events:\\
+Event $C$: A | Yellow  (Bucket A given ball is Yellow) \\
+Event $D$: A | Blue    (Bucket B given ball is Blue)\\
+And so we have\\
+\ber
+P(C) = P(A|Yellow) = \frac{1}{3} \\
+P(D) = P(A|Blue)   = 0.6
+\eer
+
+And it seems that we are interested in $P(C|D)$ which is, by Bayes' theorem
+\beq
+P(C|D) = \frac{P(D/C)P(C)}{P(D)}
+\eeq
+And I have no idea what to do next.\\
+
+It seems that they are doing 
+\ber
+P(C|D)&=&P(A|Yellow\Big{|}A|Blue)\\
+&=& \frac{P(Yellow|A)P(A|Blue)}{P(Yellow)} \\
+&=& \frac{0.25*0.6}{P(Yellow|A)P(A|Blue)+P(Yellow|B)P(B|Blue)} \\
+      &=& \frac{0.15}{0.25*0.6+0.5*0.4} \\
+      &=& \frac{0.15}{0.35} \\
+      &=& 0.4285
+\eer
+But I cannot understand why.
+\section{ Graham's Answer}
+Do not define events as below:\\
+Event $C$: A | Yellow  (Bucket A given ball is Yellow) \\
+Event $D$: A | Blue    (Bucket B given ball is Blue)\\
+
+\noindent{Define them like this}:\\
+$A$: Selecting bucket A \\
+$B$: Selecting blue ball \\
+$Y$: Selecting yellow ball \\
+
+\noindent Events are actions. Do not define an event as selecting bucket A given Yellow.\\
+
+For Part 1:
+
+\ber
+P(A|B) &=& \frac{P(B|A)P(A)}{P(B)} \\
+       &=& \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|A^\complement)P(A^\complement)} \qquad \text{ where  } A^\complement \text{ is the complement of } A
+\eer
+
+\end{document}
+
