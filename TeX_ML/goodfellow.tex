@@ -1,0 +1,33 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\bD}{{\mathbf{D}}}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage[hyphens]{url}
+\usepackage{amssymb} 
+\usepackage[utf8]{inputenc} 
+%\usepackage[ngerman]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{cancel}
+\definecolor {processblue}{cmyk}{0.96,0,0,0}
+\usetikzlibrary {positioning}
+\usepackage{hyperref}
+\begin{document}
+\title{Notes from Goodfellow}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{PCA Section 2.12}
+Given a decoder $\pmb{D}$, what should the encoder be? The idea is that of all the points $\pmb{c}$ that one could map $\pmb{x}$ to, we should choose the point $\pmb{c}^*$ that minimizes $\|\pmb{x}-g(\pmb{c})\|_2$. Taking derivatives we find that the minimizer satisfies $\pmb{c}^* = \pmb{D}^T\pmb{x}$. So, $\pmb{D}^T$ is our encoder.  
+\end{document}
+
