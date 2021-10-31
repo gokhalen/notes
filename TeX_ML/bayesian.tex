@@ -168,8 +168,20 @@ For Part 1:
 
 \ber
 P(A|B) &=& \frac{P(B|A)P(A)}{P(B)} \\
-       &=& \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|A^\complement)P(A^\complement)} \qquad \text{ where  } A^\complement \text{ is the complement of } A
+&=& \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|A^\complement)P(A^\complement)} \qquad \text{ where  } A^\complement \text{ is the complement of } A \\
+&=& \frac{\frac{3}{4}\frac{1}{2}}{\frac{3}{4}\frac{1}{2}+\frac{2}{4}\frac{1}{2}}\\
+&=& \frac{3}{5}
 \eer
 
+For Part 2: $P(A|Y,B)$ means the probability of $A$ given $Y$, given that we are in the space in which $B$ has occurred.
+
+\ber
+P(A|Y,B) &=& \frac{P(Y|A,B)P(A|B)}{P(Y|B)} \\
+&=& \frac{P(Y|A,B)P(A|B)}{P(Y|A,B)P(A|B) + P(Y|A^\complement,B)P(A^\complement|B)}
+\eer
+We know $P(Y|A,B)=P(Y|A)=1/4$
+\ber
+P(A|Y,B) &=& \frac{\frac{1}{4}\frac{3}{5}}{\frac{1}{4}\frac{3}{5} + \frac{2}{4}\frac{2}{5}} = \frac{3}{7}
+\eer
 \end{document}
 
