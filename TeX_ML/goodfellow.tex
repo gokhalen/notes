@@ -107,13 +107,22 @@ Replacing that in the formula shown above:
 p(x=k) = \frac{12!}{7!2!3!}{0.4}^7{0.35}^2{0.25}^3 = 0.0248
 \eer
 \section{Equation 3.52}
+$a$ and $c$ are independent given $b$
 \beq
 p(a,b,c) = p(a)p(b|a)p(c|b)
 \eeq
 $p(a,b,c)$ seems to be the probability of $a$ and $b$ and $c$ occurring. The rhs can be simplified to
 \beq
-p(a,b)p(c|b)
+p(a,b)p(c|b) = p(a,b)p(c|a,b)  \text{ because of independence}
 \eeq
 which is the same thing as $p(a,b,c)$.
+\section{Equation 5.1}
+\beq
+p(\mathbf{x}) = p(x_1)p(x_2|x_1)p(x_3|x_1,x_2)
+\eeq
+RHS =
+\beq
+p(x_1\cap x_2)p(x_3|x_1x_2) = p(x_1\cap x_2 \cap x_3) = p(\mathbf{x})
+\eeq
 \end{document}
 

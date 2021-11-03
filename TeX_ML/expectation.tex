@@ -1,0 +1,41 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\bw}{{\mathbf{w}}}
+\newcommand{\bff}{\mathbf{f}}
+\newcommand{\bPi}{\mathbf{\Pi}}
+\newcommand{\bQ}{{\mathbf{Q}}}
+\newcommand{\bq}{{\mathbf{q}}}
+\newcommand{\bK}{{\mathbf{K}}}
+\newcommand{\bU}{{\mathbf{U}}}
+\newcommand{\bS}{{\mathbf{S}}}
+\newcommand{\bV}{{\mathbf{V}}}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[hyphens]{url}
+\usepackage{amssymb} 
+\usepackage[utf8]{inputenc} 
+%\usepackage[ngerman]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{cancel}
+\definecolor {processblue}{cmyk}{0.96,0,0,0}
+\usetikzlibrary {positioning}
+\usepackage{hyperref}
+\begin{document}
+\title{Expectation}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Expectation}
+Let a fair die be tosses. The set out outcomes is ${1,2,3,4,5,6}$. $E(x)$ is $\frac{1/6}(1+2+3+4+5+6)=3.5$. What is $E(xE(x))$. One way to understand it is to consider $xE(x)$ as another random variable capable of taking values ${3.5,7,10.5,14,17.5,21}$. So, $E(xE(x))=\frac{1}{6}(3.5+7+10.5+14+17.5+21)=3.5*\frac{1}{6}(1+2+3+4+5+6)=3.5^2=E(x)^2$
+\end{document}
+
