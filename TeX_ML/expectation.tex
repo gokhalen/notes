@@ -60,5 +60,34 @@ Note: $P(X=y,Y=y)=P(X=x|Y=y)P(y)$ \text { because } $P(x\cup{y}) = P(x|y)p(y)$.
 &=& E(xy) -2E(x)E(y) + E(x)E(y) \\
 &=& E(xy) - E(x)E(y)
 \eer
+\section{Expectation and independence}
+$x,y$ are independent. Therefore, $P(x,y)=P(x)P(y)$
+\ber
+E(xy) = \sum_{x}\sum_y xy P(xy) =  \sum_{x}\sum_y xy P(x)P(y) = \sum_x xP(x) \sum_y yP(y) = E(x)E(y)
+\eer
+\section{Expectation and linearity}
+Graham Kemp's comment on \url{https://math.stackexchange.com/questions/1810365/proof-of-linearity-for-expectation-given-random-variables-are-dependent}.
+\ber
+Y = X_1 + X_2 \\
+E(Y) &=& \sum_{x_1,x_2}(x_1 + x_2)P(x_1,x_2) \\
+&=& \sum_{x_1}\sum_{x_2}x_1P(x_1,x_2) + \sum_{x_1}\sum_{x_2}x_2P(x_1,x_2) \\
+&=& \sum_{x_1}x_1\sum_{x_2}P(x_1,x_2)  + \sum_{x_2}x_2\sum_{x_1}P(x_1,x_2) \\
+&=& \sum_{x_1}x_1P(x_1) + \sum_{x_2}x_2P(x_2) \text{...}P(x_2)=\sum_{x_1}P(x_1,x_2)\\
+&=& E(X_1) + E(X_2)
+\eer
+\section{Expectation of a constant}
+Interpret $E(c)$ as the random variable $x$ taking the value $c$ with 100\% probability. So,
+\ber
+E(c) = \sum_{x}xP(x) = cP(c) = c*1 = c
+\eer
+\section{Variance of addition}
+\ber
+Y &=& X_1 + X_2 \\
+\text{var}(Y) &=& E(Y^2) - (E(Y))^2\\
+&=& E(X_1^2 + 2X_1X_2 + X_2^2) - (E(X_1) + E(X_2))^2 \\
+&=& E(X_1^2) + 2E(X_1X_2) + E(X_2^2) - (E(X_1)^2 + E(X_2)^2 + 2E(X_1)E(X_2)) \\
+&=& E(X_1^2) - E(X_1)^2 + E(X_2^2) - E(X_2)^2 +2(E(X_1X_2)-E(X_1)E(X_2)) \\
+&=& \text{var}(X_1) + \text{var}(X_2) +2\text{cov}(X_1,X_2)
+\eer
 \end{document}
 
