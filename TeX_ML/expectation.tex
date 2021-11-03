@@ -36,7 +36,7 @@
 \date{\today}
 \maketitle
 \section{Expectation}
-Let a fair die be tosses. The set out outcomes is ${1,2,3,4,5,6}$. $E(x)$ is $\frac{1}{6}(1+2+3+4+5+6)=3.5$. What is $E(xE(x))$. One way to understand it is to consider $xE(x)$ as another random variable capable of taking values ${3.5,7,10.5,14,17.5,21}$. So, $E(xE(x))=\frac{1}{6}(3.5+7+10.5+14+17.5+21)=3.5*\frac{1}{6}(1+2+3+4+5+6)=3.5^2=E(x)^2$.
+Let a fair die be tosses. The set out outcomes is ${1,2,3,4,5,6}$. $E(x)$ is $\frac{1}{6}(1+2+3+4+5+6)=3.5$. What is $E(xE(x))$. One way to understand it is to consider $xE(x)$ as another random variable capable of taking values ${3.5,7,10.5,14,17.5,21}$. So, $E(xE(x))=\frac{1}{6}(3.5+7+10.5+14+17.5+21)=3.5*\frac{1}{6}(1+2+3+4+5+6)=3.5^2=E(x)^2$. Basiclly, $E(x)$ is number, not a random variable, and we can take it outside to get $E(x)E(x)$ 
 \section{Total Expectation}
 From \url{https://en.wikipedia.org/wiki/Law_of_total_expectation}.
 \beq
@@ -52,5 +52,13 @@ E(E(X|Y)) &=& E\Big[\sum_{x}xP(X=x|Y)\Big] \\
 &=& E(X)
 \eer
 Note: $P(X=y,Y=y)=P(X=x|Y=y)P(y)$ \text { because } $P(x\cup{y}) = P(x|y)p(y)$.
+\section{Covariance and expectation}
+\ber
+\text{cov}(x,y) &=& E((x-E(x))(y-E(y))) \\
+&=& E(xy - xE(y) - yE(x) + E(x)(E(y))) \\
+&=& E(xy)- E(xE(y)) - E(yE(x)) + E(E(x)E(y)) \\
+&=& E(xy) -2E(x)E(y) + E(x)E(y) \\
+&=& E(xy) - E(x)E(y)
+\eer
 \end{document}
 
