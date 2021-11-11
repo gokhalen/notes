@@ -35,7 +35,7 @@
 \author{Nachiket Gokhale}
 \date{\today}
 \maketitle
-\section{Expectation}
+\section{Expectation and other statistics. Mostly from Goodfellow}
 Let a fair die be tosses. The set out outcomes is ${1,2,3,4,5,6}$. $E(x)$ is $\frac{1}{6}(1+2+3+4+5+6)=3.5$. What is $E(xE(x))$. One way to understand it is to consider $xE(x)$ as another random variable capable of taking values ${3.5,7,10.5,14,17.5,21}$. So, $E(xE(x))=\frac{1}{6}(3.5+7+10.5+14+17.5+21)=3.5*\frac{1}{6}(1+2+3+4+5+6)=3.5^2=E(x)^2$. Basiclly, $E(x)$ is number, not a random variable, and we can take it outside to get $E(x)E(x)$ 
 \section{Total Expectation}
 From \url{https://en.wikipedia.org/wiki/Law_of_total_expectation}.
@@ -89,7 +89,7 @@ E(c) = \int xP(c) = \int x \delta(x-c) = c
 Y &=& X_1 + X_2 \\
 \text{var}(Y) &=& E(Y^2) - (E(Y))^2\\
 &=& E(X_1^2 + 2X_1X_2 + X_2^2) - (E(X_1) + E(X_2))^2 \\
-&=& E(X_1^2) + 2E(X_1X_2) + E(X_2^2) - (E(X_1)^2 + E(X_2)^2 + 2E(X_1)E(X_2)) \\bg
+&=& E(X_1^2) + 2E(X_1X_2) + E(X_2^2) - (E(X_1)^2 + E(X_2)^2 + 2E(X_1)E(X_2)) \\
 &=& E(X_1^2) - E(X_1)^2 + E(X_2^2) - E(X_2)^2 +2(E(X_1X_2)-E(X_1)E(X_2)) \\
 &=& \text{var}(X_1) + \text{var}(X_2) +2\text{cov}(X_1,X_2)
 \eer

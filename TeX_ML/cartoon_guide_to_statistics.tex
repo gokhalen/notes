@@ -1,0 +1,250 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\bD}{{\mathbf{D}}}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage[hyphens]{url}
+\usepackage{amssymb} 
+\usepackage[utf8]{inputenc}
+\usepackage{cancel}
+%\usepackage[ngerman]{babel} 
+\usepackage{hyperref}
+\begin{document}
+\title{Notes from Cartoon Guide to Statistics}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Chapter 5: Tale of two distributions}
+1. Binomial: mean $np$, variance $np(1-p)$, $p$ is prob of success (1) failure (0)\\
+2. Normal: pdf
+\beq
+f(x|\mu,\sigma) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}(\frac{\mu-\sigma}{\sigma})^2}
+\eeq
+$\mu$ is mean and $\sigma$ is standard deviation.\\
+3. Binomial distribution is assymetric but assymetry gets overwhelmed when $n$ is large.\\
+4. Fuzzy CLT: data that are influenced by many small and unrelated random effects are approximately normally distributed.
+\beq
+\text{Pr}(a\le{x}\le{b}) = F(\frac{b-\mu}{\sigma}) - F(\frac{a-\mu}{\sigma})
+\eeq
+5. Normal as a good approximation to binomial $np \ge 5 $ and $n(1-p)\ge 5$
+\section{CGS Chapter 6: Sampling}
+1. Sampling for defective pieces: sample size $n$, $x$ number of good pieces, $\hat{p}=\frac{x}{n}$. How is $\hat{p}$ distributed around $p$ (the true success rate). $\hat{p}$ is an \textit{estimator} of $p$.\\
+2. Let $\hat{P}$ be the random variable and let $\hat{p}$ be the values it takes.\\
+3. We know (by magic)
+\ber
+E(\hat{P}) = p , \sigma(\hat{P}) = \sqrt{\frac{p(1-p)}{n}}\\
+\hat{P}\sim\mathcal{N}(p,\sigma(\hat{P})), \text{ the normal distribution}
+\eer
+4. \textit{Estimate} is a single measure or observation. \textit{Estimator} is a rule for getting estimates.\\
+\subsection{Sampling distribution of the mean}
+1. Need to know average length of pickles. \\
+2. Randomly select $n$ pickles and measure their lengths $x_1,x_2,\cdots,x_n$.\\
+3. Let $X_i$ be a random variable allowed to take value $x_i$, the length of the $i^{th}$ pickle.
+\ber
+E(X_i) &=& \mu \text{ the true mean }, \sigma(X_i) = \sigma \text{ the true standard deviation} \\
+\bar{X} &=& \frac{X_1+X_2+\cdots+X_n}{n}\\
+E(\bar{X}) &=& \mu \qquad \sigma(\bar{X}) = \frac{\sigma}{\sqrt{n}}\\
+\bar{X} &\sim& \mathcal{N}(\mu,\frac{\sigma}{\sqrt{n}})
+\eer
+\subsection{t-distribution}
+1. Need because of problems with CLT. We need large $n$ and we have no knowledge of $\sigma$.\\
+2  Solution: estimate $\sigma$ using
+\beq
+s = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2}
+\eeq
+3. In place of the random-variable
+\beq
+Z = \frac{\bar{X}-\mu}{\frac{\sigma}{\sqrt{n}}}
+\eeq
+use
+\beq
+t=\frac{\bar{X}-\mu}{\frac{s}{\sqrt{n}}}
+\eeq
+$t$ is distributed according to the student's-t distribution and approaches normal distribution as $n\rightarrow\infty$.
+\section{CGS Chapter 7: Confidence intervals}
+\subsection{For true or false type problems}
+1. For true or false type problems\\
+2. $p$ fraction of candidates who vote for Mr. Astute. We don't know $p$ and are trying to estimate it.\\
+3. We take a sample of 1000 voters and determine $\hat{p}=\frac{550}{1000}$. $\hat{p}$ is an estimator of $p$.
+4. We want to get limits  of the form
+\beq
+p \in \hat{p} \pm \text{error} , \text{ say 95\% of the time}
+\eeq
+5. We know (by magic)
+\beq
+E(\hat{p}) = p \text{ and } \sigma(\hat{p}) = \sqrt{\frac{p(1-p)}{n}} \text{ and } \hat{p} \sim \mathcal{N}(p,\sigma(\hat{p}))
+\eeq
+Because $\hat{p} \sim \mathcal{N}(p,\sigma(\hat{p}))$, if we repeat the sampling experiment a large number of times, 95\% of the time we are going to get 
+\beq
+Z = \frac{\hat{p}-p}{\sigma(\hat{p})}
+\eeq
+within
+\beq
+-1.96 \le Z \le 1.96,
+\eeq
+where the 1.96 is linked to the 95\% confidence using standard normal pdf. Therefore,
+\ber
+-1.96 \le \frac{\hat{p}-p}{\sigma(\hat{p})} \le 1.96 \\
+-1.96\sigma(\hat{p}) \le \hat{p}-p \le 1.96\sigma(\hat{p}) \\
+-1.96\sigma(\hat{p}) - \hat{p}\le -p \le 1.96\sigma(\hat{p}) - \hat{p}
+\eer
+Since multiplying by -1 reverses inequalities,
+\ber
+1.96\sigma(\hat{p}) + \hat{p} \ge p \ge -1.96\sigma(\hat{p}) + \hat{p} 
+\eer
+Rearranging
+\beq
+\hat{p} -1.96\sigma(\hat{p}) \le p \le \hat{p} + 1.96\sigma(\hat{p})
+\eeq
+So we can say,
+\beq
+p \in \hat{p} \pm 1.96\sigma(\hat{p}), \text{ with 95\% confidence }
+\eeq
+In practice, we will approximate $\sigma(\hat{p})$ using
+\beq
+\text{SE}(\hat{p}) = \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
+\eeq
+So, finally, we can say
+\beq
+p \in \hat{p} \pm 1.96\text{SE}(\hat{p}), \text{ with 95\% confidence }
+\eeq
+\subsubsection{Increasing confidence}
+The bounds derived previously are of the form
+\beq
+p \in \hat{p} \pm \text{E}
+\eeq
+where $E$ is the error given by
+\beq
+E = Z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}, \,\, 1-\alpha \text{ is the confidence }
+\eeq
+There are two things we can do:
+1. Given $Z_{\alpha/2},n,\hat{p}$, we can find $E$.\\
+2. Given $E,Z_{\alpha/2},\hat{p}$, we can find the sample size $n$.
+Typically large $n$ is not useful in practice because we run into problems with bias. Therefore \$ are better spent reducing bias.
+\subsection{Confidence intervals for the mean}
+\beq
+\bar{X} \sim \mathcal{N}(\mu,\frac{\sigma}{\sqrt{n}})
+\eeq
+As before because $\bar{X}\sim\mathcal{N}$, we can see if we compute the mean by sampling a large number of times, 95\% of the time, we will get
+\beq
+-1.96 \le Z=\frac{\bar{X}-\mu}{\frac{\sigma}{\sqrt{n}}} \le 1.96
+\eeq
+Replace $\sigma$ by $s$ the sample standard deviation. We get finally,
+\beq
+\bar{X} - 1.96\text{SE}(\bar{X}) \le \mu \le \bar{X} + 1.96\text{SE}(\bar{X}),
+\eeq
+where $\text{SE}(\bar{X})=\frac{s}{\sqrt{n}}$.
+\subsection{Confidence intervals for students-t}
+1. For small sample sizes.
+2. Choose distribution with $n-1$ degrees of freedom.
+3. For confidence level $(1-\alpha)$ we can say,
+\beq
+\bar{X} - t_{\alpha/2}\text{SE}(\bar{X}) \le \mu \le \bar{X} + t_{\alpha/2}\text{SE}(\bar{X}),
+\eeq
+where,
+\beq
+SE(\bar{X}) = \frac{s}{\sqrt{n}}
+\eeq
+\section{CGS: Chapter 8, Hypothesis testing}
+\subsection{Basic idea}
+1. It's all about answering the question ``Could these observations really have occurred by chance?'' \\
+2. Steps:
+\begin{enumerate}
+\item{Formulate hypothesis: $H_0$: Null Hypothesis, $H_a$: Alternate hypothesis}
+\item{$H_o$: usually that the obervations ocurred purely by chance.}
+\item{Identify test-statistic: $Z$ and its distribution as implied by $H_0$.}
+\item{Choose p-value: If $H_0$ is true, what is the chance of observing something as extreme as $Z$. Basically Pr$(Z)$.}
+\item{Level of significance $\alpha$: if p-value $<$ alpha, reject $H_0$}  
+\end{enumerate}
+\subsection{Large sample significance test for proportions}
+1. By proportions we mean random variable can take only true or false values.
+\begin{enumerate}
+\item{{\textbf{Step 1}} Null Hypothesis: $H_0: p = p_0$ Note: we choose $p_0$}
+  \begin{enumerate}[label=(\alph*)]
+  \item{$H_a: p \ge p_0$}
+  \item{$H_a: p \le p_0$}
+  \item{$H_a: p \ne p_0$}  
+  \end{enumerate}
+\item{{\textbf{Step 2}} Test statistic:  \beq Z_{obs} = \frac{\hat{p}-p_0}{\sqrt{\frac{p_0(1-p_0)}{n}}} \eeq}
+\item{{\textbf{Step 3}} Compute p-values acccording to which alternate hypothesis $H_a$ was chosen}
+  \begin{enumerate}[label=(\alph*)]
+  \item{\beq\text{p-value}=\text{Pr}(z>Z_{obs})\eeq}
+  \item{\beq\text{p-value}=\text{Pr}(z<Z_{obs})\eeq}
+  \item{\beq\text{p-value}=\text{Pr}(|z|<|Z_{obs}|)\eeq}
+  \end{enumerate}
+\item{{\textbf{Step 4}} If p-value $<\,\alpha$ reject $H_0$ and accept $H_a$.}
+\end{enumerate}
+\subsection{Large sample test for the mean}
+Same as before, except:
+\beq
+Z_{obs} = \frac{\bar{X}-\mu_0}{\frac{s}{\sqrt{n}}}
+\eeq
+The p-values are as before. Can combine $\mu_{low} \le \mu \le \mu_{high}$ by doing two tests, one for $\mu_{low} \le \mu$ and one for $\mu \le \mu_{high}$.
+\subsection{Small sample test for the mean}
+Same as before, except
+\beq
+t_{obs} = \frac{\bar{X}-\mu_0}{\text{SE}(\bar{X})}
+\eeq
+And choose t-distribution with $n-1$ dof.
+\subsection{Decision theory}
+$H_0:$ no fire, $H_a$: fire.
+\beq
+\beta = \text{Pr}(Accept H_0 | H_a)
+\eeq
+$1-\beta$ is the power of the test.
+\section{Chapter 9: Comparing two populations}
+\subsection{Binary variable}
+1. Binary variable, true or false
+2. Population 1: success $p_1$, Population 2: success $p_2$
+3. Need to estimate $p_1-p_2$.
+Our statistic will be
+\beq
+Z = \frac{\hat{p}_1-\hat{p}_2 - (p_1-p_2)}{\sigma(\hat{p}_1-\hat{p}_2)}, \quad Z \sim \mathcal{N}(0,1)
+\eeq
+\ber
+\sigma^2(\hat{p}_1-\hat{p}_2) &=& \sigma^2(\hat{p}_1) + \sigma^2(\hat{p}_2) \quad \text{ independence } \\
+\sigma(\hat{p}_1-\hat{p}_2) &=& \sqrt{\sigma^2(\hat{p}_1) + \sigma^2(\hat{p}_2)}
+\eer
+Approximate $\sigma(\hat{p}_1-\hat{p}_2)$ by
+\beq
+\text{SE}(\hat{p}_1-\hat{p}_2) = \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}
+\eeq
+As before we can compute a confidence interval for given ($1-\alpha$):
+\beq
+p_1 - p_2 \in \hat{p}_1-\hat{p}_2 \pm z_{\alpha/2}\text{SE}(\hat{p}_1-\hat{p}_2) 
+\eeq
+\subsection{Hypothesis testing}
+$H_0:$ Aspirin had no effect $p_1=p_2$.\\
+$H_a:$ Aspirin reduces heart attack rate $p_1>p_2$\\
+Need a statistic
+\ber
+Z &=& \frac{\hat{p}_1-\hat{p}_2 - \cancelto{0, H_0 \implies p_1-p_2=0}{(p_1-p_2)}}{\sigma(\hat{p}_1-\hat{p}_2)} \\
+Z &=& \frac{\hat{p}_1-\hat{p}_2}{\sigma(\hat{p}_1-\hat{p}_2)} 
+\eer
+Approximate as before
+\beq
+\sigma(\hat{p}_1-\hat{p}_2) \approx  \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}
+\eeq
+Since $H_0 \implies p_1-p_2=0$, replace $p_1$ and $p_2$ by $\hat{p}$ where
+\beq
+\hat{p} = \frac{x_1+x_2}{n_1+n_2}
+\eeq
+So, we have,
+\beq
+\sigma(\hat{p}_1-\hat{p}_2) \approx \sqrt{\hat{p}(1-\hat{p})\Big(\frac{1}{n_1} + \frac{1}{n_2}\Big)} = \text{SE}_0(\hat{p}_1-\hat{p}_2)    
+\eeq
+Our statistic now is
+\beq
+Z = \frac{\hat{p}_1 - \hat{p}_2}{\text{SE}_0(\hat{p}_1-\hat{p}_2)}
+\eeq
+\end{document}
+
+
