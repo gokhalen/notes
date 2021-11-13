@@ -60,6 +60,7 @@ Note: $P(X=y,Y=y)=P(X=x|Y=y)P(y)$ \text { because } $P(x\cup{y}) = P(x|y)p(y)$.
 &=& E(xy) -2E(x)E(y) + E(x)E(y) \\
 &=& E(xy) - E(x)E(y)
 \eer
+Note: $E(x),E(y)$ are no longer random variables and can be taken out of $E(xE(y))$ and $E(yE(x))$. See e.g. \url{See hhttp://www.stat.yale.edu/~pollard/Courses/241.fall97/Variance.pdf}.
 \section{Expectation and independence}
 $x,y$ are independent. Therefore, $P(x,y)=P(x)P(y)$
 \ber
@@ -82,8 +83,10 @@ E(c) = \sum_{x}xP(x) = cP(c) = c*1 = c
 \eer
 In the continuous case, the pdf is a dirac delta function $\delta(x-c)$, which yields zero probability for any interval which does not contain $c$. The expectation is
 \ber
-E(c) = \int xP(c) = \int x \delta(x-c) = c
+E(c) = \int xP(c) = \int x \delta(x-c) = c \\
+P(c) = \int_{c-\epsilon}^{c+\epsilon}\delta(x-c) dx = 1
 \eer
+
 \section{Variance of addition}
 \ber
 Y &=& X_1 + X_2 \\
