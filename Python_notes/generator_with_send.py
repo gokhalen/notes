@@ -42,6 +42,7 @@ except StopIteration as e:
     print('StopIteration was raised. Code would have terminated here if not handled')
 print('-'*100)
 
+
 def whizbang():
     for i in range(10):
         x = yield i
