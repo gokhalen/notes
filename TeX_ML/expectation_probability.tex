@@ -100,5 +100,17 @@ Similarly,
 \ber
 \text{var}(af(x)+bg(x)) = a^2\text{var}(f) + b^2\text{var}(g) +2ab\text{cov}(f,g) 
 \eer
+\section{Probability}
+1. Disjoint events are NOT independent. $P(A)P(B)\ne{}P(A\cap{B})$. $P(A)P(B)$ is in general not zero, $P(A\cap{B})$ is zero.\\
+2. Independence cannot be understood from Venn diagrams. Cannot prove independence from data. We work with correlation. \\
+3. If I know that one event has ocurred, does it increase my knowledge of another event? This is the test for independence. \\
+4. Correlation: We want to see how the changes in $x$ are related to the changes in $y$.\\
+\beq
+\text{cor}(x,y) = \frac{\text{cov}(x,y)}{\sigma(x)\sigma(y)}\,\,\in [-1,1] 
+\eeq
+It lies in $[-1,1]$ because of some sort of Cauchy-Schwartz/Holder inequality.\\
+5. Independence $implies$ zero correlation.\\
+6. Correlation zero does not imply Independence. It just implies lack of linear relationship.\\
+7. Mutual information for non-linear models.
 \end{document}
 
