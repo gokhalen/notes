@@ -294,6 +294,78 @@ a) $H_a: \mu_1 > \mu_2$: p-value=Pr$(z>Z_{obs})$\\
 b) $H_a: \mu_1 < \mu_2$: p-value=Pr$(z<z_{obs})$\\
 c) $H_a:\mu_1\ne\mu_2$: p-value=Pr$(|z|>|Z_{obs})$\\
 If p-value < $\alpha$, reject Null Hypothesis
+\subsection{Small sample means}
+Write
+\beq
+s^2_{pool} = \frac{ (n_1-1)s^2_1 + (n_2-1)s^2_2}{n_1 + n_2 - 2}
+\eeq
+Redefine $\text{SE}$ in the previous section as
+\beq
+\text{SE}(\hat{X}_1- \hat{X}_2) = \sqrt{\frac{s^2_{pool}}{n_1} + \frac{s^2_{pool}}{n_2}} = s_{pool}\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}
+\eeq
+The $1-\alpha$ confidence interval is
+\beq
+\mu_1 - \mu_2 = \hat{x}_1 - \hat{x}_2 \pm t_{\alpha/2}SE(\bar{X}_1-\bar{X}_2)
+\eeq
+\subsection{Hypothesis testing for t-distributions}
+We make a single population out of the two populations, by the transformation
+$d=x_1-x_2$. Under the null-hypothesis $H_0:x_1-x_2=0, i.e. d = 0$, the statistic
+\beq
+t_{obs} = \frac{\hat{d}-\cancelto{0}{d}}{\frac{s_d}{\sqrt{n}}} \text{ is t-distributed}
+\eeq
+95\% confidence level
+\beq
+\mu_d \in \bar{d} \pm t_{0.025}(\frac{s_d}{\sqrt{n}})
+\eeq
+$t_{0.025}$ is potentially from $n-1$ dof t-distribution.\\
+As before $H_o: d=0$\\
+1. $H_a:d>0$ p-value = Pr$(t>t_{obs})$\\
+2. $H_a:d<0$ p-value = Pr$(t<t_{obs})$\\
+3. $H_a:d\ne{0}$ p-value = Pr$(|t|>|t_{obs}|)$\\
+p-value $<\alpha$ reject null hypothesis.
+\section{Chap 11 Regression}
+Given data $(x_i,y_i)$. Minimize
+\beq
+E(a,b) = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2 \text{ where } \hat{y}_i = a +bx_i
+\eeq
+$\pdd{E}{a}=0$ gives
+\ber
+\sum_{i=1}^{i=n}(y_i-a-bx_i)(-1) = 0 \\
+n\bar{y} - an -bn\bar{x} = 0 \text{ where } \bar{y} = \frac{1}{n}\sum_{i=0}^{i=n}y_i, \bar{x} = \frac{1}{n}\sum_{i=0}^{i=n}x_i \\
+\bar{y} = a + b\bar{x}  
+\eer
+$\pdd{E}{b}=0$ yields
+\ber
+\sum_{i=1}^{n}(y_i - a - bx_i)x_i = 0 \\
+\sum_{i=1}^{n}(y_ix_i - ax_i -bx_i^2) = 0\\
+\sum_{i=1}^{n}y_ix_i - an\bar{x} - b\sum_{i=1}^n x_i^2 = 0\\
+\sum_{i=1}^{n}y_ix_i - ( \bar{y} - b\bar{x})n\bar{x} - b\sum_{i=1}^n x_i^2=0\\
+b = \frac{\sum_{i=1}^{n}y_ix_i-n\bar{x}\bar{y}}{\sum_{i=1}^{n}x_i^2- n\bar{x}^2}
+\eer
+The denominaror from CGS is
+\ber
+\text{deno} &=& \sum( x_i^2 - 2x_i\bar{x} + \bar{x}^2) \\
+&=& \sum ( x_i^2 - 2\bar{x}n\bar{x} + n\bar{x}^2) \\
+&=& \sum ( x_i^2 - n\bar{x}^2)
+\eer
+which is our denominator.\\
+The numerator from CGS is
+\ber
+\text{ numer } &=& \sum(x_i-\bar{x})(y_i-\bar{y})\\
+&=& \sum(x_iy_i - \bar{x}y_i -\bar{y}x_i + \bar{x}\bar{y})\\
+=\sum(x_iy_i) - \bar{x}n\bar{y}  - \bar{y}n\bar{x} + n\bar{x}\bar{y} \\
+=\sum(x_iy_i) - n\bar{x}\bar{y}
+\eer
+which is our numerator.
+\subsection{Orthogonality}
+\beq
+y = \begin{bmatrix}y_1 \\ \vdots \\ y_n \end{bmatrix}, X = \begin{bmatrix}1 & x_1\\  \vdots & \vdots \\ 1 & x_n \end{bmatrix}, \beta =  \begin{bmatrix}a \\ b \end{bmatrix}
+\eeq
+Then, in regression, we minimize
+\beq
+\pi = \|y-X\beta\|_2^2
+\eeq
+Then we can minimize $\pi$ 
 \end{document}
 
 
