@@ -254,8 +254,46 @@ So, we have,
 \eeq
 Our statistic now is
 \beq
-Z = \frac{\hat{p}_1 - \hat{p}_2}{\text{SE}_0(\hat{p}_1-\hat{p}_2)}
+Z = \frac{\hat{p}_1 - \hat{p}_2}{\text{SE}_0(\hat{p}_1-\hat{p}_2)} \, \sim \mathcal{N}(0,1)
 \eeq
+\subsection{General recipie}
+Null hypothesis $H_0: p_1 = p_2$\\
+Our statistic is
+\beq
+Z_{obs} = \frac{\hat{p}_1-\hat{p}_2}{\text{SE}_0(\hat{p}_1-\hat{p}_2)}
+\eeq
+Three alternate hypothesis:\\
+a) $H_a:p_1\ne{}p_2$ p-value = Pr$ (|z|>|Z_{obs}|)$ \\
+b) $H_a:p_1>{}p_2$ p-value = Pr$ (z>Z_{obs})$\\
+c) $H_a:p_1<{}p_2$ p-value = Pr$ (z<Z_{obs})$
+Reject Null Hypothesis if
+\beq
+\text{p-value} < \alpha
+\eeq
+\subsection{Comparing means of two populations}
+Population 1: $\mu_1,\sigma_1$\\
+Population 2: $\mu_2,\sigma_2$\\
+Statistic:
+\beq
+Z = \frac{\bar{X}_1-\bar{X}_2 - (\mu_1-\mu_2)}{\sqrt{\frac{\sigma^2(\mu_1)}{n_1}+\frac{\sigma^2(\mu_2)}{n_2}}} \sim \mathcal{N}(0,1) \\
+\eeq
+We approximate
+\beq
+\sqrt{\frac{\sigma^2(\mu_1)}{n_1}+\frac{\sigma^2(\mu_2)}{n_2}} \approx \sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}} = \text{SE}(\bar{X}_1-\bar{X}_2)
+\eeq
+As before, for $1-\alpha$ confidence intervals
+\beq
+\mu_1 - \mu_2 \in \hat{x}_1 - \hat{x}_2 \pm z_{\alpha/2}\text{SE}(\bar{X}_1-\bar{X}_2)
+\eeq
+\subsection{Hypothesis testing for means of two populations}
+$H_0:\mu_1 = \mu_2$ (usually the hypothesis that things occur by chance)
+\beq
+Z_{obs} = \frac{\hat{X}_1-\hat{X}_2-\cancelto{H_0 \implies \mu_1-\mu_2=0}{(\mu_1-\mu_2)}}{\text{SE}(\hat{X}_1-\hat{X}_2)}
+\eeq
+a) $H_a: \mu_1 > \mu_2$: p-value=Pr$(z>Z_{obs})$\\
+b) $H_a: \mu_1 < \mu_2$: p-value=Pr$(z<z_{obs})$\\
+c) $H_a:\mu_1\ne\mu_2$: p-value=Pr$(|z|>|Z_{obs})$\\
+If p-value < $\alpha$, reject Null Hypothesis
 \end{document}
 
 
