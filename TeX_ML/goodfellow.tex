@@ -124,5 +124,69 @@ RHS =
 \beq
 p(x_1\cap x_2)p(x_3|x_1x_2) = p(x_1\cap x_2 \cap x_3) = p(\mathbf{x})
 \eeq
+\section{Biased and unbiased estimators}
+\subsection{Bernoulli distribution}
+Random variable takes value $k=1$ with prob $\theta$ and $k=0$ with prob $1-\theta$. PMF is $\theta^k(1-\theta)^{1-k}$ assuming $0^0=1$. The true mean is
+\beq
+\theta = 1*P(1) + 0*P(0) = \theta
+\eeq
+The estimator for the mean is
+\beq
+\hat{\theta}_m = \frac{1}{m}\sum_{i=1}^{m}x^{(i)}
+\eeq
+Now,
+\beq
+\mathbb{E}(\hat{\theta}_m) = \frac{1}{m}\sum_{i=1}^{m}\mathbb{E}(x^{(i)})
+\eeq
+Now
+\beq
+\mathbb{E}(x^{(i)}) = 1*P(1) + 0*P(0) = \theta \text{ ... } x^{(i)} \text{ can take values 0 or 1 only. }
+\eeq
+So,
+\beq
+\mathbb{E}(\hat{\theta}_m) = \frac{1}{m}\sum_{i=1}^{m}\theta = \theta \text{ ...the true mean. Therefore this estimator is unbiased.}  
+\eeq
+\subsection{Biased estimator for the variance of Gaussian}
+From \url{https://dawenl.github.io/files/mle_biased.pdf} Dawn Liang CMU.
+The estimator
+\beq
+\hat{\mu}_{m} = \frac{1}{m}\sum_{i=1}^{m} x^{(i)}
+\eeq
+is unbiased for the mean of the Gaussian. The biased estimator for the variance of the Gaussian is
+\ber
+\hat{\sigma}^2_m &=& \frac{1}{m}\sum_{i=1}^{m}(x^{(i)}-\hat{\mu}_m)^2 = \frac{1}{m}\Big[\sum_{i=1}^{m}(x^{(i)})^2 - 2\hat{\mu}_{m}\sum_{i=1}^{m}x^{(i)} + \hat{\mu}_m(m)\Big]\\
+&=& \frac{1}{m}\Big[\sum_{i=1}^{m}(x^{(i)})^2 - m\hat{\mu}_m^2\Big] \label{eqn:biasedgaussestim}
+\eer
+The expected value of this estimator is
+\ber
+\mathbb{E}(\hat{\sigma}^2_m) = \frac{1}{m}\Big[\sum_{i=1}^{m}\mathbb{E}((x^{(i)})^2)\Big]-\mathbb{E}(\hat{\mu}_m^2)
+\eer
+Using $\mathbb{E}((x^{(i)})^2)=\mathbb{E}(x^2) \,\,\forall\,\,i$
+\beq
+\label{eqn:expvargaussestim}
+\mathbb{E}(\hat{\sigma}^2_m) = \mathbb{E}(x^2) - \mathbb{E}(\hat{\mu}^2_m)
+\eeq
+The true variances of $x$ and $\hat{\mu}^2$ are:
+\ber
+\sigma^2 = \mathbb{E}(x^2) - (\mathbb{E}(x))^2 \implies (\mathbb{E}(x^2) = \sigma^2 + \mu^2 \cdots \text{because } E(x)=\mu\\
+\sigma^2_{\hat{\mu}} = \mathbb{E}(\hat{\mu}^2) - \mathbb{E}(\hat{\mu}_m)^2 \implies \mathbb{E}(\hat{\mu}^2_m) =  \sigma^2_{\hat{\mu}} + \mu^2 \cdots \text{because } E(\hat{\mu}_m)=\mu
+\eer
+Using the above equations in (\ref{eqn:expvargaussestim}),
+\beq
+\label{eqn:expvargaussestim2}
+\mathbb{E}(\hat{\sigma}^2_m)  = \sigma^2 - \sigma^2_{\hat{\mu}}
+\eeq
+But,
+\ber
+\sigma^2_{\hat{\mu}_m} &=& \text{var}\Big( \frac{1}{m}\sum_{i=1}^{m} x^{(i)}\Big) \\
+&=& \frac{1}{m^2}\text{var}\Big(\sum_{i=1}^{m} x^{(i)}\Big) \\
+&=& \frac{1}{m^2}\sum_{i=1}^{m}\text{var}(x^{(i)}) = \frac{1}{m^2}(m\text{var}(x^{(i)}))\\
+&=&\frac{1}{m}\text{var}(x^{(i)})= \frac{\sigma}{m}
+\eer
+Using the above equation in (\ref{eqn:expvargaussestim}),
+\beq
+\mathbb{E}(\hat{\sigma}^2_m) = \sigma^2 - \frac{\sigma^2}{m} = \Big(1-\frac{1}{m}\Big)\sigma^2
+\eeq
+Since $\mathbb{E}(\hat{\sigma}^2_m)\ne \sigma^2$, equation (\ref{eqn:biasedgaussestim}) is not an unbiased estimator for the variance. 
 \end{document}
 
