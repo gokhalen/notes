@@ -365,7 +365,143 @@ Then, in regression, we minimize
 \beq
 \pi = \|y-X\beta\|_2^2
 \eeq
-Then we can minimize $\pi$ 
+wrt $\beta$ and we get
+\beq
+\beta = (X^TX)^{-1}X^Ty
+\eeq
+Our predictions are
+\beq
+\hat{y} = X\beta
+\eeq
+The residual is $y-\hat{y}$, which is orthogona to the rows in $X^T$.
+\ber
+\hat{e} &=& y - \hat{y}\\
+X^T\hat{e} &=& X^T(y-\hat{y})\\
+&=& X^Ty - X^TX\beta\\
+&=& X^Ty - X^TX(X^TX)^{-1}X^Ty \\
+&=& X^Ty - X^Ty = 0
+\eer
+The error between the mean $\bar{y}$ and prediction is
+\ber
+\|y-\bar{y}\|_2^2 &=& \|y-\hat{y} + \hat{y}-\bar{y}\|^2_2 \\
+&=& \|y-\hat{y}\|^2_2 + \|\hat{y}-\bar{y}\|^2_2 + 2(\hat{y}-\bar{y})^T(y-\hat{y})
+\eer
+We shall now show that the last term is $0$. The last term is 
+\beq
+(\hat{y}-\bar{y})^T(y-\hat{y}) = (\hat{y}-\bar{y})^Te = \hat{y}^Te-\bar{y}^Te
+\eeq
+Both $\hat{y}^Te,\bar{y}^Te$ are identically zero. The first term is easy and we shall start with it first.
+\beq
+\hat{y}^Te = (X\beta)^Te = \beta^T\cancelto{0}{X^Te} = 0
+\eeq
+The $\bar{y}$ in the second term can be written as
+\ber
+\bar{y} &=& \begin{bmatrix}a + b\bar{x}\\ \vdots \\ a + b\bar{x} \end{bmatrix}\\
+&=& \begin{bmatrix}a & b\bar{x}\\ \vdots & \vdots \\ a & b\bar{x} \end{bmatrix}\begin{bmatrix}1 \\ 1\end{bmatrix}\\
+&=& \begin{bmatrix}1 & \bar{x}\\ \vdots & \vdots \\ 1 & \bar{x} \end{bmatrix}\begin{bmatrix}a \\ b\end{bmatrix}\\
+&=& Y\beta    
+%&=& \frac{1}{n}\begin{bmatrix}
+%  \begin{bmatrix}1 & x_1 \\ \vdots & \vdots \\ 1 & x_1\end{bmatrix} & + &
+%    \begin{bmatrix}1 & x_2 \\ \vdots & \vdots \\ 1 & x_2\end{bmatrix} &  + &
+%      \hdots & + &
+%  \begin{bmatrix}1 & x_n \\ \vdots & \vdots \\ 1 & x_n\end{bmatrix}
+%\end{bmatrix}
+%\begin{bmatrix} a \\ b\end{bmatrix}
+\eer
+Now comes the interesting part. Both columns of $Y$ are proportional to
+\beq
+\begin{bmatrix}1\\\vdots\\1\end{bmatrix}
+\eeq
+We know one column of $X$ is
+\beq
+\begin{bmatrix}1\\\vdots\\1\end{bmatrix}
+\eeq
+Since $X^Te=0$, we must have
+\beq
+\begin{bmatrix}1 \hdots 1 \end{bmatrix}e = 0
+\eeq
+because $\begin{bmatrix}1 \hdots 1 \end{bmatrix}$ is the first row of $X^T$. Similarly
+\beq
+Y^Te = 0
+\eeq
+because all rows of $Y^T$ are proportional to
+\beq
+\begin{bmatrix}1\hdots1\end{bmatrix}
+\eeq.
+Now we are ready to use $Y^Te=0$.
+\ber
+\bar{y}^Te = (Y\beta)^Te = \beta^T\cancelto{0}{Y^Te} = 0 
+\eer
+So we have
+\beq
+(\hat{y}-\bar{y})^T(y-\hat{y}) = (\hat{y}-\bar{y})^Te = \hat{y}^Te -  \bar{y}^Te = 0
+\eeq
+So, finally we have
+\beq
+\|y-\bar{y}\|_2^2 = \|y-\hat{y}\|^2_2 + \|\hat{y}-\bar{y}\|^2_2 
+\eeq
+Define
+\ber
+\text{SSR} = \|\hat{y}-\bar{y}\|^2_2 \qquad \text{SSE} = \|y-\hat{y}\|^2_2 \qquad \text{SS}_{yy}=\|y-\bar{y}\|_2^2
+\eer
+The correlation coefficient is
+\beq
+r = \text{sign}(b)\sqrt{R^2} \qquad \text{where } R^2 = 1 - \frac{\text{SSE}}{\text{SS}_{yy}}
+\eeq
+$R^2$ of the variation in $y$ is explained by $x$.
+\subsection{Statistical viewpoint}
+A regression model
+\beq
+Y = \alpha + \beta{x} + \epsilon
+\eeq
+$\alpha$, $\beta$ are true unknown parameters we seek to estimate. $\epsilon$ is random error fluctuations. $a$ and $b$ are best linear unbiased estimators of $\alpha$, $\beta$. i.e. $E(a)=\alpha, E(b)=\beta$. Different samples $(y_i,x_i)$, yield different $a,b$. How are they distributed about $\alpha_{true},\beta_{true}$?\\
+For each data point $y_i$ we have
+\beq
+y_i = a + bx_i + e_i\\
+\eeq
+An estimator for $\sigma(e)$ is
+\beq
+s = \sqrt{\frac{\sum_{i=1}^{n}e_i^2}{n-2}} = \sqrt{\frac{\text{SS}_{yy}-b\text{SS}_{xy}}{n-2}}
+\eeq
+$s$ is an estimator for how widely the points will be scattered around the line.
+\subsection{Confidence intervals}
+The $1-\alpha$ confidence intervals have the familiar form.
+\ber
+\beta  &=& b \pm t_{\alpha/2}\text{SE}(b)\\
+\alpha &=& a \pm t_{\alpha/2}\text{SE}(a)
+\eer
+where
+\ber
+\text{SE}(b) = \frac{s}{\sqrt{SS_{xx}}}\\
+\text{SE}(a) = s\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{\text{SS}_{xx}}}
+\eer
+If we repeat the experiment many times, $\alpha,\beta$ will lie in the given interval $1-alpha$\% times
+\subsection{Mean response}
+Given $x_0$ what is the mean response $y$? The 95\% confidence interval for
+\beq
+y = \alpha + \beta{}x_0
+\eeq
+is
+\beq
+y \in a + bx_0 \pm t_{0.25}\text{SE}(\hat{y})
+\eeq
+where
+\beq
+\text{SE}(\hat{y}) = s\sqrt{\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{\text{SS}_{xx}}}
+\eeq
+\subsection{Hypothesis testing}
+Is there relationship between height and weight?\\
+$H_0:\beta=0$: Null hypothesis $\beta=0$ (no relation between height and weight)\\
+Statistic:
+\beq
+t = \frac{b-\cancelto{0}{\beta}}{\text{SE}(b)} = \frac{b}{\text{SE}(b)}
+\eeq
+Alternate hypothesis
+Need $t>t_{alpha}$ for $H_a: \beta>0$\\
+Need $t<t_{alpha}$ for $H_a: \beta<0$\\
+Need $|t|<|t_{alpha/2}|$ for $H_a: \beta\ne{0}$\\
+\subsection{Patterns in error}
+Pattern in error Vs $\hat{y}$ indicates problems. Random scatterplot is ok. 
 \end{document}
 
 
