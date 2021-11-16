@@ -7,6 +7,7 @@
 \newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
 \newcommand{\bD}{{\mathbf{D}}}
+\newcommand{\notimplies}{\;\not\!\!\!\implies}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{bm}
@@ -187,6 +188,112 @@ Using the above equation in (\ref{eqn:expvargaussestim}),
 \beq
 \mathbb{E}(\hat{\sigma}^2_m) = \sigma^2 - \frac{\sigma^2}{m} = \Big(1-\frac{1}{m}\Big)\sigma^2
 \eeq
-Since $\mathbb{E}(\hat{\sigma}^2_m)\ne \sigma^2$, equation (\ref{eqn:biasedgaussestim}) is not an unbiased estimator for the variance. 
+Since $\mathbb{E}(\hat{\sigma}^2_m)\ne \sigma^2$, equation (\ref{eqn:biasedgaussestim}) is not an unbiased estimator for the variance.
+\section{Equation 5.46}
+\ber
+\sqrt{\text{var}\Big[\frac{1}{m}\sum_{i=1}^{m}x^{(i)}\Big]} = \sqrt{\frac{1}{m^2}\sum_{i=1}^{m}\text{var}(x^{(i)})} = \sqrt{\frac{1}{m^2}m\text{var}(x)} = \sqrt{\frac{\sigma^2}{m}} = \frac{\sigma}{\sqrt{m}}
+\eer
+We have used $\text{var}(x^{(i)})=\sigma^2\,\forall\,i$
+\section{Deciding which algorithm is better Pg. 128}
+In machine learning experiments, it is common to say that algorithm A is better than algorithm B if the upper bound of the 95\% conﬁdence interval for the error of algorithm A is less than the lower bound of the 95\% conﬁdence interval for the error of algorithm B.
+\section{Equation 5.54: Proof}
+See \url{https://stats.stackexchange.com/questions/123320/mse-decomposition-to-variance-and-bias-squared} and \url{https://en.wikipedia.org/wiki/Mean_squared_error#Proof_of_variance_and_bias_relationship}
+We want to prove
+\beq
+\text{MSE} = \mathbb{E}[(\hat{\theta}_m - \theta)^2] = \text{Bias}(\hat{\theta}_{m})^2 + \text{var}(\hat{\theta}_{m})
+\eeq
+$\theta$ is an known, true, non-random parameter. Proof:
+\ber
+\text{MSE} &=& \mathbb{E}[(\hat{\theta}_m-\theta)^2] \\
+&=& \mathbb{E}[(\hat{\theta}_m-\mathbb{E}(\hat{\theta}_m)+\mathbb{E}(\hat{\theta}_m)-\theta)^2]\\
+&=& \mathbb{E}[(\hat{\theta}_m-\mathbb{E}(\hat{\theta}_m))^2 - 2(\hat{\theta}_m-\mathbb{E}(\hat{\theta}_m))(\mathbb{E}(\hat{\theta}_m)-\theta) +  (\mathbb{E}(\hat{\theta}_m)-\theta)^2]\\
+&=&  \mathbb{E}[(\hat{\theta}_m-\mathbb{E}(\hat{\theta}_m))^2] - 2\mathbb{E}[(\hat{\theta}_m-\mathbb{E}(\hat{\theta}_m))(\mathbb{E}(\hat{\theta}_m)-\theta)] + \mathbb{E}[(\mathbb{E}(\hat{\theta}_m)-\theta)^2]
+\eer
+In the second and third term,
+\beq
+\mathbb{E}(\hat{\theta}_m)-\theta
+\eeq
+is constant, because $\theta$ is a constant true parameter and $\mathbb{E}(\hat{\theta}_m)$ is no-longer random, and hence can be taken out of the expectation. The equation then becomes,
+\ber
+\text{MSE} &=& \mathbb{E}[(\hat{\theta}_m-\mathbb{E}(\hat{\theta}_m))^2] - 2(\mathbb{E}(\hat{\theta}_m)-\theta)\mathbb{E}[(\hat{\theta}_m-\mathbb{E}(\hat{\theta}_m))] + (\mathbb{E}(\hat{\theta}_m)-\theta)^2 \\
+&=& \mathbb{E}[(\hat{\theta}_m-\mathbb{E}(\hat{\theta}_m))^2] - 2(\mathbb{E}(\hat{\theta}_m)-\theta)[\mathbb{E}(\hat{\theta}_m)-\mathbb{E}(\mathbb{E}(\hat{\theta}_m))] + (\mathbb{E}(\hat{\theta}_m)-\theta)^2 \\
+\eer
+But
+\beq
+\mathbb{E}(\mathbb{E}(\hat{\theta}_m)) = \mathbb{E}(\hat{\theta}_m)
+\eeq
+The second term then goes to zero are we are left with
+\ber
+\text{MSE} &=& \overbrace{\mathbb{E}[(\hat{\theta}_m-\mathbb{E}(\hat{\theta}_m))^2]}^\text{variance} + \overbrace{(\mathbb{E}(\hat{\theta}_m)-\theta)^2}^\text{bias$^2$}
+\eer
+Shorter proof:
+\ber
+\text{MSE} &=& \mathbb{E}[(\hat{\theta}_m-\theta)^2] \\
+&=& \mathbb{E}[\hat{\theta}^2_m - 2\theta\hat{\theta}_m + \theta^2] \\
+&=& \mathbb{E}[\hat{\theta}^2_m] -2\theta\mathbb{E}(\hat{\theta}_m) + \mathbb{E}(\theta^2)
+\eer
+Now,
+\beq
+\text{var}(\hat{\theta}_m) = \mathbb{E}[\hat{\theta}^2_m] - (\mathbb{E}[\hat{\theta}^2_m])^2
+\implies
+\mathbb{E}[\hat{\theta}^2_m] = \text{var}(\hat{\theta}_m) + (\mathbb{E}[\hat{\theta}^2_m])^2
+\eeq
+Using this
+\ber
+\text{MSE} &=& \text{var}(\hat{\theta}_m) + (\mathbb{E}[\hat{\theta}^2_m])^2 -2\theta\mathbb{E}(\hat{\theta}_m) + \mathbb{E}(\theta^2) \\
+&=& \text{var}(\hat{\theta}_m) + (\mathbb{E}[\hat{\theta}_m-\theta])^2
+\eer
+Which completes the proof.
+\section{Bias and consistency}
+Consistency
+\beq
+\text{P}(|\hat{\theta}_m - \theta|) \rightarrow 0 \text{ as } m \rightarrow \infty
+\eeq
+Bias: difference in expected value of estimator and the true value\\
+Consistency $\implies$ unbiased\\
+unbiased $\notimplies$ consistency
+\section{Maximum likelihood estimation}
+When they say
+\beq
+\mathbf{\theta}_{\text{ML}} = \text{arg } \underset{\pmb{\theta}}{\text{max}} \, \mathbb{E}_{\mathbf{x}\sim\hat{p}_{\text{data}}}\log(p_{\text{model}}(\pmb{x}^{(i)},\pmb{\theta}))
+\eeq
+It is important to note that the expectation is taken over the \textit{empirical} distribution $\hat{p}_{\text{data}}$ defined over data set $\mathbb{X}=\{\pmb{x}^{(1)},\cdots,\pmb{x}^{(m)}\}$ in which each $\pmb{x}^{(i)}$ has exactly $1/m$ probability of occuring. So, finding a theta which maximizes the probability/likelihood of $\mathbb{X}=\{\pmb{x}^{(1)},\cdots,\pmb{x}^{(m)}\}$ occurring is requivalent to maximizing the expectation of
+\beq
+\log(p_{\text{model}}(\pmb{x},\pmb{\theta}))
+\eeq
+over the empirical distribution $\mathbf{x}\sim\hat{p}_{\text{data}}$.
+
+" We can thus see maximum likelihood as an attempt to make the model dis-
+tribution match the empirical distribution $\hat{p}_{\text{data}}$ Ideally, we would like to match
+the true data generating distribution $p_{\text{data}}$ , but we have no direct access to this
+distribution." 
+
 \end{document}
+%%% SO Question 1
+I'm trying to learn Maximum Likelihood Estimation from "Deep Learning" by Goodfellow/Bengio/Courville. 
+
+They start with considering a set of $m$ samples $\mathbb{X}=\{\pmb{x}^{(1)},\cdots,\pmb{x}^{(m)}\}$ drawn independently from the true but unknown data generating distribution $p_{\text{data}}(\mathbf{x})$.
+
+Then they say, Let $p_{\text{model}}(\mathbf{x},\mathbf{\theta})$ be a parametric family of probability distributions over the same space indexed by $\pmb{\theta}$. They say: In other words, $p_{\text{model}}(\pmb{x},\pmb{\theta})$ maps any configuration $\mathbf{x}$ to a real number estimating the true probability $p_{\text{data}}(\pmb{x})$.
+
+They define the maximum likelihood estimator as 
+
+$$
+\mathbf{\theta}_{\text{ML}} = \text{arg } \underset{\pmb{\theta}}{\text{max}}\prod_{i=1}^{m}p_{\text{model}}(\pmb{x}^{(i)},\pmb{\theta})
+$$
+
+And then they introduce an equivalent optimization problem
+$$
+\mathbf{\theta}_{\text{ML}} = \text{arg } \underset{\pmb{\theta}}{\text{max}}\sum_{i=1}^{m}\log(p_{\text{model}}(\pmb{x}^{(i)},\pmb{\theta}))
+$$
+They divide by $m$ to get
+$$
+\mathbf{\theta}_{\text{ML}} = \text{arg } \underset{\pmb{\theta}}{\text{max}}\sum_{i=1}^{m}\frac{1}{m}\log(p_{\text{model}}(\pmb{x}^{(i)},\pmb{\theta})) \qquad \cdots (1)
+$$
+They they say, 
+$$
+\mathbf{\theta}_{\text{ML}} = \text{arg } \underset{\pmb{\theta}}{\text{max}} \mathbb{E}_{\mathbf{x}\sim\hat{p}_{\text{data}}}
+$$
+%%% END SO Question 1
+
 
