@@ -353,6 +353,21 @@ Then,
 \eeq
 Obviously just evaluating the last term is much easier than evaulating the second term.
 \textbf{Important} Data becomes separable in higher dimensional space.
+\section{Decision trees}
+- breaks input space into regions whose boundaries are typically axis aligned \\
+- does not learn decision boundaries which are non-aligned with coord axes easily\\
+- e.g. in 2D a decision boundary with +ve class if $x_2>x_1$ is a line at 45 degrees with coordinate axes\\
+- such boundaries are not easily learned and are approximated with a stair-step function.
+\section{PCA}
+- learns representaton whose elements have no linear correlation with each other.\\
+- first step in learning representations whose elements are statistically independent\\
+\ber
+\pmb{X} = \begin{bmatrix}\pmb{x^{(1)}}^T\\\vdots\\\pmb{x^{(m)}}^T\end{bmatrix} \text{ where } \pmb{x^{(i)}} \text{ is a column feature vector}\\
+\pmb{X}^T\pmb{X} = \begin{bmatrix}\pmb{x^{(1)}}& \hdots & \pmb{x^{(m)}}\end{bmatrix}\begin{bmatrix}\pmb{x^{(1)}}^T\\\vdots\\\pmb{x^{(m)}}^T\end{bmatrix} = \sum_{i=1}^{m}\pmb{x^{(i)}}\pmb{x^{(i)}}^T
+\eer
+\section{Stochastic gradient descent}
+\textbf{Insight} Gradient is an expectation! Which can be approximated using $m^{'}\ll{m}$ examples\\
+as $m\rightarrow\infty$, we can show that the optimization algorithm converges before every example has been sampled. So the computational cost is $\mathcal{O}(1)$
 \end{document}
 %%% SO Question 1
 I'm trying to learn Maximum Likelihood Estimation from "Deep Learning" by Goodfellow/Bengio/Courville. 
