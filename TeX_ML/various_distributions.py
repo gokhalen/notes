@@ -9,12 +9,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 xmin = -5
-xmax =  5
+xmax =  15
 nn   = 1024
 hh   = (xmax-xmin)/nn
 
 
-def fgauss(xx,mu=0,sigma=1):
+def fgauss(xx,mu=3,sigma=2):
     coeff = np.sqrt(1.0/(2*np.pi*sigma*sigma))
     power = -(1.0/(2.0*sigma*sigma))*(xx-mu)**2
     fg  = coeff*np.exp(power)
@@ -32,5 +32,5 @@ yy  = fgauss(xx)
 yy1 = fexp(xx)
 yy2 = flaplace(xx)
 plt.plot(xx,yy)
-plt.plot(xx,yy1)
-plt.plot(xx,yy2)
+#plt.plot(xx,yy1)
+#plt.plot(xx,yy2)
