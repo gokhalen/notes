@@ -135,8 +135,13 @@ I(X,Y) &=& \sum_{x,y}p_{X,Y}(x,y)\log\Big(\frac{p_{X,Y}(x,y)}{P_X(x)P_Y(y)}\Big)
 \eer
 where we have used
 \beq
-\sum_{y}p_(X,Y)(x,y) = p_{X}(x) \qquad \sum_{x}p_(X,Y)(x,y) = p_{Y}(y)
+\sum_{y}p_{X,Y}(x,y) = p_{X}(x) \qquad \sum_{x}p_{X,Y}(x,y) = p_{Y}(y)
 \eeq
+We can prove
+\beq
+H(Y) = I(X,Y) + H(Y|X)
+\eeq
+That is the basis of the Venn-Diagram
 \section{Conditional Entropy}
 \ber
 H(Y|X) &=& -\sum_{x,y}p(x,y)\log{p(y|x)} \\

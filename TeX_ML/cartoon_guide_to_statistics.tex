@@ -501,7 +501,16 @@ Need $t>t_{alpha}$ for $H_a: \beta>0$\\
 Need $t<t_{alpha}$ for $H_a: \beta<0$\\
 Need $|t|<|t_{alpha/2}|$ for $H_a: \beta\ne{0}$\\
 \subsection{Patterns in error}
-Pattern in error Vs $\hat{y}$ indicates problems. Random scatterplot is ok. 
+Pattern in error Vs $\hat{y}$ indicates problems. Random scatterplot is ok.
+\section{$y=F(x)$}
+I'm not sure that y is going to be normally distributed. e.g. we can make $y=min(x,\mu)$ to make it non-normally distributed. Maybe for polynomial f $y$ is normallly distributed. (no even that). If $x\mathcal{N}(0,1)$ then for $y=x^2$ the negative values of $x$ are going to be mapped into positive values\\
+\ber
+X \sim \mathcal{N}(\mu,\sigma)\\
+y = f(x) \\
+Y \sim \mathcal{N}(\omega,s_d)\\
+\omega = \mathbb{E}(y) = \mathbb{E}(f(x))\\
+s_d^2 = \text{var}(y)
+\eer
 \end{document}
 
 
