@@ -36,9 +36,9 @@ $\mu$ is mean and $\sigma$ is standard deviation.\\
 \eeq
 5. Normal as a good approximation to binomial $np \ge 5 $ and $n(1-p)\ge 5$
 \section{CGS Chapter 6: Sampling}
-1. Sampling for defective pieces: sample size $n$, $x$ number of good pieces, $\hat{p}=\frac{x}{n}$. How is $\hat{p}$ distributed around $p$ (the true success rate). $\hat{p}$ is an \textit{estimator} of $p$.\\
+1. Sampling for defective pieces: sample size $n$, $x$ number of good pieces, $\hat{p}=\frac{x}{n}$. How is $\hat{p}$ distributed around $p$ (the true success rate). $\hat{p}$ is an \textit{estimator} of $p$. Binomial process, $x$ successes in $n$ trials.\\
 2. Let $\hat{P}$ be the random variable and let $\hat{p}$ be the values it takes.\\
-3. We know (by magic)
+3. We know (by magic, an because a binomial distribution can be approximated by normal)
 \ber
 E(\hat{P}) = p , \sigma(\hat{P}) = \sqrt{\frac{p(1-p)}{n}}\\
 \hat{P}\sim\mathcal{N}(p,\sigma(\hat{P})), \text{ the normal distribution}
@@ -84,7 +84,7 @@ $t$ is distributed according to the student's-t distribution and approaches norm
 \subsection{For true or false type problems}
 1. For true or false type problems\\
 2. $p$ fraction of candidates who vote for Mr. Astute. We don't know $p$ and are trying to estimate it.\\
-3. We take a sample of 1000 voters and determine $\hat{p}=\frac{550}{1000}$. $\hat{p}$ is an estimator of $p$.
+3. We take a sample of 1000 voters and determine $\hat{p}=\frac{550}{1000}$. $\hat{p}$ is an estimator of $p$. This is a binomial process and can be approximated by a normal distribution.
 4. We want to get limits  of the form
 \beq
 p \in \hat{p} \pm \text{error} , \text{ say 95\% of the time}

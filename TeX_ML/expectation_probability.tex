@@ -82,10 +82,13 @@ Interpret $E(c)$ as the random variable $x$ taking the value $c$ with 100\% prob
 E(c) = \sum_{x}xP(x) = cP(c) = c*1 = c
 \eer
 In the continuous case, the pdf is a dirac delta function $\delta(x-c)$, which yields zero probability for any interval which does not contain $c$. The expectation is
-\ber
-E(c) = \int xP(c) = \int x \delta(x-c) = c \\
-P(c) = \int_{c-\epsilon}^{c+\epsilon}\delta(x-c) dx = 1
-\eer
+\beq
+E(c) = \int x\, pdf(x) dx = \int x \delta(x-c) = c \\
+\eeq
+\text{( And not correct, sort of, hand waving, just to make things analogous to the discrete case)}
+\beq
+P(c) = \int_{c-\epsilon}^{c+\epsilon}\delta(x-c) dx = 1  \quad \epsilon\rightarrow{0}
+\eeq
 
 \section{Variance of addition}
 \ber
@@ -112,5 +115,36 @@ It lies in $[-1,1]$ because of some sort of Cauchy-Schwartz/Holder inequality.\\
 5. Independence $implies$ zero correlation.\\
 6. Correlation zero does not imply Independence. It just implies lack of linear relationship.\\
 7. Mutual information for non-linear models.
+\section{Bayesian}
+\beq
+P(H|D) = \frac{P(D|H)P(H)}{P(D)}
+\eeq
+D: Data i.e. Covid test result T+ or T-\\
+H: Hypothesis i.e. is a person covid positive or negative C+ or C-\\
+P(D): Evidence\\
+P(D|H): Likelihood\\
+P(H): belief (prior)\\
+Cognitive scientists: Our brains operate like Bayes machines
+\section{Mutual information}
+\ber
+I(X,Y) &=& \sum_{x,y}p_{X,Y}(x,y)\log\Big(\frac{p_{X,Y}(x,y)}{P_X(x)P_Y(y)}\Big)\\
+&=& \sum_{x,y}p_{X,Y}(x,y)\log{p_{X,Y}(x,y)} - \sum_{x,y}p_{X,Y}(x,y)\log{p_X(x)} - \sum_{x,y}p_{X,Y}(x,y)\log{p_Y(y)} \\
+&=& \sum_{x,y}p_{X,Y}(x,y)\log{p_{X,Y}(x,y)} - \sum_{x}\Big(\sum_{y}p_(X,Y)(x,y)\Big)\log{p_X(x)} \nonumber \\ && - \sum_{y}\Big(\sum_{x}p_(X,Y)(x,y)\Big)\log{p_y(y)} \\
+&=& \sum_{x,y}p_{X,Y}(x,y)\log{p_{X,Y}(x,y)} - \sum_{x}p_{X}(x)\log{p_X(x)} - \sum_{y}p_{y}(y)\log{p_Y(y)} \\
+&=& H(X) + H(Y) - H(X,Y)
+\eer
+where we have used
+\beq
+\sum_{y}p_(X,Y)(x,y) = p_{X}(x) \qquad \sum_{x}p_(X,Y)(x,y) = p_{Y}(y)
+\eeq
+\section{Conditional Entropy}
+\ber
+H(Y|X) &=& -\sum_{x,y}p(x,y)\log{p(y|x)} \\
+&=&  -\sum_{x,y}p(x,y)\Big(\frac{p(x,y)}{p(x)}\Big) \\
+&=&  -\sum_{x,y}p(x,y)\log{p(x,y)} + \sum_{x,y}p(x,y)\log{p(x)} \\
+&=& -\sum_{x,y}p(x,y)\log{p(x,y)} + \sum_{x}\Big(\sum_{y}p(x,y)\Big)\log{p(x)} \\
+&=& -\sum_{x,y}p(x,y)\log{p(x,y)} + \sum_{x}p(x)\Big)\log{p(x)} \\
+&=& H(X,Y)- H(X)
+\eer
 \end{document}
 
