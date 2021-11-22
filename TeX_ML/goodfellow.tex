@@ -57,16 +57,28 @@ Again, since $x$ and $s$ are independent
 \text{Cov}(x,y) = \mathbb{E}\Big[sx^2\Big] =  \mathbb{E}(x^2)\mathbb{E}(s)=0
 \eeq
 $x$ and $y$ are dependent but their covariance is zero.
-\section{ Multinomial/Multinoulli distribution: 3.9.2 }
-From \url{https://www.euanrussano.com/post/probability/multinoulli_multinomial/}.
-\subsection{Expectation of product}
 Let $x,y$ be independent random variables. Then
 \ber
 \mathbb{E}(xy) &=& \int \int P(x,y)xy dxy = \int\int P_1(x)P_2(y) xy dxdy \\
                &=& \int P_1(x)xdx \int P_2(y)ydy = \mathbb{E}(x)\mathbb{E}(y)
 \eer
 I think the critical part is that $P(x,y)=P_1(x)P_2(y)$ if $x,y$ are independent.
+\section{ Multinomial/Multinoulli distribution: 3.9.2 }
+\subsection{Bernoulli distribution}
+Random variable takes value $k=1$ with prob $\theta$ and $k=0$ with prob $1-\theta$. PMF is $\theta^k(1-\theta)^{1-k}$ assuming $0^0=1$. The true mean is
+\beq
+\theta = 1*P(1) + 0*P(0) = \theta
+\eeq
+The PMF can be written as
+\beq
+P(k) = (\theta)^k(1-\theta)^{1-k}
+\eeq
+From which it can be seen that
+\beq
+P(0) = (1-\theta) \qquad P(1) = \theta
+\eeq
 \subsection{Multinoulli distribution}
+From \url{https://www.euanrussano.com/post/probability/multinoulli_multinomial/}.
 This distribution is also called categorial distribution, since it can be used to model events with K possible outcomes. Bernoulli distribution can be seen as a specific case of Multinoulli, where the number of possible outcomes K is 2. In machine learning, the multinoullli can used to model the expected class of one sample into a set of K classes. For instance, one may want to predict to which specie  in the set  a flower belongs based on its attribute. Then species K follow a multinoulli distribution.\\
 Consider the $p(x=k)$ the probability that the sample $x$ belongs to class k. Here  $x$ could be the attributes of a flower in the example above, or one side of a die in the roll of it. If the set of classes is $K \,\in \, 1,2,3,\cdots,K$ then the probability of each outcome can be written as:
 \ber
@@ -82,7 +94,12 @@ p(x=2) &=& 0.3\\
 ... & &\\
 p(x=K) &=& 0.6
 \eer
-Clearly $\sum_{i}^{K}p(x=i)=1.0$ and one would say that the sample is most probable from class 3.
+Clearly $\sum_{i}^{K}p(x=i)=1.0$ and one would say that the sample is most probable from class 3.\\
+If we consider 3 classes corresponding to $k=1,k=2,k=3$ then the PMF can be written as
+\ber
+P(k)=p_1^{(k-2)(k-3)}p_2^{(k-1)(k-3)}p_3^{(k-1)(k-2)}
+\eer
+Can extend to $n$ classes similarly.
 \subsection{Multinomial distribution}
 The multinomial distribution describes repeated and independent Multinoulli trials. It is a generalization of he binomial distribution, where there may be K possible outcomes (instead of binary. As an example in machine learning and NLP (natural language processing), multinomial distribution models the counts of words in a document. Similar to Multinoulli, we say that a sample $x$ may take $K$ possible outcomes, each one with prabability $p_K$ after n successive trials. The probability (pmf) of a certain (particular) outcome can be modeled using the formula:
 \beq
@@ -126,11 +143,6 @@ RHS =
 p(x_1\cap x_2)p(x_3|x_1x_2) = p(x_1\cap x_2 \cap x_3) = p(\mathbf{x})
 \eeq
 \section{Biased and unbiased estimators}
-\subsection{Bernoulli distribution}
-Random variable takes value $k=1$ with prob $\theta$ and $k=0$ with prob $1-\theta$. PMF is $\theta^k(1-\theta)^{1-k}$ assuming $0^0=1$. The true mean is
-\beq
-\theta = 1*P(1) + 0*P(0) = \theta
-\eeq
 The estimator for the mean is
 \beq
 \hat{\theta}_m = \frac{1}{m}\sum_{i=1}^{m}x^{(i)}
@@ -365,10 +377,18 @@ Obviously just evaluating the last term is much easier than evaulating the secon
 \ber
 \pmb{X} = \begin{bmatrix}\pmb{x^{(1)}}^T\\\vdots\\\pmb{x^{(m)}}^T\end{bmatrix} \text{ where } \pmb{x^{(i)}} \text{ is a column feature vector}\\
 \pmb{X}^T\pmb{X} = \begin{bmatrix}\pmb{x^{(1)}}& \hdots & \pmb{x^{(m)}}\end{bmatrix}\begin{bmatrix}\pmb{x^{(1)}}^T\\\vdots\\\pmb{x^{(m)}}^T\end{bmatrix} = \sum_{i=1}^{m}\pmb{x^{(i)}}\pmb{x^{(i)}}^T
-\eer
+  \eer
 \section{Stochastic gradient descent}
 \textbf{Insight} Gradient is an expectation! Which can be approximated using $m^{'}\ll{m}$ examples\\
 as $m\rightarrow\infty$, we can show that the optimization algorithm converges before every example has been sampled. So the computational cost is $\mathcal{O}(1)$ (That's what the book says) I think it is $\mathcal{O}(m)$.
+\section{Need to understand eqns 6.14-6.16}
+\section{Sigmoid eqn 6.20-6.23}
+\url{https://stats.stackexchange.com/questions/253273/inverse-logit-sigmoid-algebraic-manipulations-in-ian-goodfellows-deep-learning}
+The point to note that
+\beq
+\sigma((2y-1)z) \ne \frac{\exp(yz)}{\sum_{y^{'}=0}^{1}\exp(y^{'}z)} \text{ for all values of y}
+\eeq
+The equality holds only for $y=0$ or $y=1$, which are the values that $y$ is allowed to take. The $z$ that goes into $\sigma$ is called a logit.
 \end{document}
 %%% SO Question 1
 I'm trying to learn Maximum Likelihood Estimation from "Deep Learning" by Goodfellow/Bengio/Courville. 
