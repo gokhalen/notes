@@ -5,6 +5,7 @@
 \newcommand{\eer}{\end{eqnarray}}
 \newcommand{\nn}{\nonumber}
 \newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\ddeps}{\frac{d}{d\epsilon}\Big{|}_{\rightarrow{0}}}
 \newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
 \newcommand{\bD}{{\mathbf{D}}}
 \newcommand{\notimplies}{\;\not\!\!\!\implies}
@@ -264,8 +265,8 @@ Consistency
 Bias: difference in expected value of estimator and the true value\\
 Consistency $\implies$ unbiased\\
 unbiased $\notimplies$ consistency
-\section{Maximum likelihood estimation}
-The basic idea is to choose a probability distribution paramterized by $\pmb{\theta}$, $p_{model}(\pmb{x},\pmb{\theta})$, and to find the $\pmb{\theta}$ which maximizes the probability of the observed data $\mathbb{X}$ occurring.\\
+\section{\label{sect:mle}Maximum likelihood estimation}
+Equation (5.59) The basic idea is to choose a probability distribution paramterized by $\pmb{\theta}$, $p_{model}(\pmb{x},\pmb{\theta})$, and to find the $\pmb{\theta}$ which maximizes the probability of the observed data $\mathbb{X}$ occurring.\\
 When they say
 \beq
 \mathbf{\theta}_{\text{ML}} = \text{arg } \underset{\pmb{\theta}}{\text{max}} \, \mathbb{E}_{\mathbf{x}\sim\hat{p}_{\text{data}}}\log(p_{\text{model}}(\pmb{x}^{(i)},\pmb{\theta}))
@@ -381,7 +382,59 @@ Obviously just evaluating the last term is much easier than evaulating the secon
 \section{Stochastic gradient descent}
 \textbf{Insight} Gradient is an expectation! Which can be approximated using $m^{'}\ll{m}$ examples\\
 as $m\rightarrow\infty$, we can show that the optimization algorithm converges before every example has been sampled. So the computational cost is $\mathcal{O}(1)$ (That's what the book says) I think it is $\mathcal{O}(m)$.
+%
+%
+%
 \section{Need to understand eqns 6.14-6.16}
+\subsection{Mean}
+\ber
+f^{*} &=& \text{arg } \underset{f}{\text{min}}\, {\mathbb{E}}_{\pmb{y}\sim{p_{data}}}\|{\pmb{y}}-f(\pmb{x})\|^2 \\
+     &=& \text{arg } \underset{f}{\text{min}} \frac{1}{m}\sum_{i=1}^{m}\|{\pmb{y}^{(i)}}-f(\pmb{x})\|^2
+\eer
+Take variations in $f$ and set them to zero to get
+\beq
+\sum_{i=1}^{m}(\pmb{y}^{(i)}-f,\delta{f}) = 0 \text{ where, } (\cdot,\cdot) \text{ is the inner-product corrresponding to }\|\cdot\|
+\eeq
+Taking summation and noting that the above equation is true $\forall\,\delta{f}$
+\beq
+(\sum_{i=1}^{m}\pmb{y}^{(i)}-mf),\delta{f}) = 0 \, \implies\,f(\pmb{x})=\frac{1}{m}\sum_{i=1}^{m}\pmb{y}^{(i)} = \mathbb{E}_{y\sim{p_{data(\pmb{y}|\pmb{x})}}}[\pmb{y}]
+\eeq
+Where we have used arguments similar to Section (\ref{sect:mle})
+\subsection{Median}
+\ber
+f^{*} &=& \text{arg } \underset{f}{\text{min}}\, {\mathbb{E}}_{\pmb{y}\sim{p_{data}}}\|{\pmb{y}}-f(\pmb{x})\|_1 \
+\eer
+yields a function which predicts the median value of $\pmb{y}$ for each $\pmb{x}$. Treatment is as in \url{https://math.stackexchange.com/questions/113270/the-median-minimizes-the-sum-of-absolute-deviations-the-ell-1-norm}. We restrict ourselves to scalar $\pmb{y}$, and note that the treatment will work as long as an appropriate \text{sign} function is defined for vectors. For scalars, the optimization problem is
+\ber
+f^{*} &=& \text{arg } \underset{f}{\text{min}}\, {\mathbb{E}}_{\pmb{y}\sim{p_{data}}}\|{\pmb{y}}-f(\pmb{x})\| \text{ where } \|\cdot\| \text{ is the absolute value}
+\eer
+First we note that
+\beq
+\dd{|x|}{x} = \text{sign}(x)
+\eeq
+Our optimization problem is
+\beq
+\label{eqn:optprob}
+f^{*} = \text{arg } \underset{f}{\text{min}}\, \frac{1}{m}\sum_{i=1}^{m}|y^{i}-f|
+\eeq
+We need to take variations in $f$ and set them to zero.
+\ber
+\text{Let }\pi^{i} &=& |y^{i}-f| \\
+\delta_f \pi^{i} &=& \ddeps|y^{i}-f-\epsilon\delta{f}|\\
+&=& \ddeps \,\, \Big{[} |y^{i}-f| + \dd{|y^{i}-f|}{f}(-\epsilon\delta{f}) \cdots \text{ higher order terms }\Big{]} \text{ by chain rule } \\
+&=& \ddeps \,\, \Big{[}  \dd{|y^{i}-f|}{f}(-\epsilon\delta{f})\Big{]}\\
+&=& \ddeps \,\, \Big{[} \dd{|y^{i}-f|}{(y^{i}-f)}\dd{y^{i}-f}{f}(-\epsilon\delta{f})\Big{]}\\
+&=&  \ddeps \,\, \text{sign}(y^{i}-f)(-1)(-\epsilon\delta{f})\Big{]}\\
+&=& \text{sign}(y^{i}-f)\delta{f}  
+\eer
+Taking variations in $f$ in equation (\ref{eqn:optprob}) and setting them to zero gives
+\beq
+(\sum_{i=1}^{m}\text{sign}(y^{i}-f))\delta{f} \,\, \forall\, \delta{f}
+\eeq
+This can happen only if the number of terms with +ve sign in the above equation are equal to the number of terms with negative sign. i.e. if $f$ is the median.
+%
+%
+%
 \section{Sigmoid eqn 6.20-6.23}
 \url{https://stats.stackexchange.com/questions/253273/inverse-logit-sigmoid-algebraic-manipulations-in-ian-goodfellows-deep-learning}
 The point to note that
