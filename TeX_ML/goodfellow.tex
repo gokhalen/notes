@@ -318,7 +318,12 @@ Then start repating in conditional space
 p(x^2|x^1)&=&\int p(x^2|\pmb{\theta})p(\pmb{\theta}|x^1)d\pmb{\theta} \\
 p(x^3|x^1,x^2)&=&\int p(x^3|\pmb{\theta})p(\pmb{\theta}|x^1,x^2)d\pmb{\theta} \text{ and so on }
 \eer
-\section{Equation 5.74}
+\section{Equation 5.74: Bayes' theorem with multiple variables}
+\url{https://math.stackexchange.com/questions/1281454/bayes-rule-with-3-variables/1281558}
+I think the thing to note here is
+\beq
+p(\pmb{w}|\pmb{X},\pmb{y}) \text { is the same as }   p(\pmb{w}|(\pmb{X},\pmb{y})) 
+\eeq
 \beq
 % https://math.stackexchange.com/questions/1281454/bayes-rule-with-3-variables/1281558
 p(\pmb{w}|\pmb{X},\pmb{y}) = \frac{p(\pmb{w},\pmb{X},\pmb{y})}{p(\pmb{X},\pmb{y})} = \frac{p(\pmb{y}|\pmb{X},\pmb{w})p(\pmb{X},\pmb{w})}{p(\pmb{X},\pmb{y})}
@@ -330,7 +335,7 @@ Finally we get
 p(\pmb{w}|\pmb{X},\pmb{y}) \propto  p(\pmb{y}|\pmb{X},\pmb{w})p(\pmb{w})
 \eeq
 \section{Bayesian linear regression}
-Once you have the probability $p(\pmb{w}|\pmb{X},\pmb{y})$ (equation 5.78), we can put it into the maximum-likelihood equation and and maximize it. That becaomes equation (5.79) with a slight abuse of notation $\pmb{w}\rightarrow{\pmb{\theta}}$ and $\pmb{X}\rightarrow{\pmb{x}}$ and $\pmb{y}$ being dropped.
+Once you have the probability $p(\pmb{w}|\pmb{X},\pmb{y})$ (equation 5.78), we can put it into the maximum-likelihood equation and and maximize it. That becomes equation (5.79) with a slight abuse of notation $\pmb{w}\rightarrow{\pmb{\theta}}$ and $\pmb{X}\rightarrow{\pmb{x}}$ and $\pmb{y}$ being dropped.
 \section{SVM Support Vector machines}
 \beq
 f(\pmb{x}) = \pmb{w}^T\pmb{x} + b 
