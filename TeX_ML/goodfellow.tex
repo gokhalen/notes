@@ -432,6 +432,20 @@ Taking variations in $f$ in equation (\ref{eqn:optprob}) and setting them to zer
 (\sum_{i=1}^{m}\text{sign}(y^{i}-f))\delta{f} \,\, \forall\, \delta{f}
 \eeq
 This can happen only if the number of terms with +ve sign in the above equation are equal to the number of terms with negative sign. i.e. if $f$ is the median.
+\subsection{Median: Generalization to vector functions}
+The treatment is the same as above. Consider $\pmb{f}$ and the data $\pmb{y}$ to be in $\mathbb{R}^2$. Then the optimization problem is
+\beq
+f^{*} = \text{arg } \underset{f}{\text{min}}\, \frac{1}{m}\sum_{i=1}^{m}\|\pmb{y}^{i}-\pmb{f}\|_1
+\eeq
+Using the definition of the $\|\cdot\|_1$ we get
+\beq
+f^{*} = \text{arg } \underset{f}{\text{min}}\, \frac{1}{m}\sum_{i=1}^{m}\sum_{j=1}^{2}\|{y}^{i}_j-f_j\|_1
+\eeq
+Using the definition of $\|\cdot\|_1$ we have
+\beq
+f^{*} = \frac{1}{m}\text{arg } \underset{f}{\text{min}}\, |{y}^{i}_1-f_1|_1 + |{y}^{i}_2-f_2|_1
+\eeq
+Take variations in $f$, in both its components. Since these variations are arbitrary, we can choose in sequence $\delta\pmb{f}=[\delta{f}_1,0]$ and then $\delta\pmb{f}=[0,\delta{f}_2]$. This has the effect of reducing the above optimization problem in which variations in both directions were present to one in which variations in only one direction are present, rendering it the same as the scalar case. So, in the case of vector functions, it finds the median in all directions. Specifically, in 2D it is going to predict an answer which has the same number of examples to its left and right, and, up and down. 
 %
 %
 %
