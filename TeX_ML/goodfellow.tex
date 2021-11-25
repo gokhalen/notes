@@ -416,7 +416,7 @@ The minimum is attained at
 \beq
 f(x) = \mathsf{E}[y\mid x]
 \eeq
-See \url{https://math.stackexchange.com/questions/1915324/find-fx-that-minimizes-ey-fx2x/1915328#1915328}.  
+See \url{https://math.stackexchange.com/questions/1915324/find-fx-that-minimizes-ey-fx2x/1915328#1915328}. Hehas posted explanation there too.  
 \subsection{Mean: instructive but wrong}
 This is wrong because we have wrongly assumed that $\pmb{y}$ comes from the empirical distribution $\hat{p}_{data}$, whereas it is actually from $p_{data}$.
 \ber
@@ -532,8 +532,11 @@ See table (\ref{tab:sigmoid}). Summarizes discussion in Goodfellow after equatio
     gradient = $\dd{\zeta}{z}=-\sigma(-z)$ & (small)  & (large)\\
     \midrule
   \end{tabular}
-\caption{\label{tab:sigmoid} Two class classification properties. When we have the correct ans}  
-\end{table}  
+  \caption{\label{tab:sigmoid} Two class classification properties. When we have the correct ans}  
+\end{table}
+\section{Softmax}
+\subsection{Numerical stability}
+\url{https://stackoverflow.com/questions/42599498/numercially-stable-softmax}
 \end{document}
 %%% SO Question 1
 I'm trying to learn Maximum Likelihood Estimation from "Deep Learning" by Goodfellow/Bengio/Courville. 

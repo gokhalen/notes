@@ -151,5 +151,33 @@ H(Y|X) &=& -\sum_{x,y}p(x,y)\log{p(y|x)} \\
 &=& -\sum_{x,y}p(x,y)\log{p(x,y)} + \sum_{x}p(x)\Big)\log{p(x)} \\
 &=& H(X,Y)- H(X)
 \eer
+\section{$E[(x-b)^2]$}
+$b$ is a constant 
+\ber
+E[(x-b)^2] &=& E[(x-E(x)+E(x)-b)^2] \\
+&=& E[(x-E(x))^2 + (E(x)-b)^2 + 2(x-E(x))(E(x)-b)]\\
+&=& E[(x-E(x))^2] + E[(E(x)-b)^2] + 2E[(x-E(x))(E(x)-b)]
+\eer
+Now, $(E(x)-b)$ is a constant because $E(x)$ is a constant and $b$ is a constant.
+\ber
+E[(x-b)^2] &=& E[(x-E(x))^2] + (E(x)-b)^2 + 2(E(x)-b)E[(x-E(x))] \\
+&=& E[(x-E(x))^2] + (E(x)-b)^2 + 2(E(x)-b)(E(x)-EE(x)) \\
+&=& E[(x-E(x))^2] + (E(x)-b)^2 + 2(E(x)-b)\overbrace{(E(x)-E(x))}^{0}\\
+&=& E[(x-E(x))^2] + (E(x)-b)^2
+\eer
+Since the second term is non-negative
+\ber
+E[(x-b)^2]\ge E[(x-E(x))^2]
+\eer
+Hence, by inspection the minimum value is obtained for $b=E(x)$.
+\section{Expectation of a function of a random variable}
+See Goodfellow section 3.12. Let $y=g(x)$
+\beq
+E(x) = \int xp_x(x)\,dx
+\eeq
+Analogously,
+\beq
+E(y) = \int yp_y(y)\,dy = \int g(x) p_x(x)\,dx \qquad \text{ because } |p_ydy|=|p_xdx|
+\eeq
 \end{document}
 
