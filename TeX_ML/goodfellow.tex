@@ -537,6 +537,8 @@ See table (\ref{tab:sigmoid}). Summarizes discussion in Goodfellow after equatio
 \section{Softmax}
 \subsection{Numerical stability}
 \url{https://stackoverflow.com/questions/42599498/numercially-stable-softmax}
+\section{Binary function for classification: pg 199 }
+A binary function is one whose output is either 0 or 1. i.e. Range is {0,1}. Recall the basic definition of a function. Relation between two sets. Or a mapping from one set to another. If the domain has $n$ elements and the range has $m$ elements then there are $m^n$ functions from domain to range. This is because each element in domain can take the $m$ values  and there are $n$ such elements. Now, in the context of binary classification, we are interested in the case where $m=2$. Furthermore, if our feature vectors are consisting only of 0s and 1s and have length $n$ i.e. they are in $\in\{0,1\}^n$ then there are at most $2^n$ feature vectors. A training set consists of $n_1$ of these vectors mapped to $1$ and the remaining $2^n-n_1$ mapped to zero. This mapping is just one function of the total possible $2^{2^n}$ functions. This illustrates how hard the problem of binary classification is, not to say anything of $k$ class classification.
 \end{document}
 %%% SO Question 1
 I'm trying to learn Maximum Likelihood Estimation from "Deep Learning" by Goodfellow/Bengio/Courville. 
