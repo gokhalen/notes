@@ -82,6 +82,28 @@ From which it can be seen that
 \beq
 P(0) = (1-\theta) \qquad P(1) = \theta
 \eeq
+\section{Expectation of a function}
+The definition is (equation 3.10) in Goodfellow
+\beq
+\mathbb{E}(f(x)) = \int f(x) p_x(x) dx
+\eeq
+If we now want to change the random variable from $x$ to $y=f(x)$ we will need to find a pdf $p_y(y)$, so that we can use the formula
+\beq
+\mathbb{E}(y)) = \int yp_y(y)dy 
+\eeq
+$p_y(y) \ne p_x(f^{-1}(y))$. We change variables in the above equation from $y$ to $x$ and get
+\ber
+\mathbb{E}(f(x)) &= \int f(x)p_x(x)dx \\
+               &= \int y p_x(f^{-1}(y)) \frac{dx}{dy} dy
+\eer
+In the above equation we can identify
+\beq
+p_y(y) = p_x(f^{-1}(y)) \frac{dx}{dy} 
+\eeq
+Pretty much a standard change of variables formula.
+%
+%
+%
 \subsection{Multinoulli distribution}
 From \url{https://www.euanrussano.com/post/probability/multinoulli_multinomial/}.
 This distribution is also called categorial distribution, since it can be used to model events with K possible outcomes. Bernoulli distribution can be seen as a specific case of Multinoulli, where the number of possible outcomes K is 2. In machine learning, the multinoullli can used to model the expected class of one sample into a set of K classes. For instance, one may want to predict to which specie  in the set  a flower belongs based on its attribute. Then species K follow a multinoulli distribution.\\
