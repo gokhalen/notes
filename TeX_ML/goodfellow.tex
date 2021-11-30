@@ -562,7 +562,65 @@ See table (\ref{tab:sigmoid}). Summarizes discussion in Goodfellow after equatio
 \url{https://stackoverflow.com/questions/42599498/numercially-stable-softmax}
 \section{Binary function for classification: pg 199 }
 A binary function is one whose output is either 0 or 1. i.e. Range is {0,1}. Recall the basic definition of a function. Relation between two sets. Or a mapping from one set to another. If the domain has $n$ elements and the range has $m$ elements then there are $m^n$ functions from domain to range. This is because each element in domain can take the $m$ values  and there are $n$ such elements. Now, in the context of binary classification, we are interested in the case where $m=2$. Furthermore, if our feature vectors are consisting only of 0s and 1s and have length $n$ i.e. they are in $\in\{0,1\}^n$ then there are at most $2^n$ feature vectors. A training set consists of $n_1$ of these vectors mapped to $1$ and the remaining $2^n-n_1$ mapped to zero. This mapping is just one function of the total possible $2^{2^n}$ functions. This illustrates how hard the problem of binary classification is, not to say anything of $k$ class classification.
+%
+%
+%
+\section{Algorithm 6.1}
+$Pa(u^{(i)})$ probably means parents of $u^{(i)}$.
+\section{Perceptron definition}
+From \url{https://en.wikipedia.org/wiki/Perceptron}. In the modern sense, the perceptron is an algorithm for learning a binary classifier called a threshold function: a function that maps its input {$\mathbf {x}$} (a real-valued vector) to an output value $f(\mathbf{x})$ (a single binary value):
+\beq
+f(\mathbf{x}) = 1 \text{ if } \mathbf{x}^T\mathbf{w} + b \ge 0   \text{ or 0 otherwise} 
+\eeq
+\section{Sect 6.6.: Why is minimizing cross-entropy good}
+1) The logarithms undo the action of the exponentials leading to cost functions that don't saturate.
+2) Minimizing the cross entropy is equivalent to minimizing the KL divergence (equation 3.50) which measures the difference between two distributions.
+%
+%
+%
+\section{$L^2$ regularization}
+\ber
+\tilde{J} = J_{reg} + J  \qquad \text{ where } J_{reg} = \frac{\alpha}{2}\pmb{w}^T\pmb{w}
+\eer
+We want a quadratic approximation for $\tilde{J}$ about $\pmb{w}^{*}$, the minimizer of $J$  This can be obtained by expanding $\tilde{J}(\pmb{w}^{*}+(\pmb{w}-\pmb{w}^{*}))$ to yield a function in $\pmb{w}$.
+\ber
+J_{reg} \approx \frac{\alpha}{2}\pmb{w^*}^T\pmb{w^*} + \alpha\pmb{w^*}^T(\pmb{w}-\pmb{w^*}) + \frac{\alpha}{2}(\pmb{w}-\pmb{w^*})^T(\pmb{w}-\pmb{w^*})
+\eer
+Similarly $J$ can be expanded about $\pmb{w^*}$ too, noting that the first derivative at $\pmb{w^*}$ is zero.
+\ber
+J \approx  J(\pmb{w^*}) + \frac{1}{2}(\pmb{w}-\pmb{w^*})^T\pmb{H}(\pmb{w}-\pmb{w^*})
+\eer
+So, the expansion of $\tilde{J}$ becomes
+\ber
+\tilde{J} \approx  \frac{\alpha}{2}\pmb{w^*}^T\pmb{w^*} + J(\pmb{w^*}) + \alpha\pmb{w^*}^T(\pmb{w}-\pmb{w^*}) + \frac{\alpha}{2}(\pmb{w}-\pmb{w^*})^T(\pmb{H}+\alpha\pmb{1})(\pmb{w}-\pmb{w^*})
+\eer
+Treating this as a function of $\pmb{w}$ and setting the first derivative to zero gives us the condition to find its minimizer, $\pmb{\tilde{w}}$.
+\ber
+\alpha\pmb{w^*} + \alpha(\pmb{\tilde{w}}-\pmb{w^*}) + \pmb{H}(\pmb{\tilde{w}}-\pmb{w^*}) = 0\\
+\alpha\pmb{\tilde{w}} + \pmb{H}(\pmb{\tilde{w}}-\pmb{w^*}) = 0
+\eer
+We can solve for $\pmb{\tilde{w}}$ as
+\ber
+\pmb{\tilde{w}} = (\pmb{H}+\alpha\pmb{1})^{-1}\pmb{H}\pmb{w^*}
+\eer
+Using $\pmb{H}=\pmb{Q}\pmb{\Lambda}\pmb{Q^T}$ we can write this as
+\ber
+\pmb{\tilde{w}} = \pmb{Q}(\pmb{\Lambda}+\alpha\pmb{1})^{-1}\pmb{\Lambda}\pmb{Q^T}\pmb{w^*}
+\eer
+We can write $\pmb{w^*}=\pmb{Q}\pmb{\beta}$ where components of $\pmb{\beta}$ are projections of $\pmb{w^*}$ along the columns of $\pmb{Q}$.
+\ber
+\pmb{\tilde{w}} &=& \pmb{Q}(\pmb{\Lambda}+\alpha\pmb{1})^{-1}\pmb{\Lambda}\pmb{Q^T}\pmb{Q}\pmb{\beta}\\
+&=& \pmb{Q}(\pmb{\Lambda}+\alpha\pmb{1})^{-1}\pmb{\Lambda}\pmb{\beta}
+\eer
+Even though $(\pmb{\Lambda}+\alpha\pmb{1})^{-1}\pmb{\Lambda}$ is diagonal we cannout pull it outside $ \pmb{Q}$ because all diagonal terms are not in general equal. We see that the components of $\pmb{w^*}$ along the eigenvectors of $\pmb{H}$ are rescaled by $\frac{\lambda_i}{\lambda_i + \alpha}$. What's unstated is that the important descent directions of the objective functional are associated with large eigenvalues of the Hessian. I'm not going to prove this now. For the large values of eigenvalues of the Hessian, the scaling is essentially unity, for small eigenvalues of the Hessian compared to $\alpha$ the scaling is essentially zero.\\
+
+%
+%
+%
 \end{document}
+%
+%
+%
 %%% SO Question 1
 I'm trying to learn Maximum Likelihood Estimation from "Deep Learning" by Goodfellow/Bengio/Courville. 
 
