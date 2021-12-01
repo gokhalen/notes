@@ -616,40 +616,51 @@ We can write $\pmb{w^*}=\pmb{Q}\pmb{\beta}$ where components of $\pmb{\beta}$ ar
 Even though $(\pmb{\Lambda}+\alpha\pmb{1})^{-1}\pmb{\Lambda}$ is diagonal we cannout pull it outside $ \pmb{Q}$ because all diagonal terms are not in general equal. We see that the components of $\pmb{w^*}$ along the eigenvectors of $\pmb{H}$ are rescaled by $\frac{\lambda_i}{\lambda_i + \alpha}$. What's unstated is that the important descent directions of the objective functional are associated with large eigenvalues of the Hessian. I'm not going to prove this now. For the large values of eigenvalues of the Hessian, the scaling is essentially unity, for small eigenvalues of the Hessian compared to $\alpha$ the scaling is essentially zero.\\
 \section{$L^1$ regularization}
 \url{https://math.stackexchange.com/questions/3572016/how-does-this-l1-regularization-derivation-follow-proof-it-makes-sparse-models}\\
-\url{https://www.cs.ubc.ca/~murphyk/Teaching/CS540-Fall08/L13.pdf}\\
-Quadratic approximation of the regularized objective function
+\url{https://people.seas.harvard.edu/~yaron/AM221-S16/sections/sec6.pdf}\\
+This treatment is based on proposition 6 in the Harvard link. We are trying to minimize
 \beq
-\tilde{J}(\pmb{w}) = J(\pmb{w^*}) + \sum_{i}\Big{[}\frac{1}{2}H_{i,i}(w_i-w^*_i) + \alpha|w_i|\Big{]} \qquad H_{i,i}>0, \alpha > 0
+f(\pmb{x}) = \sum_{i}\frac{1}{2} (y_i - x_i)^2 + \lambda|x_i|
 \eeq
-Equations are derived through black-magic of subdifferentials/subgradients. According to reference 2 on page 8, for the $j^{th}$ component of the minimizer of the above equation if $|w_j|>0$, the optimality conditions are
-\ber
-H_{j,j}(w_j-w^*_j) + \alpha\sign(w_j) = 0 \text{ if } |w_j| > 0 \text{ no sum on } j\\
-\label{eqn:subdiffmaster}
-w_j = w_j^* - \alpha\frac{\sign(w_j)}{H_{j,j}} \text{ no sum on } j
-\eer
-I am not able to derive 7.23 from the above equation.
-%We consider two cases 1) $w_j>0$  and, 2)$w_j<0$. In the first case, we will derive an equation and set $w_j$ to zero if the equation drives $w_j$ below zero. In the second case, we will set $w_j$ to zero if the equation drives $w_j$ above zero.\\
-%textbf{Case 1:} $w_j>0$
-%Equation (\ref{eqn:subdiffmaster}) becomes,
-%\beq
-%w_j =  w_j^* - \frac{\alpha}{H_{j,j}} \,\, \text{...because }\sign{w_j} = 1 \text{ bcos } w_j>0
-%\eeq
-%Note $\alpha>0,H_{j,j}>0$.\\
-%If $w_j^*>0$ this equation can be written as
-%\beq
-%w_j =  \sign({w_j^*})|w_j^*| - \sign({w_j^*})\frac{\alpha}{H_{j,j}} \text{...}\sign({w_j})=1\\ 
-%\eeq
-%We add a $\max$ term to make $w_j$ zero when the RHS forces $w_j$ to be less than zero. We get
-%\beq
-%w_j = \sign({w_j^*})\max\Big{\{}|w_j^*| - \frac{\alpha}{H_{j,j}},0\Big{\}}
-%\eeq
-%
-%\textbf{Case 2:} $w_j<0$
-%Equation (\ref{eqn:subdiffmaster}) becomes,
-%\beq
-%w_j =  w_j^* + \frac{\alpha}{H_{j,j}} \,\, \text{...because }\sign{w_j} = -1 \text{ bcos } w_j<0
-%\eeq
+The minimizer is
+\beq
+x_i^{min} \stackrel{def}{=} 
+\begin{cases} 
+      y_i-\lambda & \text{ if } y_i > \lambda \\
+      0           & \text{ if } y_i \in [-\lambda,\lambda]\\
+      y_i+\lambda & \text{ if } y_i < -\lambda \\
+\end{cases}
+\eeq
+To recover the case in Goodfollow use:
+\beq
+y_i = \sqrt{H_{i,i}}w_i^* \quad x_i = \sqrt{H_{i,i}}w_i \quad \lambda = \frac{\alpha}{\sqrt{H_{i,i}}} 
+\eeq
+Note $\alpha>0,H_{i,i}>0$
+We get,
+\beq
+w_i^{min} =
+\begin{cases}
+        w_i^*-\frac{\alpha}{\sqrt{H_{i,i}}} & \text{ if } w_i^* >  \frac{\alpha}{\sqrt{H_{i,i}}}\\
+      0           & \text{ if } w_i^* \in \Big[-\frac{\alpha}{\sqrt{H_{i,i}}},\frac{\alpha}{\sqrt{H_{i,i}}}\Big]\\
+      w_i^*+\frac{\alpha}{\sqrt{H_{i,i}}}  & \text{ if } w_i^* <  -\frac{\alpha}{\sqrt{H_{i,i}}}  \\
+\end{cases}  
+\eeq
+This can be succintly written in the form given in Goodfellow
+\beq
+w_i = \sign({w_i^*})\max\Big{\{}|w_i^*|-\frac{\alpha}{H_{i,i}},0\Big{\}}
+\eeq
+For $w_i^* >  \frac{\alpha}{\sqrt{H_{i,i}}}$ it is easy to see $w_i^{min}=w_i^*-\frac{\alpha}{\sqrt{H_{i,i}}}$\\
+For $w_i^* \in \Big[-\frac{\alpha}{\sqrt{H_{i,i}}},\frac{\alpha}{\sqrt{H_{i,i}}}\Big]$ it is easy to see $w_i^{min}=0.$\\
+For $w_i^* <  -\frac{\alpha}{\sqrt{H_{i,i}}}$, Goodfellow's formula yields
+\beq
+-\max\Big{\{}|w_i^*|-\frac{\alpha}{H_{i,i}},0\Big{\}}
+\eeq
+Note that the first term $|w_i^*|-\frac{\alpha}{H_{i,i}}$ is POSITIVE. So the formula yields
+\beq
+-(|w_i^*|-\frac{\alpha}{H_{i,i}}) = -|w_i^*|+\frac{\alpha}{H_{i,i}} = w_i^* + \frac{\alpha}{H_{i,i}} 
+\eeq
+because $|w_i^*|=-w_i^* \text{ for } w_i^*<0$.
 \end{document}
+
 %
 %
 %
