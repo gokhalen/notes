@@ -293,6 +293,16 @@ Consistency
 Bias: difference in expected value of estimator and the true value\\
 Consistency $\implies$ unbiased\\
 unbiased $\notimplies$ consistency
+%
+%
+\section{Different estimators/regressions}
+\begin{enumerate}
+\item{\textbf{Maximum likelihood: } Find parameters that maximize likelihood of seeing data}
+\item{\textbf{Full Bayesian: pg 137:} Find the full distribution/pdf of the weights given the data}
+\item{\textbf{Maximum A Posteriori (MAP):} Maximize the likelihood plus a prior}  
+\end{enumerate}
+%
+%
 \section{\label{sect:mle}Maximum likelihood estimation}
 Equation (5.59) The basic idea is to choose a probability distribution paramterized by $\pmb{\theta}$, $p_{model}(\pmb{x},\pmb{\theta})$, and to find the $\pmb{\theta}$ which maximizes the probability of the observed data $\mathbb{X}$ occurring.\\
 When they say
@@ -364,6 +374,22 @@ p(\pmb{w}|\pmb{X},\pmb{y}) \propto  p(\pmb{y}|\pmb{X},\pmb{w})p(\pmb{w})
 \eeq
 \section{Bayesian linear regression}
 Once you have the probability $p(\pmb{w}|\pmb{X},\pmb{y})$ (equation 5.78), we can put it into the maximum-likelihood equation and and maximize it. That becomes equation (5.79) with a slight abuse of notation $\pmb{w}\rightarrow{\pmb{\theta}}$ and $\pmb{X}\rightarrow{\pmb{x}}$ and $\pmb{y}$ being dropped.
+%
+%
+%
+\section{Maximum-a-Posteriori}
+Notation in Goodfellow 5.6.1 is a little confusing and inconsistent with previous stuff. \url{https://brunomaga.github.io/Bayesian-Linear-Regression}. We aim at maximizing:
+\beq
+p(\pmb{w}|\pmb{X},\pmb{y}) = \frac{p(\pmb{w}|\pmb{X},\pmb{w})p(\pmb{w})}{p(\pmb{y}|\pmb{x})}
+\eeq
+%
+Taking logs
+\beq
+\log{p(\pmb{w}|\pmb{X},\pmb{y})} = \log{p(\pmb{y}|\pmb{X},\pmb{w})} + \log{p(\pmb{w})}
+\eeq
+Basically maximum likeliood with a prior.
+%
+%
 \section{SVM Support Vector machines}
 \beq
 f(\pmb{x}) = \pmb{w}^T\pmb{x} + b 
@@ -659,6 +685,29 @@ Note that the first term $|w_i^*|-\frac{\alpha}{H_{i,i}}$ is POSITIVE. So the fo
 -(|w_i^*|-\frac{\alpha}{H_{i,i}}) = -|w_i^*|+\frac{\alpha}{H_{i,i}} = w_i^* + \frac{\alpha}{H_{i,i}} 
 \eeq
 because $|w_i^*|=-w_i^* \text{ for } w_i^*<0$.
+%
+%
+%
+\section{Early stopping: Sect 7.8}
+Equation 7.41
+\ber
+(\pmb{\Lambda}+\alpha\pmb{1})^{-1}\pmb{\Lambda} &=& (\pmb{\Lambda}+\alpha\pmb{1})^{-1}((\pmb{\Lambda}+\alpha\pmb{1})-\alpha\pmb{1})\\
+&=&  (\pmb{\Lambda}+\alpha\pmb{1})^{-1}((\pmb{\Lambda}+\alpha\pmb{1})-\alpha(\pmb{\Lambda}+\alpha\pmb{1})(\pmb{\Lambda}+\alpha\pmb{1})^{-1})\\
+&=& (\pmb{1}-\alpha(\pmb{\Lambda}+\alpha\pmb{1})^{-1})
+\eer
+So we get
+\ber
+(\pmb{1}-\epsilon\pmb{\Lambda})^{\tau} &=&\alpha(\pmb{\Lambda}+\alpha\pmb{1})^{-1}\\
+\pmb{1}-\epsilon\tau\pmb{\Lambda} &\approx& \alpha\frac{1}{\alpha}(\pmb{1}+\frac{\pmb{\Lambda}}{\alpha})^{-1} \qquad \ldots (\beta\pmb{1})^{-1} = \frac{1}{\beta}\pmb{1}\\
+&\approx& \pmb{1} - \frac{\pmb{\Lambda}}{\alpha}
+\eer
+We must have
+\ber
+\epsilon\tau=\frac{1}{\alpha}
+\eer
+%
+%
+%
 \end{document}
 
 %
