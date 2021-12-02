@@ -708,6 +708,20 @@ We must have
 %
 %
 %
+\section{Dropout explanation: Fig 7.7}
+See Figure (\ref{fig:goodfellow77}). Output of $\hat{x}_1$ is $0$ because $\mu_{x_1}$ is $0$. output of $\hat{x}_2$ is $1$ because $\mu_{x_2}$ is $1$. Similar rules for $\hat{h}_1$ and $\hat{h}_2$. The output is
+\ber
+y = y(\hat{h}_1,\hat{h}_2) = y(\hat{h}_1,0) = y(h_1(0,x_2),0)
+\eer
+which is the same output produced by the neural network on the top-right in figure (\ref{fig:goodfellow77})
+\begin{figure}[h]
+\centering  
+\includegraphics[width=14cm]{goodfellow_fig/dropout_fig_77.jpg}
+\caption{\label{fig:goodfellow77} Explanation of figure 7.7 in Goodfellow}
+\end{figure}  
+%
+%
+%
 \end{document}
 
 %
