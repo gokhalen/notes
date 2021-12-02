@@ -722,6 +722,33 @@ which is the same output produced by the neural network on the top-right in figu
 %
 %
 %
+\section{Exactness of Weight scaling inference rule}
+Equation 7.65 in Goodfellow is
+\beq
+\exp\Big{(}\frac{1}{2^n}\sum_{\pmb{d}\in\{0,1\}^n}\pmb{W}_{y}^T(\pmb{d}\odot\pmb{v})+b_y\Big{)}
+\eeq
+Note: since there are no nonlinear hidden units, the output of unit $y$ which predicts class $y$ can be expressed as a vector $\pmb{W}_{y}^T$ times $\pmb{d}\odot\pmb{v}$ where the $\odot$ represents element-wise vector product. Dropout is applied only to the input. So the input becomes $\pmb{d}\odot\pmb{v}$, where $\pmb{d}\in\{0,1\}^n$. There are $2^n$ vectors corresponding to $\{0,1\}^n$. So we have,
+\beq
+\sum_{\pmb{d}\in\{0,1\}^n} b_y  = 2^nb_y
+\eeq
+Furthermore,
+\beq
+\sum_{\pmb{d}\in\{0,1\}^n}\pmb{W}_{y}^T(\pmb{d}\odot\pmb{v}) = \pmb{W}_{y}^T\sum_{\pmb{d}\in\{0,1\}^n}(\pmb{d}\odot\pmb{v})
+= \pmb{W}_{y}^T\Big{(}\sum_{\pmb{d}\in\{0,1\}^n}\pmb{d}\Big{)}\odot\pmb{v}
+= \pmb{W}_{y}^T\Big{(}2^{n-1}\Big{)}\pmb{v} = 2^{n-1}\pmb{W}_{y}^T\pmb{v}
+\eeq
+Where we have used
+\beq
+\sum_{\pmb{d}\in\{0,1\}^n}(\pmb{d}\odot\pmb{v}) = 2^{n-1}\pmb{v} \text{ which follows from }\sum_{\pmb{d}\in\{0,1\}^n}{\pmb{d}}=2^{n-1}
+\eeq
+So, the first equation becomes
+\beq
+\exp\Big(\frac{1}{2^n}(2^{n-1}\pmb{W}_{y}^T\pmb{v}+2^nb_y)\Big) = \exp\Big(\frac{1}{2}\pmb{W}_{y}^T\pmb{v}+b_y\Big) 
+\eeq
+So, basically, after applying dropout with probablity $0.5$ (the weights are multiplied by 1 50\% of the time, or by 0 the remaining 50\% of the time) the weights are halved. All the weight states that can be achieved by this multiplication by can be represented by $\pmb{d}\odot\pmb{v}$ for some $\pmb{d}\in\{0,1\}^n$
+%
+%
+%
 \end{document}
 
 %
