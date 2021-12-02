@@ -745,7 +745,16 @@ So, the first equation becomes
 \beq
 \exp\Big(\frac{1}{2^n}(2^{n-1}\pmb{W}_{y}^T\pmb{v}+2^nb_y)\Big) = \exp\Big(\frac{1}{2}\pmb{W}_{y}^T\pmb{v}+b_y\Big) 
 \eeq
-So, basically, after applying dropout with probablity $0.5$ (the weights are multiplied by 1 50\% of the time, or by 0 the remaining 50\% of the time) the weights are halved. All the weight states that can be achieved by this multiplication by can be represented by $\pmb{d}\odot\pmb{v}$ for some $\pmb{d}\in\{0,1\}^n$
+So, basically, after applying dropout with probablity $0.5$ (the weights are multiplied by 1 50\% of the time, or by 0 the remaining 50\% of the time) the weights are halved. All the weight states that can be achieved by this multiplication by can be represented by $\pmb{d}\odot\pmb{v}$ for some $\pmb{d}\in\{0,1\}^n$.
+%
+%
+%
+\section{Dropout and Bagging: 7.12 }
+- \textbf{Bagging (Bootstrap Aggregating)} train a separate model for each class and then ensemble the prediction\\
+- \textbf{Boosting}: Construct an ensemble with higher capacity than individual models.\\
+- \textbf{Dropout}: A method of making bagging practical. Instead of training multiple neural networks on different datasets and averaging, dropout trains all sub-networks of a model. Since there are a very large number of all sub-networks of a model, it is impractical to train them all. So we just sample the gradients by training a few models.\\
+- \textbf{weight scaling inference rule} allows us to approximate $p_{ensemble}$ by multiplying the weights with probability of includig the link.\\
+- \textbf{dropout boosting} traditional boosting increases the capacity of bagging. dropout boosting reduces the regularizing effect and thus in some sense increases capacity. (increasing regularization reduces capacity, therefore decreasing regularization increases capacity)
 %
 %
 %
