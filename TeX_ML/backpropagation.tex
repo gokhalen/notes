@@ -101,5 +101,34 @@ draw,processblue , text=blue , minimum width =1 cm}]
 \caption{\label{fig:computationalgraph} Computational graph}
 \end{figure}
 
+\section{Backprop on a simple NN}
+\begin{figure}
+  \centering
+\begin{tikzpicture}[-latex ,auto ,node distance =3 cm and 3cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = processblue!20 ,
+  draw,processblue , text=blue , minimum width =1 cm}]
+  \node[state](Input1){$x$};
+  \node[state](Hidden)[right = of Input1]{$h$};
+  \node[state](Output)[right = of Hidden]{$y$};
+  \path (Input1) edge [] node {$w_1$} (Hidden);
+  \path (Hidden) edge [] node {$w_2$} (Output);
+\end{tikzpicture}
+\caption{\label{fig:toybackprop} Toy backprop}
+\end{figure}
+Let there be one training example $x_1,y_1$. Let the loss be $\pi=\frac{1}{2}(y-y_1)^2$. So our neural network is
+\beq
+y = w_2h(w_1x)
+\eeq
+\beq
+\pdd{y}{w_2} = h(w_1x) \qquad \pdd{y}{h}   = w_2 \qquad
+\pdd{y}{w_1} = \pdd{y}{h}\pdd{h}{(w_1x)}\pdd{(w_1x)}{w_1}
+\eeq
+The quantity $\pdd{h(w_1x)}{(w_1x)}$ is nothing but the derivative of $h$ evaluated at the current state. For some functions like $h(z)=\tanh{(z)}$, we can write $\pdd{h(w_1x)}{(w_1x)}$ in terms of the activation of the hidden layers itself.
+e.g.
+\beq
+\pdd{\tanh(z)}{z}= 1 - (\tanh{(z)})^2 = 1-h(z)^2 \qquad 
+\eeq
+For other functions it may not be possible or easy.
 \end{document}
 
