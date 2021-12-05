@@ -318,7 +318,10 @@ over the empirical distribution $\mathbf{x}\sim\hat{p}_{\text{data}}$.
 " We can thus see maximum likelihood as an attempt to make the model dis-
 tribution match the empirical distribution $\hat{p}_{\text{data}}$ Ideally, we would like to match
 the true data generating distribution $p_{\text{data}}$ , but we have no direct access to this
-distribution."
+distribution."\\
+
+We typically minimize $\log{(p)}$ because of better numerics. Avoids overflow/underflow in exponentials.
+
 \section{Linear regression as Maximum Likelihood}
 - Earlier we motivated linear regression as an algorithm that takes an input $\pmb{x}$ and produces an output $\hat{y}$ using ${\pmb{\theta}}^T\pmb{x}$\\
 - We learned the weights $\pmb{\theta}$ by minimizing mean squared error a criterion chosen arbitrarily.\\
@@ -331,7 +334,11 @@ So,
 \beq
 p(y^{(i)}|\pmb{x}^{(i)};\pmb{\theta}) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big(-\frac{(y^{(i)}-\hat{y}(\pmb{x}^{(i)},\pmb{\theta}))^2}{2\sigma^2}\Big) 
 \eeq
-So now we want to find a $\pmb{\theta}$ that maximizes
+So to maximize the total likelihood we want to maximize
+\beq
+\pmb{\Pi}_{i=1}^{m}p(y^{(i)|\pmb{x^{(i)}}},\pmb{\theta})
+\eeq
+We can replace the product by a sum if we take the log of the above equation. So now we want to find a $\pmb{\theta}$ that maximizes
 \beq
 \sum_{i=1}^{m}\log{}p(y^{(i)}|\pmb{x}^{(i)};\pmb{\theta}) = m\log\Big(\frac{1}{\sqrt{2\pi\sigma^2}}\Big) - \sum_{i=1}^{i=n}\frac{(y^{(i)}-\hat{y}(\pmb{x}^{(i)},\pmb{\theta}))^2}{2\sigma^2}
 \eeq
@@ -756,6 +763,16 @@ So, basically, after applying dropout with probablity $0.5$ (the weights are mul
 - \textbf{Dropout}: A method of making bagging practical. Instead of training multiple neural networks on different datasets and averaging, dropout trains all sub-networks of a model. Since there are a very large number of all sub-networks of a model, it is impractical to train them all. So we just sample the gradients by training a few models.\\
 - \textbf{weight scaling inference rule} allows us to approximate $p_{ensemble}$ by multiplying the weights with probability of includig the link.\\
 - \textbf{dropout boosting} traditional boosting increases the capacity of bagging. dropout boosting reduces the regularizing effect and thus in some sense increases capacity. (increasing regularization reduces capacity, therefore decreasing regularization increases capacity)
+%
+%
+%
+\section{Tangent prop: sect 7.14}
+Let all points belonging to class $y^1$ belong to manifold $M_1$. The point of the condition 7.67 is to make sure that our prediction $f(\pmb{x})$ changes very-little as the data point moves from location $\pmb{x}_1$ on the manifold to another point $\pmb{x}_2$ closeby. 
+%
+%
+%
+\section{Optimization: 8.2 Why maximize ecpectations}
+Goodfellow et al seem to prefer minimizing the expectation of some loss function over the data generating distribution as shown in equation 8.2. This is because taking the expectation automatically assigns higher weight to high-probability examples, and lower weight to lower probability examples.
 %
 %
 %
