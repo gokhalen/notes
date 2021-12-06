@@ -4,6 +4,7 @@
 \newcommand{\ber}{\begin{eqnarray}}
 \newcommand{\eer}{\end{eqnarray}}
 \newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -37,4 +38,20 @@ Using $f'(x_0)=0$, the Taylor expansion becomes
 f(x_0+h) = f(x_0) + \frac{1}{2}f''(x_0)h^2 + ...
 \eeq
 Neglecting higher order terms, we note that since $f(x_0+h) \geq f(x_0)$ we must have $\frac{1}{2}f''(x_0)h^2 \geq 0$. This implies $f''(x_0) \geq 0$. If we assume $f(x_0+h) > f(x_0)$, we will get $f''(x_0) > 0$.
+\section{Gradient is the direction of most increase}
+\ber
+f(\pmb{x} + h\pmb{n}) \approx f(\pmb{x}) + h\nabla{f(\pmb{x})}\cdot\pmb{n} \text{ where } \pmb{n} \text{ is a unit vector} \\
+\nabla{f(\pmb{x})}\cdot\pmb{n} = |f(\pmb{x})|\cos(\theta) \text{ where } \theta \text{ is the angle between} \nabla{}f(\pmb{x}) \text{ and } \pmb{n} 
+\eer
+For a given positive and small $h$, $h\nabla{f(\pmb{x})}\cdot\pmb{n} = h|f(\pmb{x})|\cos(\theta) $ is maximized when $\theta=0$ ( $\pmb{n}$ is in the same direction as $\nabla{f}$) and minimized when $\theta=180^{\circ}$ (when $\pmb{n}$ is in a direction opposite to $\nabla{}f$). 
+\section{Line search}
+Now that we know the direction of steepest descent, we need to know how much we need to go along that direction. Let $\pmb{g}=\nabla{}f(\pmb{x})$ and let $\pmb{H}$ be the Hessian of $f$
+\ber
+f(\pmb{x} + \alpha\pmb{g}) \approx f(\pmb{x}) + \alpha\pmb{g}\cdot\pmb{g} + \frac{1}{2}\alpha^2\pmb{g}\pmb{H}\pmb{g}
+\eer
+Becase we want to minimize $f(\pmb{x} + \alpha\pmb{g})$ we differentiate wrt $\alpha$ and set to zero to get
+\ber
+\dd{f}{\alpha} = 0 = \pmb{g}\cdot\pmb{g} + \alpha\pmb{g}\pmb{H}\pmb{g} \implies \alpha = -\frac{\pmb{g}\cdot\pmb{g}}{\pmb{g}\pmb{H}\pmb{g}}
+\eer
+Similar equation in \url{http://www.ee.iitm.ac.in/~uday/2021b-EE5121/ls.html} equation (8)
 \end{document}
