@@ -51,8 +51,13 @@ f(\pmb{x} + \alpha\pmb{g}) \approx f(\pmb{x}) + \alpha\pmb{g}\cdot\pmb{g} + \fra
 \eer
 Becase we want to minimize $f(\pmb{x} + \alpha\pmb{g})$ we differentiate wrt $\alpha$ and set to zero to get
 \ber
-\dd{f}{\alpha} = 0 = \pmb{g}\cdot\pmb{g} + \alpha\pmb{g}\pmb{H}\pmb{g} \implies \alpha = -\frac{\pmb{g}\cdot\pmb{g}}{\pmb{g}\pmb{H}\pmb{g}}
+\dd{f}{\alpha} = 0 = \pmb{g}\cdot\pmb{g} + \alpha\pmb{g}\pmb{H}\pmb{g} \implies \alpha = -\frac{\pmb{g}\cdot\pmb{g}}{\pmb{g}\pmb{H}\pmb{g}} 
 \eer
+when
+\ber
+\text{ when }\frac{\pmb{g}\cdot\pmb{g}}{\pmb{g}\pmb{H}\pmb{g}} > 0
+\eer
+If $\frac{\pmb{g}\cdot\pmb{g}}{\pmb{g}\pmb{H}\pmb{g}}<0$ we are going in the direction of ascent.
 Similar equation in \url{http://www.ee.iitm.ac.in/~uday/2021b-EE5121/ls.html} equation (8). \\
 In case quadratic approximation is not good enough, we need to use backtracking/other approaches to improve this estimate of the step.
 \end{document}
