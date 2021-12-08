@@ -840,6 +840,22 @@ initial activations throughout.`''
 %
 %
 %
+\section{Section 8.5.2 RMSProp: recurrence relation}
+From \url{https://en.wikipedia.org/wiki/Stochastic_gradient_descent#RMSProp}.\\
+\ber
+v_{t} = \gamma{}v_{t-1} + (1-\gamma)(\nabla{Q_t}^2)
+\eer
+$v_{0}$ is probably initialized to the first gradient or maybe even to zero
+\ber
+v_{t} &=& \gamma{}(\gamma{}v_{t-2}+(1-\gamma)(\nabla{Q_{t-1}})^2) + (1-\gamma)(\nabla{Q_t})^2\\
+&=& \gamma^2v_{t-2} + \gamma(1-\gamma)(\nabla{Q_{t-1}})^2 + (1-\gamma)(\nabla{Q_t})^2\\
+&\approx& \sum_{k=0}^{t}\gamma^{k}(1-\gamma)(\nabla{Q_{t-k}})^2
+\eer
+This shows the exponential weighting to the older gradients.
+
+%
+%
+%
 \section{Batch normalization section 8.7}
 1) Small updates to weights can cause large changes in the output due to adding up of second order effects\\
 2) Higher order optimizations can take into account the second and higher order effects but these optimization algos are very expensive\\
