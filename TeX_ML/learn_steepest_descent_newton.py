@@ -23,7 +23,7 @@ xx,yy = np.meshgrid(xvec,yvec)
 
 alpha  = 0.1 # learning rate for steepest descent
 xstart = np.asarray([xmax-1.0,ymax-1.0]) # initial point
-niter  = 64 # number of iterations for steepest descent
+niter  = 128 # number of iterations for steepest descent
 
 def fobj(xx,yy,aa,bb):
     # objective function
@@ -55,6 +55,8 @@ ax.set_aspect('equal')
 plt.contourf(xx,yy,ff)
 
 # do steepest descent
+# the step-size in steepest descent is based on a quadratic approximation
+# in a particular direction (the gradient)!
 xcurr     = xstart
 xiterates = []
 for iiter in range(0,niter):
@@ -67,6 +69,7 @@ xiterates = np.asarray(xiterates)
 plotiterates(xiterates,ax,'r')
 
 # do newton
+# Newton is based on quadratic-approximation in all-directions 
 xcurr     = xstart
 xiterates = []    
 xiterates.append(xcurr)
@@ -75,3 +78,13 @@ xiterates.append(xnew)
 xiterates = np.asarray(xiterates)
 plotiterates(xiterates,ax,'b')
 
+# do gradient descent with constant learning rate
+xcurr = xstart 
+xiterates = []
+for iiter in range(0,niter):
+    xiterates.append(xcurr)
+    gg = fgrad(xcurr,aamin,bbecc)
+    xcurr = xcurr - 0.16*gg
+
+xiterates = np.asarray(xiterates)
+plotiterates(xiterates,ax,'y')
