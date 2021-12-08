@@ -43,7 +43,10 @@ Neglecting higher order terms, we note that since $f(x_0+h) \geq f(x_0)$ we must
 f(\pmb{x} + h\pmb{n}) \approx f(\pmb{x}) + h\nabla{f(\pmb{x})}\cdot\pmb{n} \text{ where } \pmb{n} \text{ is a unit vector} \\
 \nabla{f(\pmb{x})}\cdot\pmb{n} = |f(\pmb{x})|\cos(\theta) \text{ where } \theta \text{ is the angle between} \nabla{}f(\pmb{x}) \text{ and } \pmb{n} 
 \eer
-For a given positive and small $h$, $h\nabla{f(\pmb{x})}\cdot\pmb{n} = h|f(\pmb{x})|\cos(\theta) $ is maximized when $\theta=0$ ( $\pmb{n}$ is in the same direction as $\nabla{f}$) and minimized when $\theta=180^{\circ}$ (when $\pmb{n}$ is in a direction opposite to $\nabla{}f$). 
+For a given positive and small $h$, $h\nabla{f(\pmb{x})}\cdot\pmb{n} = h|f(\pmb{x})|\cos(\theta) $ is maximized when $\theta=0$ ( $\pmb{n}$ is in the same direction as $\nabla{f}$) and minimized when $\theta=180^{\circ}$ (when $\pmb{n}$ is in a direction opposite to $\nabla{}f$).
+%
+%
+%
 \section{Line search}
 Now that we know the direction of steepest descent, we need to know how much we need to go along that direction. Let $\pmb{g}=\nabla{}f(\pmb{x})$ and let $\pmb{H}$ be the Hessian of $f$
 \ber
@@ -60,4 +63,16 @@ when
 If $\frac{\pmb{g}\cdot\pmb{g}}{\pmb{g}\pmb{H}\pmb{g}}<0$ we are going in the direction of ascent.
 Similar equation in \url{http://www.ee.iitm.ac.in/~uday/2021b-EE5121/ls.html} equation (8). \\
 In case quadratic approximation is not good enough, we need to use backtracking/other approaches to improve this estimate of the step.
+%
+%
+\section{Steepest descent and Newton}
+From previous section the steepest descent update is:
+\ber
+\pmb{x}_{new} = \pmb{x}_{old} + \alpha\pmb{g} \text{ where } \alpha < 0 \text{ and }  \alpha = \frac{\pmb{g}\cdot\pmb{g}}{\pmb{g}\pmb{H}\pmb{g}}
+\eer
+Even though, Hessian information is used, this update is different from the Newton update
+\ber
+\pmb{x}_{new} = \pmb{x}_{old} - \pmb{H}^{-1}\nabla{f(\pmb{x}_{old})}
+\eer
+Which is why Steepest descent takes many steps to go to the minimum of a quadratic function, while Newton takes one step.
 \end{document}

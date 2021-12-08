@@ -613,6 +613,11 @@ f(\mathbf{x}) = 1 \text{ if } \mathbf{x}^T\mathbf{w} + b \ge 0   \text{ or 0 oth
 %
 %
 %
+\section{Regularization as a prior on weights }
+```In section 5.6.1, we saw that many regularization strategies can be interpreted as MAP Bayesian inference, and that in particular, L2 regularization is equivalent to MAP Bayesian inference with a Gaussian prior on the weights`a''
+%
+%
+%
 \section{$L^2$ regularization}
 \ber
 \tilde{J} = J_{reg} + J  \qquad \text{ where } J_{reg} = \frac{\alpha}{2}\pmb{w}^T\pmb{w}
@@ -801,14 +806,37 @@ Here, $\epsilon_{\tau}$ is to be interpreted as a fixed constant.
 after the ﬁrst 100 iterations or so. Therefore, it is usually best to monitor the ﬁrst
 several iterations and use a learning rate that is higher than the best-performing
 learning rate at this time, but not so high that it causes severe instability.`''
-
 %
 %
 %
-
 \section{Optimization with momentum: section 8.3.2}
 It is less important to adapt $\alpha$ (momentum parameter) time than to shrink $\epsilon$ (learning rate)  over time.
 
+
+%
+%
+%
+
+\section{Sect 8.4 Parameter initialization strategies}
+`''A good rule of thumb for choosing the initial scales is to
+look at the range or standard deviation of activations or gradients on a single
+minibatch of data. If the weights are too small, the range of activations across the
+minibatch will shrink as the activations propagate forward through the network.
+By repeatedly identifying the first layer with unacceptably small activations and
+increasing its weights, it is possible to eventually obtain a network with reasonable
+initial activations throughout.`''
+
+%
+%
+%
+
+\section{Section 8.4 weight initialization}
+`''We can think of initializing the parameters $\pmb{\theta}$ to $\pmb{\theta}_0$ as being similar to imposing a Gaussian prior $p(\pmb{\theta})$ with mean $\pmb{\theta}_0$
+%
+%
+%
+\section{Section 8.4 Marginal mean}
+\url{https://stats.stackexchange.com/questions/4245/what-is-the-meaning-of-marginal-mean} Marginal mean is the mean of a marginal distribution. A marginal distribution is defined in expectation\_probability.tex
 %
 %
 %
