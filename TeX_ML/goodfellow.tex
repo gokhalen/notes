@@ -235,6 +235,18 @@ Since $\mathbb{E}(\hat{\sigma}^2_m)\ne \sigma^2$, equation (\ref{eqn:biasedgauss
 \sqrt{\text{var}\Big[\frac{1}{m}\sum_{i=1}^{m}x^{(i)}\Big]} = \sqrt{\frac{1}{m^2}\sum_{i=1}^{m}\text{var}(x^{(i)})} = \sqrt{\frac{1}{m^2}m\text{var}(x)} = \sqrt{\frac{\sigma^2}{m}} = \frac{\sigma}{\sqrt{m}}
 \eer
 We have used $\text{var}(x^{(i)})=\sigma^2\,\forall\,i$
+%
+%
+%
+\section{Derivation of maximum likelihoood estimators (Bishop PRML 2006) }
+Our data $x_i$ comes from a normal distribution $\mathcal{N}(x_i|\mu,\sigma^2)$. The likelihood is
+\beq
+p(\pmb{x}|\mu,\sigma^2)=\prod_{i=1}^{n}\mathcal{N}(x_i|\mu,\sigma^2)
+\eeq
+Maximizing wrt $\mu$ and $\sigma$ gives us the maximum likelihood estimators for the mean and variance. This is a joint maximization of the above equation. That is, we want to find a $\mu,\sigma$  that maximizes the above probability. We will call the $\mu,\sigma$ thus obtained as maximum likelihood estimators.
+%
+%
+%
 \section{Deciding which algorithm is better Pg. 128}
 In machine learning experiments, it is common to say that algorithm A is better than algorithm B if the upper bound of the 95\% conﬁdence interval for the error of algorithm A is less than the lower bound of the 95\% conﬁdence interval for the error of algorithm B.
 \section{Equation 5.54: Proof}
@@ -288,7 +300,7 @@ Which completes the proof.
 \section{Bias and consistency}
 Consistency
 \beq
-\text{P}(|\hat{\theta}_m - \theta|) \rightarrow 0 \text{ as } m \rightarrow \infty
+\text{P}(|\hat{\theta}_m - \theta|>\epsilon) \rightarrow 0 \text{ as } m \rightarrow \infty 
 \eeq
 Bias: difference in expected value of estimator and the true value\\
 Consistency $\implies$ unbiased\\
@@ -863,6 +875,11 @@ This shows the exponential weighting to the older gradients.
 network. The reparametrization significantly reduces the problem of coordinating
 updates across many layers.`''\\
 4) Can be thought of as eliminating linear interactions
+%
+%
+%
+\section{CNNs equivariance}
+CNNs are equivariant to translations but not rotation and scaling.
 %
 %
 %
