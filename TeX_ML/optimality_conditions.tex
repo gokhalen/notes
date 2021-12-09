@@ -74,5 +74,6 @@ Even though, Hessian information is used, this update is different from the Newt
 \ber
 \pmb{x}_{new} = \pmb{x}_{old} - \pmb{H}^{-1}\nabla{f(\pmb{x}_{old})}
 \eer
-Which is why Steepest descent takes many steps to go to the minimum of a quadratic function, while Newton takes one step.
+Which is why Steepest descent takes many steps to go to the minimum of a quadratic function, while Newton takes one step.\\
+In steepest descent we are making a function that is a quadratic approximation of the original function in the direction of the gradient. For Newton, it is a quadratic approximation in all directions. In steepest descent, we choose a direction defined by the gradient and find the minimum in that direction. The global minium (usually) does not lie in the direction indicated by the gradient. \\
 \end{document}

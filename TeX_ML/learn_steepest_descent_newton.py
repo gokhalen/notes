@@ -37,7 +37,7 @@ def fgrad(xx,aa,bb):
 # HH is the hessian
 HH = np.asarray([[2.0/bbecc[0],0],[0,2.0/bbecc[1]]])    
 
-def plotiterates(xitertes,ax,clr='r'):
+def plotiterates(xitertes,ax,clr='r',label=''):
     nn = len(xiterates)
     for ii in range(nn-1):
         xstart = xiterates[ii]
@@ -45,7 +45,9 @@ def plotiterates(xitertes,ax,clr='r'):
         xx_ = xstart[0],xend[0]
         yy_ = xstart[1],xend[1]
         ax.plot(xstart[0],xstart[1],clr+'+')
-        ax.plot(xx_,yy_,clr+'-')        
+        line,=ax.plot(xx_,yy_,clr+'-')
+        
+    line.set_label(label)
 
 ff = fobj(xx,yy,aamin,bbecc)
 
@@ -66,7 +68,7 @@ for iiter in range(0,niter):
     xcurr = xcurr - alpha*gg
 
 xiterates = np.asarray(xiterates)
-plotiterates(xiterates,ax,'r')
+plotiterates(xiterates,ax,'r',label='steepest descent')
 
 # do newton
 # Newton is based on quadratic-approximation in all-directions 
@@ -76,7 +78,7 @@ xiterates.append(xcurr)
 xnew      = xstart - np.linalg.inv(HH)@fgrad(xcurr,aamin,bbecc)
 xiterates.append(xnew)
 xiterates = np.asarray(xiterates)
-plotiterates(xiterates,ax,'b')
+plotiterates(xiterates,ax,'b',label='Newton')
 
 # do gradient descent with constant learning rate
 xcurr = xstart 
@@ -87,4 +89,7 @@ for iiter in range(0,niter):
     xcurr = xcurr - 0.16*gg
 
 xiterates = np.asarray(xiterates)
-plotiterates(xiterates,ax,'y')
+plotiterates(xiterates,ax,'y',label='gradient descent with const learning rate')
+plt.legend()
+
+
