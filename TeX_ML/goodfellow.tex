@@ -316,8 +316,28 @@ unbiased $\notimplies$ consistency
 %
 %
 \section{\label{sect:mle}Maximum likelihood estimation}
-Equation (5.59) The basic idea is to choose a probability distribution paramterized by $\pmb{\theta}$, $p_{model}(\pmb{x},\pmb{\theta})$, and to find the $\pmb{\theta}$ which maximizes the probability of the observed data $\mathbb{X}$ occurring.\\
-When they say
+Equation (5.59) The basic idea is to choose a probability distribution paramterized by $\pmb{\theta}$, $p_{model}(\pmb{x},\pmb{\theta})$, which approximates the true data generating distribution $p_{data}(\pmb{x},\pmb{\theta})$, and to find the $\pmb{\theta}$ which maximizes the probability of the observed data $\mathbb{X}$ occurring.\\
+We want to find $\pmb{\theta}$ that maximizes
+\ber
+L = p_{data}(\mathbb{X},\pmb{\theta}) = \prod_i p_{data}(\pmb{x}^{(i)},\pmb{\theta})
+\eer
+Since we do not know $p_{data}$, we replace it with $p_{model}$. So we maximize
+\ber
+L = \prod_i p_{model}(\pmb{x}^{(i)},\pmb{\theta})
+\eer
+Instead of  maximizing $L$  we maximize $\log{L}$ because it has better numerics ( overflow and underflow in exponentials is avoided)\\
+\ber
+\log{L} = \sum_{i}\log{p_{model}}(\pmb{x}^{(i)},\pmb{\theta})
+\eer
+Equivalently, we can divide by the number of training examples and minimize
+\ber
+\log{L'}= \frac{1}{m}\sum_{i}\log{p_{model}}(\pmb{x}^{(i)},\pmb{\theta})
+\eer
+Which we can recognize as the expectation over the EMPIRICAL distribution $\hat{p}_{data}$ where every example has a probability of $1/m$ of occurring.
+\ber
+\log{L'} = \mathbb{E}_{\mathbf{x}\sim\hat{p}_{\text{data}}}\log(p_{\text{model}}(\pmb{x}^{(i)},\pmb{\theta}))
+\eer
+So our maximum likelihood estimate of $\pmb{\theta}$ denoted by $\pmb{\theta}_{ML}$ is 
 \beq
 \mathbf{\theta}_{\text{ML}} = \text{arg } \underset{\pmb{\theta}}{\text{max}} \, \mathbb{E}_{\mathbf{x}\sim\hat{p}_{\text{data}}}\log(p_{\text{model}}(\pmb{x}^{(i)},\pmb{\theta}))
 \eeq
@@ -325,8 +345,16 @@ It is important to note that the expectation is taken over the \textit{empirical
 \beq
 \log(p_{\text{model}}(\pmb{x},\pmb{\theta}))
 \eeq
-over the empirical distribution $\mathbf{x}\sim\hat{p}_{\text{data}}$.
-
+over the empirical distribution $\mathbf{x}\sim\hat{p}_{\text{data}}$.\\
+%
+The KL divergence which measures the dissimilarity between $\hat{p}_{data}$ and $p_{model}$ is
+\ber
+D_{KL}(\hat{p}_{data}\|p_{model}) = \mathbb{E}_{\pmb{x}\sim\hat{p}_{data}}[\log\hat{p}_{data}-\log{}p_{model}]
+\eer
+The first term is not a function of the model. So we need only minimize
+\ber
+-\mathbb{E}_{\pmb{x}\sim\hat{p}_{data}}\log{}p_{model}
+\eer
 " We can thus see maximum likelihood as an attempt to make the model dis-
 tribution match the empirical distribution $\hat{p}_{\text{data}}$ Ideally, we would like to match
 the true data generating distribution $p_{\text{data}}$ , but we have no direct access to this
@@ -348,7 +376,7 @@ p(y^{(i)}|\pmb{x}^{(i)};\pmb{\theta}) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\Big(-\
 \eeq
 So to maximize the total likelihood we want to maximize
 \beq
-\pmb{\Pi}_{i=1}^{m}p(y^{(i)|\pmb{x^{(i)}}},\pmb{\theta})
+\pmb{\Pi}_{i=1}^{m}p(y^{(i)}|\pmb{x}^{(i)},\pmb{\theta})
 \eeq
 We can replace the product by a sum if we take the log of the above equation. So now we want to find a $\pmb{\theta}$ that maximizes
 \beq
@@ -486,7 +514,7 @@ The minimum is attained at
 \beq
 f(x) = \mathsf{E}[y\mid x]
 \eeq
-See \url{https://math.stackexchange.com/questions/1915324/find-fx-that-minimizes-ey-fx2x/1915328#1915328}. Hehas posted explanation there too.  
+See \url{https://math.stackexchange.com/questions/1915324/find-fx-that-minimizes-ey-fx2x/1915328#1915328}. He has posted explanation there too.  
 \subsection{Mean: instructive but wrong}
 This is wrong because we have wrongly assumed that $\pmb{y}$ comes from the empirical distribution $\hat{p}_{data}$, whereas it is actually from $p_{data}$.
 \ber
@@ -883,5 +911,8 @@ CNNs are equivariant to translations but not rotation and scaling.
 %
 %
 %
+\section{Recurrent Neural Networks: equation 10.14}
+Note: this equation is like the maximum likelihood as before in Section (\ref{sect:mle}). What exactly Goodfellow means by `''where $p_{model}$ is given by reading the entry for $y^{(t)}$ from the
+model’s output vector $\hat{\pmb{y}}ˆ{(t)}$`'' is unknown, but it is somemethod of of calculating/approximating $p_{model}$.
 \end{document}
 
