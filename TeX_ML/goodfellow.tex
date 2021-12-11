@@ -533,7 +533,6 @@ Where we have used arguments similar to Section (\ref{sect:mle})
 \subsection{Median}
 \url{https://math.stackexchange.com/questions/85448/why-does-the-median-minimize-ex-c} The $c$ in the following derivation corresponds to $f(x)$ in our work\\
 
-
 Let $f$ be the pdf and let $J(c) = E(|X-c|)$. We want to maximize $J(c)$. Note that $E(|X-c|) = \int_{\mathbb{R}} |x-c| f(x) dx = \int_{-\infty}^{c} (c-x) f(x) dx  + \int_c^{\infty} (x-c) f(x) dx.$
 
 To find the maximum, set $\frac{dJ}{dc} = 0$. Hence, we get that,
@@ -914,5 +913,23 @@ CNNs are equivariant to translations but not rotation and scaling.
 \section{Recurrent Neural Networks: equation 10.14}
 Note: this equation is like the maximum likelihood as before in Section (\ref{sect:mle}). What exactly Goodfellow means by `''where $p_{model}$ is given by reading the entry for $y^{(t)}$ from the
 model’s output vector $\hat{\pmb{y}}ˆ{(t)}$`'' is unknown, but it is somemethod of of calculating/approximating $p_{model}$.
+%
+%
+%
+\section{Recurrent Neural Networks: equation 10.15/10.16}
+\ber
+p(A\cap{B}) = p(A|B)p(B) = p(B|A)p(A)
+\eer
+This theorem works even when we are in a probability space in which $x_1,x_2$ is true. That is, when we are given $x_1,x_2$. So,
+\ber
+p(y^1,y^2|x^2,x^1) = p(y^2|y^1,x^1,x^2)p(y^1|x^1,x^2)
+\eer
+If we want to be pedantic, note
+\beq
+p(y^2|y^1|x^1,x^2) = p(y^2|y^1,x^1,x^2)
+\eeq
+%
+%
+%
 \end{document}
 
