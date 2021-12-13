@@ -931,5 +931,26 @@ p(y^2|y^1|x^1,x^2) = p(y^2|y^1,x^1,x^2)
 %
 %
 %
+\section{Encoder decoder Sequence-to-Sequence Architectures}
+Fig 10.12 - Not clear where the loss is calculated. Has to be after y is calculated. For an example see \url{https://keras.io/examples/nlp/lstm_seq2seq/}.
+%
+%
+%
+\section{Dynamics of forward and backpropagation: p.g. 406}
+`''Note that it is possible for back-propagation to retain unbounded dynamics even when forward propagation has bounded dynamics,`''\\
+Consider the following NN
+\ber
+w_1 = \tanh{a_1x} \qquad y = \tanh{a_xw_1}
+\eer
+The output $y$ is bounded because $\tanh$ is bounded. Backpropagation for the derivatives gives
+\ber
+\pdd{y}{w_1} = (1-\tanh^2{(a_2w_1)})a_2\\
+\pdd{w_1}{x} = (1-\tanh^2{(a_1x)})a_1\\
+\pdd{y}{x} = (1-\tanh^2{(a_2w_1)})(1-\tanh^2{(a_1x)})a_1a_2
+\eer
+So the $a_1$ and $a_2$ come as a product in derivative. In deep neural networks with multple layers, this product may cause derivatives to become unbounded or vanish depending on whether all $a_i>0$ or all $a_i<0$. When multiple units per layer are present, the $a_i$ become the eigenvalues of the jacobian of the transformation. 
+%
+%
+%
 \end{document}
 

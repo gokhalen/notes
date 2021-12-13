@@ -35,8 +35,14 @@
 \author{Nachiket Gokhale}
 \date{\today}
 \maketitle
+%
+%
+%
 \section{Expectation and other statistics. Mostly from Goodfellow}
-Let a fair die be tosses. The set out outcomes is ${1,2,3,4,5,6}$. $E(x)$ is $\frac{1}{6}(1+2+3+4+5+6)=3.5$. What is $E(xE(x))$. One way to understand it is to consider $xE(x)$ as another random variable capable of taking values ${3.5,7,10.5,14,17.5,21}$. So, $E(xE(x))=\frac{1}{6}(3.5+7+10.5+14+17.5+21)=3.5*\frac{1}{6}(1+2+3+4+5+6)=3.5^2=E(x)^2$. Basiclly, $E(x)$ is number, not a random variable, and we can take it outside to get $E(x)E(x)$ 
+Let a fair die be tosses. The set out outcomes is ${1,2,3,4,5,6}$. $E(x)$ is $\frac{1}{6}(1+2+3+4+5+6)=3.5$. What is $E(xE(x))$. One way to understand it is to consider $xE(x)$ as another random variable capable of taking values ${3.5,7,10.5,14,17.5,21}$. So, $E(xE(x))=\frac{1}{6}(3.5+7+10.5+14+17.5+21)=3.5*\frac{1}{6}(1+2+3+4+5+6)=3.5^2=E(x)^2$. Basiclly, $E(x)$ is number, not a random variable, and we can take it outside to get $E(x)E(x)$
+%
+%
+%
 \section{Total Expectation}
 From \url{https://en.wikipedia.org/wiki/Law_of_total_expectation}.
 \beq
@@ -52,6 +58,9 @@ E(E(X|Y)) &=& E\Big[\sum_{x}xP(X=x|Y)\Big] \\
 &=& E(X)
 \eer
 Note: $P(X=y,Y=y)=P(X=x|Y=y)P(y)$ \text { because } $P(x\cup{y}) = P(x|y)p(y)$.
+%
+%
+%
 \section{Covariance and expectation}
 \ber
 \text{cov}(x,y) &=& E((x-E(x))(y-E(y))) \\
@@ -76,6 +85,9 @@ E(Y) &=& \sum_{x_1,x_2}(x_1 + x_2)P(x_1,x_2) \\
 &=& \sum_{x_1}x_1P(x_1) + \sum_{x_2}x_2P(x_2) \text{...}P(x_2)=\sum_{x_1}P(x_1,x_2)\\
 &=& E(X_1) + E(X_2)
 \eer
+%
+%
+%
 \section{Expectation of a constant}
 Interpret $E(c)$ as the random variable $x$ taking the value $c$ with 100\% probability. So,
 \ber
@@ -103,6 +115,14 @@ Similarly,
 \ber
 \text{var}(af(x)+bg(x)) = a^2\text{var}(f) + b^2\text{var}(g) +2ab\text{cov}(f,g) 
 \eer
+%
+%
+%
+\section{Variance of product}
+\url{https://stats.stackexchange.com/questions/52646/variance-of-product-of-multiple-independent-random-variables/52699}
+%
+%
+%
 \section{Probability}
 1. Disjoint events are NOT independent. $P(A)P(B)\ne{}P(A\cap{B})$. $P(A)P(B)$ is in general not zero, $P(A\cap{B})$ is zero.\\
 2. Independence cannot be understood from Venn diagrams. Cannot prove independence from data. We work with correlation. \\
@@ -115,6 +135,9 @@ It lies in $[-1,1]$ because of some sort of Cauchy-Schwartz/Holder inequality.\\
 5. Independence $implies$ zero correlation.\\
 6. Correlation zero does not imply Independence. It just implies lack of linear relationship.\\
 7. Mutual information for non-linear models.
+%
+%
+%
 \section{Bayesian}
 \beq
 P(H|D) = \frac{P(D|H)P(H)}{P(D)}
@@ -125,6 +148,9 @@ P(D): Evidence\\
 P(D|H): Likelihood\\
 P(H): belief (prior)\\
 Cognitive scientists: Our brains operate like Bayes machines
+%
+%
+%
 \section{Mutual information}
 \ber
 I(X,Y) &=& \sum_{x,y}p_{X,Y}(x,y)\log\Big(\frac{p_{X,Y}(x,y)}{P_X(x)P_Y(y)}\Big)\\
@@ -142,6 +168,9 @@ We can prove
 H(Y) = I(X,Y) + H(Y|X)
 \eeq
 That is the basis of the Venn-Diagram
+%
+%
+%
 \section{Conditional Entropy}
 \ber
 H(Y|X) &=& -\sum_{x,y}p(x,y)\log{p(y|x)} \\
@@ -170,6 +199,9 @@ Since the second term is non-negative
 E[(x-b)^2]\ge E[(x-E(x))^2]
 \eer
 Hence, by inspection the minimum value is obtained for $b=E(x)$.
+%
+%
+%
 \section{Expectation of a function of a random variable}
 See Goodfellow section 3.12. Let $y=g(x)$
 \beq
@@ -188,5 +220,8 @@ E(y) = \int yp_y(y)\,dy = \int g(x) p_x(x)\,dx \qquad \text{ because } |p_ydy|=|
 \ber
 p_X(x_i) = \sum_{j}p(x_i,y_j)
 \eer
+%
+%
+%
 \end{document}
 
