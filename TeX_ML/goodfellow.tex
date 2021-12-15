@@ -815,6 +815,13 @@ Let all points belonging to class $y^1$ belong to manifold $M_1$. The point of t
 %
 %
 %
+\section{Stochastic gradient descent: ph 280}
+SGD reduces computational cost\\
+SGD might get out of local minima because of the noise introduced \url{https://leon.bottou.org/publications/pdf/nimes-1991.pdf}\\
+SGD follows gradient of the true generalization error as long as no examples are repeated.\\
+%
+%
+%
 \section{Optimization: 8.2 Why maximize ecpectations}
 Goodfellow et al seem to prefer minimizing the expectation of some loss function over the data generating distribution as shown in equation 8.2. This is because taking the expectation automatically assigns higher weight to high-probability examples, and lower weight to lower probability examples.
 %
@@ -949,6 +956,52 @@ The output $y$ is bounded because $\tanh$ is bounded. Backpropagation for the de
 \pdd{y}{x} = (1-\tanh^2{(a_2w_1)})(1-\tanh^2{(a_1x)})a_1a_2
 \eer
 So the $a_1$ and $a_2$ come as a product in derivative. In deep neural networks with multple layers, this product may cause derivatives to become unbounded or vanish depending on whether all $a_i>0$ or all $a_i<0$. When multiple units per layer are present, the $a_i$ become the eigenvalues of the jacobian of the transformation. 
+%
+%
+%
+\section{Bayes' error section 11.1}
+\url{https://en.wikipedia.org/wiki/Bayes_error_rate} `''In statistical classification, Bayes error rate is the lowest possible error rate for any classifier of a random outcome (into, for example, one of two categories) and is analogous to the irreducible erro`''\\
+Goodfellow p.g. 131 `''The ideal model is an oracle that simply knows the true probability distribution
+that generates the data. Even such a model will still incur some error on many
+problems, because there may still be some noise in the distribution. In the case
+of supervised learning, the mapping from $\pmb{x}$ to $\pmb{y}$ may be inherently stochastic,
+or $\pmb{y}$ may be a deterministic function that involves other variables besides those
+included in $\pmb{x}$. The error incurred by an oracle making predictions from the true
+distribution $p(\pmb{x}, \pmb{y})$ is called the Bayes error`''
+%
+%
+%
+\section{Precision and recall section 11.1}
+\url{https://en.wikipedia.org/wiki/Precision_and_recall#Precision}
+\ber
+\text{Precision} = \frac{tp}{tp+fp} \qquad \text{Recall} = \frac{tp}{tp+fn}
+\eer
+in case denominators go to zero, we can control the behavior using \textit{zero\_division} in sklearn. \url{https://scikit-learn.org/stable/modules/generated/sklearn.metrics.precision_score.html}
+%
+%
+\section{F-score}
+\ber
+F_1 = 2\frac{\text{precision}\text{recall}}{\text{precision}+\text{recall}}
+\eer
+In general higher, F-score is better. Depends on how you want to trade-off precision and recall.
+%
+%
+%
+\section{Collecting more data sect 11.3}
+- If training set data is not being used (underfit), do not collect more data\\
+- If test set perf is much worse than training set perf collect more data. An explanation of this is that we need more data to learn features that will generalize.
+
+\section{Test set error sect 11.4 pg 430}
+`''The test error is the sum of the training error and the gap between training and test error.`'' We want to keep the training error constant and decrease the gap between the training and test error.
+%
+%
+%
+\section{Grid search 11.4.3}
+Because we provide pdfs to random search, we end up concentrating our efforts in the region where we believe good hyperparameters are present. Grid search ends up exploring unimportant parameter spaces as well. Of course, we must have good pdfs for random search.
+%
+%
+%
+\section{}
 %
 %
 %
