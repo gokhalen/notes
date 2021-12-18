@@ -295,6 +295,27 @@ u^1 & u^2
 = u^1\sigma_1{v^1}^T + u^2\sigma_2{v^2}^T
 \eer
 %
+Now, for SVD of a $2\times{4}$ matrix, we get for $u^{i}$  $\in \mathbb{R}^2$ and $v^{i}$ $\in \mathbb{R}^4$
+\ber
+%
+\begin{pmatrix} u^1 & u^2\end{pmatrix}
+\begin{pmatrix} \sigma_1 & 0 & 0 & 0 \\ 0 &\sigma_2 & 0 & 0\end{pmatrix}
+\begin{pmatrix}{v^1}^T\\{v^2}^T\\{v^3}^T\\{v^4}^T\end{pmatrix}  
+%
+&=&
+\begin{pmatrix} u^1 & u^2\end{pmatrix}
+  \Big{[}
+    \begin{pmatrix} \sigma_1 \\ 0 \end{pmatrix}{v^1}^T +
+    \begin{pmatrix} 0  \\ \sigma_2 \end{pmatrix}{v^2}^T+
+    \begin{pmatrix} 0  \\ 0 \end{pmatrix}{v^3}^T+
+    \begin{pmatrix} 0  \\ 0 \end{pmatrix}{v^4}^T 
+    \Big{]} \\
+  &=&
+  \begin{pmatrix} u^1 & u^2\end{pmatrix}
+  \begin{pmatrix} \sigma_1{v^1}^T\\ \sigma_2{v^2}^T \end{pmatrix}\\
+  &=& \sigma_1u^1{v^1}^T + \sigma_2u^2{v^2}^T
+\eer  
+%
 %
 %
 \end{document}
