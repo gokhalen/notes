@@ -50,6 +50,7 @@ Pick the first $k$ columns of $U$:
 \beq
 \hat{U} = U[:,0:k]  \qquad \hat{U} \in \mathbb{R}^{n\times{k}}
 \eeq
+We can view $U$ containing information about which combination of features is most significant.
 Define new variables:
 \beq
 z^{(i)}   = {\hat{U}}^{T}x^{(i)} \qquad z^{(i)} \in \mathbb{R}^{k},\,\, {\hat{U}}^{T} \in \mathbb{R}^{k\times{n}}
@@ -234,6 +235,7 @@ We want to come up with ratings of these movies for a new user. We want to facto
 A^{8\times{3}} = U^{8\times{8}}\Sigma^{8\times{3}}{V^T}^{3\times{3}}
 \eeq
 Here, the columns of $U$ form a particularly good basis for the space of ratings of movies. Here the columns (I think) of $V$ form a particularly good basis for representing people. These two things are done keeping $\Sigma$ diagonal.\\
+In other words, the columns of $U$ form a good basis for the space of columns and the columns of $V$ for a good basis for the space of rows. This is useful in low rank approximations.\\
 Let's see this for a simple $2\times{}2$ case. Let $u^1,u^2$ be the columns of $U$ and $v^1,v^2$ be the columns of $V$. We have
 \ber
 U =
