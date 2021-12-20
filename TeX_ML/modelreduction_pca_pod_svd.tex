@@ -15,7 +15,6 @@
 \newcommand{\bU}{{\mathbf{U}}}
 \newcommand{\bS}{{\mathbf{S}}}
 \newcommand{\bV}{{\mathbf{V}}}
-
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage[hyphens]{url}
@@ -212,6 +211,7 @@ From \url{https://jeremykun.com/2016/04/18/singular-value-decomposition-part-1-p
 \begin{matrix}
   \text{Up}\\
   \text{Skyfall}\\
+  \text{Thor}\\
   \text{Amelie}\\
   \text{Snatch}\\
   \text{Casablanca}\\
@@ -234,9 +234,34 @@ We want to come up with ratings of these movies for a new user. We want to facto
 \beq
 A^{8\times{3}} = U^{8\times{8}}\Sigma^{8\times{3}}{V^T}^{3\times{3}}
 \eeq
-Here, the columns of $U$ form a particularly good basis for the space of ratings of movies. Here the columns (I think) of $V$ form a particularly good basis for representing people. These two things are done keeping $\Sigma$ diagonal.\\
-In other words, the columns of $U$ form a good basis for the space of columns and the columns of $V$ for a good basis for the space of rows. This is useful in low rank approximations.\\
-In still other words, the columns of $U$ tell you the most important person (which may be some sort of linear combination of Aisha,Bob Chandrika), and the columns of $V$ tell you the most important (or best like) movie (which may be some sort of linear combination of the movie ratings)
+The SVD can be decomposed as
+\beq
+A = \sum_i u^i\sigma_i{v^i}^T
+\eeq
+Where $u^i,v^i$ are column vectors of $U$ and $V$. Here, $A$ can be used to predict movie ratings for a new user. We shall now see what $u^i$ and $v^i$ mean. If have a new user which we can express as the weighted sum of Aisha, Bob, Chandrika e.g.
+\beq
+x_{user} =
+\begin{pmatrix}0.9,0.05,0.05\end{pmatrix}
+  \eeq
+  
+  Then we can predict movie-ratings for this user using $Ax_{user}$. Suppose now that we have too many raters and want to reduce the number of raters to 1. We can do this by approximating $A$ using the following formula.
+  \beq
+  \bar{A} = u^1\sigma_1{v^1}^T
+  \eeq
+  Here, $u^1$ is a new fictitious rater who rates the movies in a certain way, so that there is the least difference in $Ax_{user}-\bar{A}x_{user}$. Since $\|u^1\|=1$, this corresponds to a certain direction in ratings space ($\mathbb{R}^8$).\\
+  To find out what $v^1$ is, consider $A^T$ which maps movies expressed as a combinations of Up, Skyfall, Thor, Amelie, Snatch, Casablanca, Bridesmaids, Grease to the rating of Aisha, Bob, Chandrika i.e. a vector in $\mathbb{R}^3$. Further more, consider that instead of expressing moves in terms of 8 movies, we want to express a movie in terms on only one fictitious movie which the which most captures the feelings of the raters. This movie corresponds to a certain direction in rater space $\mathbb{R}^3$. That is we are approximating $A^T$ by 
+  \beq
+  \bar{A^T} = v^1\sigma_1{u^1}^T
+  \eeq
+%Here, the columns of $U$ form a particularly good basis for the space of ratings of movies. Here the columns (I think) of $V$ form a particularly good basis for representing people. These two things are done keeping $\Sigma$ diagonal.\\
+%In other words, the columns of $U$ form a good basis for the space of columns and the columns of $V$ for a good basis for the space of rows. This is useful in low rank approximations.\\
+  %In still other words, the columns of $U$ tell you the most important person (which may be some sort of linear combination of Aisha,Bob Chandrika), and the columns of $V$ tell you the most important (or best like) movie (which may be some sort of linear combination of the movie ratings)
+\subsection{Code}
+\section{SVD Code}
+\begin{center}
+  \lstinputlisting[language=Python]{learn\_svd\_data.py}
+\end{center}   
+\section{SVD related math}
 Let's see this for a simple $2\times{}2$ case. Let $u^1,u^2$ be the columns of $U$ and $v^1,v^2$ be the columns of $V$. We have
 \ber
 U =
