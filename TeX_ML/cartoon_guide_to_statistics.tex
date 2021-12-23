@@ -506,7 +506,7 @@ Need $|t|<|t_{alpha/2}|$ for $H_a: \beta\ne{0}$\\
 \subsection{Patterns in error}
 Pattern in error Vs $\hat{y}$ indicates problems. Random scatterplot is ok.
 \section{$y=F(x)$}
-I'm not sure that y is going to be normally distributed. e.g. we can make $y=min(x,\mu)$ to make it non-normally distributed. Maybe for polynomial f $y$ is normallly distributed. (no even that). If $x\mathcal{N}(0,1)$ then for $y=x^2$ the negative values of $x$ are going to be mapped into positive values\\
+I'm not sure that y is going to be normally distributed. e.g. we can make $y=min(x,\mu)$ to make it non-normally distributed. Maybe for polynomial f $y$ is normallly distributed. (no even that). If $x\sim\mathcal{N}(0,1)$ then for $y=x^2$ the negative values of $x$ are going to be mapped into positive values\\
 \ber
 X \sim \mathcal{N}(\mu,\sigma)\\
 y = f(x) \\
@@ -536,6 +536,15 @@ Total prob of heart attack $p=378/22071\approx{0.0171}$. Using the figures in th
   &= 26.97
 \end{align}
 Lookup 26.97 in the pdf of the $\chi^2$ distribution we can determine p-value, compare to $\alpha$ and go from there.
+%
+%
+\section{F Test for population variances}
+\url{https://www.itl.nist.gov/div898/handbook/eda/section3/eda359.htm}
+\section{Variance confidence limits - Chi square}
+The $\chi^2$ is a statistic and needs to computed from \text{scipy.stats.chi2.ppf}. Confidence limits at level $\alpha$ for sample size $n$ is 
+\beq 
+\Big{[}\frac{(n-1)S^2}{\chi^2_{\alpha/2,n-1}},\frac{(n-1)S^2}{\chi^2_{1-\alpha/2,n-1}}\Big{]}
+\eeq
 \end{document}
 
 

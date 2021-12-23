@@ -302,7 +302,7 @@ U
 \begin{pmatrix}
   v^1_1 & v^1_2\\
   v^2_1 & v^2_2
-\end{pmatrix}^T\\
+\end{pmatrix}\\
 &=& U
 \begin{pmatrix}
   \sigma_1v^1_1 & \sigma_1v^1_2\\
@@ -346,5 +346,46 @@ Now, for SVD of a $2\times{4}$ matrix, we get for $u^{i}$  $\in \mathbb{R}^2$ an
 %
 %
 %
+\subsection{Another take: columns of $V^T$}
+\ber
+U =
+\begin{pmatrix}
+  u^1_1 & u^2_1\\
+  u^1_2 & u^2_2
+\end{pmatrix}
+\qquad
+\sigma=
+\begin{pmatrix}
+  \sigma_1 & 0 \\
+  0   &  \sigma_2 
+\end{pmatrix}  
+\qquad
+V^T =
+\begin{pmatrix}
+  c^1_1 & c^2_1\\
+  c^1_2 & c^2_2
+\end{pmatrix} 
+\eer
+Then, we have the svd of $X$ ($x^1,x^2$ are columns)
+\ber
+\begin{pmatrix}
+  x^1 & x^2
+\end{pmatrix}
+=
+U\Sigma{}V^T =
+\begin{pmatrix}
+u^1 & u^2   
+\end{pmatrix}
+\begin{pmatrix}
+  \sigma_1 c^1_1 & \sigma_1 c^2_1\\
+  \sigma_2 c^1_2 & \sigma_2 c^2_2
+\end{pmatrix}
+=
+\begin{pmatrix}
+  u^1\sigma_1c^1_1 + u^2\sigma_2c^1_2  & u^1\sigma_1c^2_1 + u^2\sigma_2c^2_2
+\end{pmatrix}  
+\eer
+So, the entries of $c^1$ are determining how $u^1,u^2$ are getting mixed to form  $x^1$. \\
+So, the entries of $c^2$ are determining how $u^1,u^2$ are getting mixed to form  $x^2$
 \end{document}
 
