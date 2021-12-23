@@ -58,7 +58,8 @@ Now training data becomes $(z^{(0)},y^{(0)}), (z^{(1)},y^{(1)}), \cdots, (z^{(m)
 \beq
 x^{(i)} = \hat{U}z^{(i)}
 \eeq
-
+\textbf{Output of PCA (z) depends on how the eigenvectors/sigularvectors are normalized! You can flip the sign of a singular vector. It will still remain a singular vector with the same eigenvalue, but z will change!}
+%
 %
 %
 \subsection{Aside} 
@@ -387,5 +388,32 @@ u^1 & u^2
 \eer
 So, the entries of $c^1$ are determining how $u^1,u^2$ are getting mixed to form  $x^1$. \\
 So, the entries of $c^2$ are determining how $u^1,u^2$ are getting mixed to form  $x^2$
+%
+%
+%
+\section{Principal component analysis: IISC Notes (Matrix decomposition)}
+They say the principal components are
+\beq
+T = BV =
+\begin{pmatrix}
+  x_{1}^T\\
+  x_{2}^{T}\\
+  \vdots\\
+  x_{m}^T
+\end{pmatrix}
+\begin{pmatrix}
+  v_1 & v_2 & \hdots & v_n
+\end{pmatrix}
+=
+\begin{pmatrix}
+  x_1^Tv_1 & x_1^Tv_2 & \hdots & x_1^Tv_n\\
+  x_2^Tv_1 & x_2^Tv_2 & \hdots & x_2^Tv_n\\
+  \vdots & \vdots &  \ddots &  \\
+  x_m^Tv_1 & x_m^Tv_2 & \hdots & x_m^Tv_n
+\end{pmatrix}  
+\eeq
+%
+%
+%
 \end{document}
 
