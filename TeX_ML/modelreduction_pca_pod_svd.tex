@@ -197,7 +197,11 @@ We want to find an orthogonal projector us that minimizes a discrete version of 
 \beq
 J = \sum_{i=0}^{m}\|x^{(i)}-\bPi{x^{(i)}}\|_2^2
 \eeq
-The rest of the theory is pretty much the same as POD theory. Equation (\ref{eqn:discretexxt}) is a discrete analog of (\ref{eqn:continuousxxt}).
+I'm pretty sure the above equation is not entirely corect in the context of data science. I think it should be
+\beq
+J = \sum_{i=0}^{m}\|x^{(i)}-\hat{U}\hat{U}^T{x^{(i)}}\|_2^2
+\eeq
+And we find the optimal projector $U$ of rank $k$.The rest of the theory is pretty much the same as POD theory. Equation (\ref{eqn:discretexxt}) is a discrete analog of (\ref{eqn:continuousxxt}).
 %
 %
 %
