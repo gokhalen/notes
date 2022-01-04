@@ -223,5 +223,22 @@ p_X(x_i) = \sum_{j}p(x_i,y_j)
 %
 %
 %
+\section{MSE: Stanley Chan: Intro Prob for DS pg 425}
+Claim:
+\beq
+\mathbb{E}(\pmb{e}^T\pmb{H}^T\pmb{e}') = 0
+\eeq
+Proof:
+\beq
+LHS=\mathbb{E}_{e,e'}(\sum_{ij}e_iH_{ij}{e'}_{j}) = \sum_{ij}\mathbb{E}_{e,e'}(e_iH_{ij}{e'}_{j})
+\eeq
+$H_{ij}$ is a constant and can be taken out of the expectation.
+\beq
+LHS = \sum_{ij}H_{ij}\mathbb{E}_{e,e'}(e_i{e'}_{j}) = \sum_{ij}H_{ij}\mathbb{E}_{e}(e_i)\mathbb{E}_{e'}({e'}_j) = 0
+\eeq
+Because of independence of $e$ and $e'$. And the product is zero because $\mathbb{E}_{e}(e_i)=\mathbb{E}_{e'}({e'}_j)=0$
+%
+%
+%
 \end{document}
 
