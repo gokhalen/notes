@@ -17,8 +17,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.special
 
-nn = 64
-pp = 0.5
+nn = 128
+pp = 0.3
 qq = 1.0 - pp
 mean  = nn*pp
 sigma = np.sqrt(nn*pp*qq)

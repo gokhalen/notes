@@ -310,6 +310,17 @@ The $1-\alpha$ confidence interval is
 \beq
 \mu_1 - \mu_2 = \hat{x}_1 - \hat{x}_2 \pm t_{\alpha/2}SE(\bar{X}_1-\bar{X}_2)
 \eeq
+$t_{\alpha/2}$ is a critical value of $t$ with $n_1+n_2-2$ degrees of freedom.
+\subsection{Small sample mean comparison}
+As per solutoins from Nov 27, pool the variances using the formula above, use the same formula for SE and then the statistic
+
+\beq
+\frac{\bar{x_1}-\bar{x_2}-(\mu_1-\mu_2)}{SE}
+\eeq
+
+is t-distributed with $n_1+n_2-2$ dofs.
+
+
 \subsection{Hypothesis testing for t-distributions}
 We make a single population out of the two populations, by the transformation
 $d=x_1-x_2$. Under the null-hypothesis $H_0:x_1-x_2=0, i.e. d = 0$, the statistic
