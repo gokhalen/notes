@@ -260,8 +260,8 @@ F_Z(z) &=& P(Z \le z)  \qquad \text{by definition of cdf, $P$ is probability} \\
 &=& z
 \eer
 Hence, by point 1, $z$ is uniformly distributed.\\
-4. If $Z$ is uniformly distributed on $[0,1]$ as it is in a random number generator on a computed, we can do $X=F_X^{-1}(Z)$ to get a random variable $X$ distributed according to cdf $F_X$.
-
+4. If $Z$ is uniformly distributed on $[0,1]$ as it is in a random number generator on a computed, we can do $X=F_X^{-1}(Z)$ to get a random variable $X$ distributed according to cdf $F_X$. Sometimes $F_X^{-1}$
+is hard to calculate. This might make sampling from a distribution governed by $F_X$ hard. Hence, we might need to use a easier distribution to sample from. This motivates \textit{importance sampling}.
 %
 %
 %
