@@ -240,5 +240,30 @@ Because of independence of $e$ and $e'$. And the product is zero because $\mathb
 %
 %
 %
+\section{Probability integral transform: how to sample from arbitrary distribution}
+From: \url{https://en.m.wikipedia.org/wiki/Probability_integral_transform}\\
+1. $Y$ is a uniformly distributed random variable in $[0,1]$. Its pdf $p_Y$ is $1$ on $[0,1]$ and $0$ elsewhere. Its cdf $F_Y$ is
+\beq
+F_Y (y) = \int_{0}^y 1 dy = y
+\eeq
+We can also show that if $F_Y(y)=y$ its pdf is 1.\\
+\beq
+F_Y(y) = y \implies \int_{0}^y p_X dx  = y \implies p_x = 1
+\eeq
+2. Let $X$ be a random variable with cdf $F_X$\\
+3. Let $Z=F_X(X)$ be another random variabale. We want to determine its cdf $F_Z$.
+\ber
+F_Z(z) &=& P(Z \le z)  \qquad \text{by definition of cdf, $P$ is probability} \\
+&=& P(F_X(X) \le z) \\
+&=& P( X \le F_X^{-1}(z))\\
+&=& F_X(F_X^{-1}(z)) \qquad \text{by definition of cdf} \\
+&=& z
+\eer
+Hence, by point 1, $z$ is uniformly distributed.\\
+4. If $Z$ is uniformly distributed on $[0,1]$ as it is in a random number generator on a computed, we can do $X=F_X^{-1}(Z)$ to get a random variable $X$ distributed according to cdf $F_X$.
+
+%
+%
+%
 \end{document}
 

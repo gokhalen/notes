@@ -947,7 +947,7 @@ Fig 10.12 - Not clear where the loss is calculated. Has to be after y is calcula
 `''Note that it is possible for back-propagation to retain unbounded dynamics even when forward propagation has bounded dynamics,`''\\
 Consider the following NN
 \ber
-w_1 = \tanh{a_1x} \qquad y = \tanh{a_xw_1}
+w_1 = \tanh{a_1x} \qquad y = \tanh{a_2w_1}
 \eer
 The output $y$ is bounded because $\tanh$ is bounded. Backpropagation for the derivatives gives
 \ber
