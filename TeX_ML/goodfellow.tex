@@ -810,7 +810,7 @@ So, basically, after applying dropout with probablity $0.5$ (the weights are mul
 %
 %
 %
-\section{Tangent prop: sect 7.14}
+\section{\label{sect:tangentprop}Tangent prop: sect 7.14}
 Let all points belonging to class $y^1$ belong to manifold $M_1$. The point of the condition 7.67 is to make sure that our prediction $f(\pmb{x})$ changes very-little as the data point moves from location $\pmb{x}_1$ on the manifold to another point $\pmb{x}_2$ closeby. If we want $f(\pmb{x})$ to change very-little along the manifold tangent vectors, then we want to make the component of the gradient along the tangnet vectors zero. That is the gradient should be orthogonal to the tangent vectors. Equation 7.67 penalizes the derivative along tangent vectors.
 %
 %
@@ -1003,6 +1003,12 @@ Because we provide pdfs to random search, we end up concentrating our efforts in
 %
 \section{Section 12.2.1.1 Gradient contrast normalization eqn 12.3}
 I can't see how equation 12.3 projects points to the sphere. The denominator is constant, the numerator is purely a shift in coordinates. To do what they claim it does, it needs to be non-linear methinks
+%
+%
+%
+\section{Autoencoders pg 516 sect 14.6}
+``only the variations tangent to the manifold around x need to correspond to changes in h = f(x).'' This appears to be a contradiction to section (\ref{sect:tangentprop}). The difference here seems to be that the autoencoder has to learn that the tangent directions are important parts of representation of $x$, because the label does not change along them. $f$ for autoencoders is the encoding function and not the output label. In section (\ref{sect:tangentprop}) $f$ is the output label (which we do not want to change along the tangent directions).
+
 %
 %
 %
