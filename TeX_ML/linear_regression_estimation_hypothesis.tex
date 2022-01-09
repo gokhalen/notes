@@ -71,6 +71,9 @@ Reject $H_0$ if $|Z_1| > Z_{\alpha/2}$, where $Z_{\alpha/2}$ is the $\alpha/2$ p
 \eeq
 $\alpha$ is called the significance level. Typically, $\alpha = 0.05$. This means if the we're rejecting $H_0:\beta_1 = \beta_{10}$ if the probability of the statistic $Z_1$ is less than $\alpha$. In particular, if $\beta_{10}=0$, our null hypothesis becomes $H_0:\beta_1 = 0$. This means that we're postulating that no relationship exists between $x_1$ and the $y$ (because the coefficient of $x_1$ is zero). Note: our null-hypothesis is on the true parameter $\beta_1$ and not the estimated parameter $b_1$. If we reject  $H_0:\beta_1 = 0$, this means that there is a relationship between $y$ and $x_1$.\\
 Shalab also talks about hypothesis testing for the intercept term $\beta_0$. It is mostly similar to this.
+%
+%
+%
 \section{Linear regression}
 From IISC notes. The linear regression problem is
 \beq
@@ -87,4 +90,13 @@ Features for linear regression should be (or good to be)
 \item{Correlated with target (ensures predictive power)}  
 \end{enumerate}
 Prof says $SVD$ can take care of rank-deficient matrices
+%
+%
+%
+\section{Gradient descent vs normal equations}
+1) Gradient descent is cheaper - see \url{https://www.quora.com/When-would-you-use-gradient-Descent-vs-Normal-Equation}
+2) Normal equations are only for linear equations. For normal equations the corresponding is the Newton's method which requires Hesssian, which is expensive to compute and use.
+%
+%
+%
 \end{document}
