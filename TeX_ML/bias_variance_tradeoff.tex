@@ -1,0 +1,21 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Bias variance tradeoff}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Introduction}
+From \url{https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff}. The critical point is  that expectations are taken over the training set. And that $f$
+  is deterministic (i.e. independent of D), (which I don't get because what does into $f$ is $x$ which is part of the D).  After that, the proof is easy. \\
+But the proof in Stanley Chan's IPDS pg 431-433 is very nice.
+\end{document}
