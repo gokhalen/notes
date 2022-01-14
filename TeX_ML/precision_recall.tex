@@ -1,0 +1,22 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Precision Recall}
+\section{Precision recall}
+From Geron pg 87. Increasing threshold decreases recall and increases precision.Lowering threshold increases recall and reduces precision. (from Notes this is not strictly necessary - recall may stay constant - \url{https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html})\\
+
+increasing precision reduces recall, and vice versa. This is called the precision/recall tradeoff.
+
+Best statement is from professor: ``In slides, the keyword is "must". It is not a must for P to increase and R to decrease.''
+
+
+\end{document}

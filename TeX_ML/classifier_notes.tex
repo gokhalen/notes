@@ -1,0 +1,66 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage{url}
+\begin{document}
+\title{Classifier notes}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Random binary classifier}
+Chollet in his book Deep Learning with Python, on page 82 says: 'With a balanced binary classification
+problem, the accuracy reached by a purely random classifier would be 50\%.'. This was not obvious to me.\\
+
+So basically we have a vector ${\bf{x}}$ of large length $n$, which contains either $0$ or $1$ with 50\% probability. This is our label vector, which is given. We now guess a vector ${\bf{y}}$, which contains either $0$ or $1$ with 50\% probability. We want to know how many entries in ${\bf{x}}$ and ${\bf{y}}$ match. That is we are interested in
+\beq
+\sum_{i=1}^{i=n} (x_{i} == y_{i}), 
+\eeq
+where $x_{i} == y_{i}$ yields $1$ if true, and $0$ otherwise.\\
+
+Without loss of generality, rearrange ${\bf{x}}$ so that the first half contains $0$ and the last half contains $1$.  Now, when we guess $\mathbf{y}$ for the first half of ${\mathbf{x}}$, we are going to get 50\% entries 0 and the other 50\% 1. So we get 50\% entries correct for the first half of ${\bf{x}}$. Similarly for the second half of ${\mathbf{x}}$ we are going to get 50\% entries correct and 50\% entries wrong. Combining the two halves, we are going to get 50\% entries correct.
+
+\section{Confusion matrix for linear classifier}
+Suppose we are classifying examples based on some parameter $p$ which lies in $[0,1]$. If $p>c$ then the example is labelled $+ve$ and if $p\le{c}$ the example is labelled $-ve$. Let there be a very large number of examples $N$ and let them be uniformly distributed in $p$. So there are $N(1-c)$ $+ve$ examples and $Nc$ $-ve$ examples.\\
+\textbf{Case 1}: Now, if our threshold is some $t > c$. i.e. if $p>t$ the examples is classified as $+ve$ and if $p\le{t}$ the example is classified as negative. So the number of examples classified $+ve$ by our classifier are $N(1-t)$ and the number of examples classified $-ve$ are $Nt$. Since $t>c$ all of our $+ve$ examples are \textit{true positives} and there are no \textit{false positives}. The number of \textit{true negatives} is $Nc$ and the number of \textit{false negatives} is $t-c$. This leads to the confusion matrix in table $(\ref{tab:confcase1})$.
+\begin{table}
+\begin{center}
+  \begin{tabular}{cccc}
+    \cline{3-4}
+    & & \multicolumn{2}{|c|}{Actual class}  \\
+    \cline{3-4}
+    & & \multicolumn{1}{|c|}{$+ve$, $N(1-c)$} &  \multicolumn{1}{|c|}{$-ve$, $Nc$}\\
+    \hline
+    \multicolumn{1}{|c}{Predicted} & \multicolumn{1}{|c|}{$+ve$,$N(1-t)$} & \multicolumn{1}{|c|}{$N(1-t)$} & \multicolumn{1}{|c|}{$0$} \\
+    \cline{2-4}
+    \multicolumn{1}{|c}{class} & \multicolumn{1}{|c|}{$-ve$,$Nt$} & \multicolumn{1}{|c|}{$N(t-c)$} & \multicolumn{1}{|c|}{$Nc$}\\
+    \hline
+  \end{tabular}
+\end{center}
+\caption{\label{tab:confcase1} Confusion matrix for Case 1.}
+\end{table}\\
+%
+\textbf{Case 2}:Now, if our threshold is some $t < c$. i.e. if $p>t$ the examples is classified as $+ve$ and if $p\le{t}$ the example is classified as negative. So the number of examples classified $+ve$ by our classifier are $N(1-t)$ and the number of examples classified $-ve$ are $Nt$. Since $t<c$ all of our $-ve$ examples are \textit{true negatives} and there are no \textit{false negatives}. The number of \textit{true positives} is $Nc$ and the number of \textit{false positives} is $N(c-t)$. This leads to the confusion matrix in table $(\ref{tab:confcase2})$.
+\begin{table}
+\begin{center}
+  \begin{tabular}{cccc}
+    \cline{3-4}
+    & & \multicolumn{2}{|c|}{Actual class}  \\
+    \cline{3-4}
+    & & \multicolumn{1}{|c|}{$+ve$, $N(1-c)$} &  \multicolumn{1}{|c|}{$-ve$, $Nc$}\\
+    \hline
+    \multicolumn{1}{|c}{Predicted} & \multicolumn{1}{|c|}{$+ve$,$N(1-t)$} & \multicolumn{1}{|c|}{$N(1-c)$} & \multicolumn{1}{|c|}{$N(c-t)$} \\
+    \cline{2-4}
+    \multicolumn{1}{|c}{class} & \multicolumn{1}{|c|}{$-ve$,$Nt$} & \multicolumn{1}{|c|}{$0$} & \multicolumn{1}{|c|}{$Nt$}\\
+    \hline
+  \end{tabular}
+\end{center}
+\caption{\label{tab:confcase1} Confusion matrix for Case 2.}
+\end{table}\\
+\end{document}
