@@ -102,8 +102,108 @@ Prof says $SVD$ can take care of rank-deficient matrices
 \section{Distribution of variables in regression}
 From Deepak Subramani: Normal and (perhaps other distribution) of regression features and targets enables us to do uncertainity quantification on the predicted variables i.e. confidence bounds and hypothesis testing on the fitted parameters. Probably normal distribution of target and features implies normal distribution of parameters.
 
-\section{$R2$ for non-lineart models}
+\section{$R2$ for non-linear models}
 $R2$ doesn not make sense for non-linear models. i.e. it cannot be used to prefer one model over another.
 \url{https://statisticsbyjim.com/regression/r-squared-invalid-nonlinear-regression/} $R2$ cannot distinguish between good and bad non-linear models.
 
+\section{Linear reg and rhs transformation}
+
+\subsection{RHS transformation}
+Consider the linear system,
+\beq
+\pmb{A}x = b \text{ where } \pmb{A}\in\mathbb{R}^{m\times{n}},\,x\in\mathbb{R}^n,\,b\in\mathbb{R}^m
+\eeq
+which can be solved using the pseudo-inverse $(\pmb{A}^{T}\pmb{A})^{-1}\pmb{A}^T$. We have, therefore,
+\beq
+x = (\pmb{A}^{T}\pmb{A})^{-1}\pmb{A}^Tb
+\eeq
+We transform the rhs using $f(z)=cz+d$ where $c\in\mathbb{R}$ is a real number and $d\in\mathbb{R}^{m}$. We keep the matrix $\pmb{A}$ the same. We get the linear system
+\beq
+\pmb{A}y = cb + d 
+\eeq
+Which can be solved again using the pseudo-inverse
+\beq
+\label{eqn:ydef}
+y = (\pmb{A}^{T}\pmb{A})^{-1}\pmb{A}^T(cb + d)
+\eeq
+If we inverse transform $y$ do we get back $x$? First we need $f^{-1}$.
+\ber
+f(z)=cz+d \qquad \text{let } w = cz+d \implies z =\frac{(w-d)}{c}\\
+z = f^{-1}(cz+d) \implies  \frac{(w-d)}{c} = f^{-1}(w)
+\eer
+Hence,
+\beq
+f^{-1}(z) = \frac{z-d}{c}
+\eeq
+We get applying the above inverse to equation (\ref{eqn:ydef})
+\beq
+f^{-1}(y) = f^{-1}((\pmb{A}^{T}\pmb{A})^{-1}\pmb{A}^T(cb + d)) = \frac{(\pmb{A}^{T}\pmb{A})^{-1}\pmb{A}^T(cb + d) -d}{c}
+\eeq
+Clearly $f^{-1}(y)$ is equal to $x=(\pmb{A}^{T}\pmb{A})^{-1}\pmb{A}^Tb$ only if $(\pmb{A}^{T}\pmb{A})^{-1}\pmb{A}^Td-d = 0$. This can be accomplished if $d=0$ or if $d$ is an eigenvector of $(\pmb{A}^{T}\pmb{A})^{-1}\pmb{A}^T$ with eigenvalue 1. Leave the eigenvalue = 1 case  aside. We can say that if $f(z)=cz$ then we can transform the rhs, solve the equation, and then inverse transform back to get the solution.
+
+
+\textbf{In light of the discussion above, it is not a good idea to scale the right hand side using a standard scaler in which the mean is subtracted and the result diived by the standard deviation. This transformation will, in general, not satisfy the conditions derived above.}
+
+\subsection{Regression with a dependent variable}
+Suppose we are given a feature matrix $\pmb{X}$ and observations $b_1,b_2$ which are independent and we make a third dependent observation $b_3=b_1+b_2$. Consider that we have solved the regression problems $\pmb{X}\theta_1=b_1$ and $\pmb{X}\theta_2=b_2$ for $\theta_1,\theta_2$ as
+\beq
+\theta_1 = (\pmb{X}^T\pmb{X})^{-1}\pmb{X}^Tb_1 \qquad \theta_2 = (\pmb{X}^T\pmb{X})^{-1}\pmb{X}^Tb_2
+\eeq
+Then,
+\beq
+\theta_3 = (\pmb{X}^T\pmb{X})^{-1}\pmb{X}^Tb_3 =(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T(b_1+b_2)  = \theta_1 + \theta_2
+\eeq
+So, if we are given new datapoints $\pmb{X}^{new}$ and we want to make a prediction for $b_3$, we can either sum up the predictions using $\theta_1,\theta_2$ or make an independent prediction using $\theta_3$. These will be equal. This is shown below
+\ber
+p_1 = \pmb{X}^{new}\theta_1 \qquad p_2 = \pmb{X}^{new}\theta_2\\
+p_3 = \pmb{X}^{new}\theta_3 = \pmb{X}^{new}(\theta_1+\theta_2) = p_1 + p_2
+\eer
+
+\textbf{What if we scale the right-hand sides, compute parameters, make predictions, invert them and then add them up?}.  We have the following problems
+
+\beq
+\pmb{X}\theta_1^{'}=\frac{b_1-\bar{b}_1}{\sigma_{b_1}} \qquad \pmb{X}\theta_2^{'}=\frac{b_2-\bar{b}_2}{\sigma_{b_2}} \qquad \pmb{X}\theta_3^{'}=\frac{b_3-\bar{b}_3}{\sigma_{b_3}}
+\eeq
+Where $\bar{b}_i$ is the mean of $b_i$ and $\sigma_{b_i}$ is some constant. Because of what we saw in the previous section, the predictions made by scaling the rhs and then unscaling them, will not match the predictions made directly unless the transformation obeys the conditions derived in the previous section.\\
+We have
+\ber
+\theta_1 = (\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (\frac{b_1-\bar{b}_1}{\sigma_{b_1}})\\
+\theta_2 = (\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (\frac{b_2-\bar{b}_2}{\sigma_{b_2}})\\
+\theta_3 = (\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (\frac{b_3-\bar{b}_3}{\sigma_{b_3}})
+\eer
+Now we make predictions
+\ber
+p_1 = \pmb{X}^{new}\theta_1 = \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (\frac{b_1-\bar{b}_1}{\sigma_{b_1}})\\
+p_2 = \pmb{X}^{new}\theta_2 = \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (\frac{b_2-\bar{b}_2}{\sigma_{b_2}})\\
+p_3 = \pmb{X}^{new}\theta_3 = \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (\frac{b_3-\bar{b}_3}{\sigma_{b_3}})
+\eer
+Now, we inverse transform them
+\ber
+\text{inv}(p_1) &=& \sigma_{b_1}\pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (\frac{b_1-\bar{b}_1}{\sigma_{b_1}}) + \bar{b}_1\\
+&=& \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (b_1-\bar{b}_1) + \bar{b}_1 \\
+%
+\text{inv}(p_2) &=& \sigma_{b_2}\pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (\frac{b_2-\bar{b}_2}{\sigma_{b_2}}) + \bar{b}_2\\
+&=& \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (b_2-\bar{b}_2) + \bar{b}_2\\
+\text{inv}(p_3) &=& \sigma_{b_3}\pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (\frac{b_3-\bar{b}_3}{\sigma_{b_3}}) + \bar{b}_3\\
+&=& \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (b_3-\bar{b}_3) + \bar{b}_3 
+\eer
+We get
+\ber
+\text{inv}(p_1) + \text{inv}(p_2) = & & \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (b_1-\bar{b}_1) + \bar{b}_1 \\ &+&  \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T (b_2-\bar{b}_2) + \bar{b}_2 \\
+\eer
+So, doing regression on $b_3$ with scaled rhs is the same as doing regression on $b_1,b_2$ with scaled rhs.
+\ber
+\text{inv}(p_1) + \text{inv}(p_2) &=& \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T(b_1+b_2-(\bar{b}_1 + \bar{b}_2)) + \bar{b}_2 + \bar{b}_3 \\
+&=& \pmb{X}^{new}(\pmb{X}^T\pmb{X})^{-1}\pmb{X}^T(b_3 - \bar{b}_3) + \bar{b}_3 \\
+&=& \text{inv}(p_3)
+\eer
+The result follows from
+\beq
+b_3 = b_1 + b_2
+\eeq
+and
+\beq
+\bar{b}_3 = \frac{1}{m}\sum_{i=1}^{m} {{}{b}_3}_i = \frac{1}{m}\sum_{i=1}^{m} ({{}{b}_1}_i+{{}{b}_2}_i) = \bar{b}_1 + \bar{b}_2
+\eeq
+We have abused some notation in denoting a scalar value $\bar{b}_3$ and a vector filled with $\bar{b}_3$ by the same symbol.
 \end{document}

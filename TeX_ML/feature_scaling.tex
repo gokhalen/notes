@@ -20,5 +20,9 @@
 \frac{\partial\pi}{\partial\theta_1} &=& (\theta_0 + \theta_1x_1 + \theta_2x_2 - y)x_1 \nn \\
 \frac{\partial\pi}{\partial\theta_2} &=& (\theta_0 + \theta_1x_1 + \theta_2x_2 - y)x_2 \nn \\
 \eer
-Clearly, if $x_1$ and $x_2$ are on vastly different scales, the gradients will be on vastly different scales, and optimization will prefer one direction over the other. Therefore we need $x_1\approx x_2$ 
+Clearly, if $x_1$ and $x_2$ are on vastly different scales, the gradients will be on vastly different scales, and optimization will prefer one direction over the other. Therefore we need $x_1\approx x_2$
+%
+\section{Feature scaling and regularization}
+Feature scaling is important for regularization because, feature scaling ensures that the parameters are about the same. (intuitive explanation, not rigorous).
+
 \end{document}
