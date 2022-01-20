@@ -23,6 +23,12 @@
 Clearly, if $x_1$ and $x_2$ are on vastly different scales, the gradients will be on vastly different scales, and optimization will prefer one direction over the other. Therefore we need $x_1\approx x_2$
 %
 \section{Feature scaling and regularization}
-Feature scaling is important for regularization because, feature scaling ensures that the parameters are about the same. (intuitive explanation, not rigorous).
+Feature scaling is important for regularization because, feature scaling ensures that the parameters are affected about the same. (intuitive explanation, not rigorous). See \url{https://stats.stackexchange.com/questions/189176/why-do-we-need-to-normalize-data-before-applying-penalizing-methods-in-the-frame}. ``The reason to normalise your variables beforehand is to ensure that the regularisation term $\lambda$ regularises/affects the variable involved in a (somewhat) similar manner.''
+%
+The regularized least squares solution is 
+\beq
+\pmb{\theta}=(\pmb{X}^T\pmb{X} + \alpha\pmb{1})^{-1}\pmb{X}^T\pmb{y}
+\eeq
+From this we can see that if the features have vastly different scales, then $\alpha$ would affect them very differently. Small features would be heavily regularized, strong features very weakly so.
 
 \end{document}

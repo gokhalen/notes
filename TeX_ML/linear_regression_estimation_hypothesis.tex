@@ -108,7 +108,25 @@ $R2$ doesn not make sense for non-linear models. i.e. it cannot be used to prefe
 
 \section{Linear reg and rhs transformation}
 
-\subsection{RHS transformation}
+\section{RHS transformation I}
+Consider the following linear system where $\pmb{A}$ is a square invertible matrix.
+\beq
+\pmb{A}x = b
+\eeq
+Consider $f(y) = cy + d$ where $c$ is a real number and  $y,d$ are vectors. Under what conditions is
+\beq
+\pmb{A}f(x) \stackrel{?}{=} f(b)
+\eeq
+Expanding the above equation we get
+\ber
+\pmb{A}(cx+d) = cb+d\\
+c\pmb{A}x + \pmb{A}d = cb + d\\
+cb + \pmb{A}d= cb + d\\
+\pmb{A}d = d
+\eer
+So its either $d=0$ or $d$ is an eigenvector of $A$ with eigenvalue $1$. I wasn't expecting the latter.
+
+\subsection{RHS transformation II }
 Consider the linear system,
 \beq
 \pmb{A}x = b \text{ where } \pmb{A}\in\mathbb{R}^{m\times{n}},\,x\in\mathbb{R}^n,\,b\in\mathbb{R}^m
