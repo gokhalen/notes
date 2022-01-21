@@ -1,0 +1,118 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Support vector machines}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Setup of the optimization problem}
+We want to find an hyperplane which separates the points and there is maximal separation (distance) between the points and the hyperplane. This is based on Prof Deepak Subramani's notes and Element's of statistical learning section by Hastie 4.5.2.\\
+
+The distance of a point $\pmb{x}^{(j)}$ from a plane defined by $\pmb{\beta}^{T}\pmb{x} + \beta_0 = 0$ is given by:
+
+\beq
+d(\pmb{x^{(j)}}) = \frac{\pmb{\beta}^T\pmb{x^{(j)}} + \beta_0}{\|\pmb{\beta}\|}
+\eeq
+
+This distance has a sign. It will be positive on one side of the hyperplane and negative on the other side, depending on the signs of $\pmb{\beta},\beta_0$. We can make it always positive by multiplying it by a function $t^{(j)}$ which is $+1$ or $-1$ depending on which side of the plane the training point $\pmb{x^{(j)}}$ lies. So our modified distance function becomes
+
+\beq
+d(\pmb{x^{(j)}}) = \frac{t^{(j)}(\pmb{\beta}^T{\pmb{x^{(j)}}} + \beta_0)}{\|\pmb{\beta}\|}
+\eeq
+
+Note: there is no implied summation over $j$. Then, our optimization problem becomes
+
+\beq
+\label{eqn:formulation1}
+\begin{aligned}
+  \max_{\pmb{\beta},\beta_0,M} &  \qquad M \\
+  \textrm{s.t.} & \qquad \frac{t^{(j)}(\pmb{\beta}^T{\pmb{x^{(j)}}} + \beta_0)}{\|\pmb{\beta}\|} \ge\, M, \, \qquad \forall \,{j}
+\end{aligned}
+\eeq
+
+We make the following substitution
+
+\beq
+\label{eqn:subs1}
+M = \frac{M'}{\|\pmb{\beta}\|}
+\eeq
+
+Note that $\|\pmb{\beta}\|\ne{0}$ because if $\pmb{\beta}=0$ there is no hyperplane because the hyperplane equation reduces to $\beta_0=0$ because  $\pmb{\beta}=0 \implies {\beta_i}=0, i\ne{0}$. This condition, $\|\pmb{\beta}\|\ne{0}$, will have to be enforced in the optimization program.\\
+
+Using equation ($\ref{eqn:subs1}$) in ($\ref{eqn:formulation1}$) we get:
+
+\beq
+\label{eqn:formulation2}
+\begin{aligned}
+  \max_{\pmb{\beta},\beta_0,M'} &  \qquad \frac{M'}{\|\pmb{\beta}\|} \\
+  \textrm{s.t.} & \qquad \frac{t^{(j)}(\pmb{\beta}^T{\pmb{x^{(j)}}} + \beta_0)}{\|\pmb{\beta}\|} \ge\, \frac{M'}{\|\pmb{\beta}\|}  \, \qquad \forall \,{j}
+\end{aligned}
+\eeq
+
+The $\|\pmb{\beta}\|$ in the denominator is +ve and it cancels. The problem becomes
+
+\beq
+\label{eqn:formulation3}
+\begin{aligned}
+  \max_{\pmb{\beta},\beta_0,M'} &  \qquad \frac{M'}{\|\pmb{\beta}\|} \\
+  \textrm{s.t.} & \qquad {t^{(j)}(\pmb{\beta}^T{\pmb{x^{(j)}}} + \beta_0)} \ge\, {M'}  \, \qquad \forall \,{j}
+\end{aligned}
+\eeq
+
+Change variables again. This time make the substitution
+
+\beq
+\label{eqn:subs2}
+\pmb{\beta} = M'\pmb{\beta}' \implies \|\pmb{\beta}\| = M'\|\pmb{\beta}'\|    \qquad \beta_0 = M'\beta'_0. 
+\eeq
+
+Using ($\ref{eqn:subs2}$) in ($\ref{eqn:formulation3}$), we get the following optimization problem
+
+\beq
+\label{eqn:formulation4}
+\begin{aligned}
+  \max_{\pmb{\beta}',\beta'_0,M'} &  \qquad \frac{M'}{M'\|\pmb{\beta}'\|} \\
+  \textrm{s.t.} & \qquad {t^{(j)}M'({\pmb{\beta}'}^T{\pmb{x^{(j)}}} + \beta'_0)} \ge\, {M'}  \, \qquad \forall \,{j}
+\end{aligned}
+\eeq
+
+Cancelling $M'$ everywhere, we see it drops out of the optimization problem, resulting in
+
+\beq
+\label{eqn:formulation5}
+\begin{aligned}
+  \max_{\pmb{\beta}',\beta'_0} &  \qquad \frac{1}{\|\pmb{\beta}'\|} \\
+  \textrm{s.t.} & \qquad {t^{(j)}({\pmb{\beta}'}^T{\pmb{x^{(j)}}} + \beta'_0)} \ge\, 1  \, \qquad \forall \,{j}
+\end{aligned}
+\eeq
+
+Drop the superscript $'$ to get 
+
+\beq
+\label{eqn:formulation6}
+\begin{aligned}
+  \max_{\pmb{\beta},\beta_0} &  \qquad \frac{1}{\|\pmb{\beta}\|} \\
+  \textrm{s.t.} & \qquad {t^{(j)}({\pmb{\beta}}^T{\pmb{x^{(j)}}} + \beta_0)} \ge \, 1  \, \qquad \forall \,{j}
+\end{aligned}
+\eeq
+
+Convert the maximization problem to a minimization problem by taking the reciprocal of the objective function. Square it and add $(1/2)$ for prettiness. This is our SVM optimization problem
+
+\beq
+\label{eqn:formulation7}
+\begin{aligned}
+  \min_{\pmb{\beta},\beta_0} &  \qquad \frac{1}{2}{\|\pmb{\beta}\|^2} \\
+  \textrm{s.t.} & \qquad {t^{(j)}({\pmb{\beta}}^T{\pmb{x^{(j)}}} + \beta_0)} \ge \, 1  \, \qquad \forall \,{j}
+\end{aligned}
+\eeq
+
+
+\end{document}
