@@ -116,7 +116,31 @@ Convert the maximization problem to a minimization problem by taking the recipro
 
 These transformations are combined into one step in the book Elements of Statistical Learning.
 
+\section{Setting minimum distance}
+
+We add a constraint $t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)=1$ for the closest point - we are NOT assuming the knowledge of the point closest to the plane. We are just saying that there is a closest point and we will find that closest point as part of the optimization program.
+
 \section{Soft margin classifier}
 Instead of explicitly enforcing constraints, penelize them.
+
+\section{SVM vs logistic regression with poly features}
+- Logistic regression is hard to train with polyfeatures\\
+- Kernel trick in SVM means you don't need to explicitly compute features\\
+- Kernel trick comes from the dual of the quadratic optimization problem.\\
+- Before deeplearning designing kernels used to be a research effort\\
+- LR is probability based, SVM is not\\
+- SVM does not support calculating probs directly\\
+
+\section{Gaussian Radial basis features}
+- Create new feature for every data point
+- In theory it introduces infinite features (one for every data point). this is in contrast to creating polynomial features, where the number of features is not dependent on the number of data points.
+
+\section{RKHS theorem}
+- any non-separable theorem can be separated in an appropriate higher dimensional space.
+
+\section{Links}
+\url{https://towardsdatascience.com/support-vector-machines-soft-margin-formulation-and-kernel-trick-4c9729dc8efe}
+
+
 
 \end{document}

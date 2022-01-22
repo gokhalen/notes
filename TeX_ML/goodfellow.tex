@@ -460,7 +460,7 @@ where $k$ is some kind of dot-product between $\phi(\pmb{x})$ and $\phi(\pmb{x}^
 - Kernel trick allows us to consider non-linear functions of $\pmb{x}$.\\
 - Allows us to make a more efficient implementation than taking the dot product of $\phi(\pmb{x})$ and $\phi(\pmb{x}^{(i)})$\\
 - In many-cases computing $k(\pmb{x},\pmb{x}^{(i)})$ is tractable even when $\phi(\pmb{x})$ is intractable.\\
-- \textbf{Drawback} cost is linear in the number of training examples. \textbf{Solution} learn an $\pmb{\alpha}$ vector that is mostly zeros and evaluate only over non-zero examples. The training examples associated with non-zero weights are called \textbf{support vectors}.\\
+- \textbf{Drawback} cost is linear in the number of training examples. \textbf{Solution} learn an $\pmb{\alpha}$ vector that is mostly zeros and evaluate only over examples where $\alpha_i$ is non-zero. The training examples associated with non-zero weights are called \textbf{support vectors}.\\
 - For billions of examples constructiing $k$ is $\mathcal{O}(m^2)$
 \subsection{Efficient implementation}
 \url{https://towardsdatascience.com/the-kernel-trick-c98cdbcaeb3f}
