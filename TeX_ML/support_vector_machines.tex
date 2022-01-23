@@ -140,7 +140,7 @@ Instead of explicitly enforcing constraints, penelize them.
 - In theory it introduces infinite features (one for every data point). this is in contrast to creating polynomial features, where the number of features is not dependent on the number of data points.
 
 \section{RKHS theorem}
-- any non-separable theorem can be separated in an appropriate higher dimensional space.
+- any non-separable data can be separated in an appropriate higher dimensional space.
 
 \section{Links}
 \url{https://towardsdatascience.com/support-vector-machines-soft-margin-formulation-and-kernel-trick-4c9729dc8efe}
@@ -150,6 +150,7 @@ Instead of explicitly enforcing constraints, penelize them.
 
 \section{Complexity of the primal and dual problem}
 Geron, page 161, ``The dual problem is faster to solve than the primal when the number of training instances is smaller than the number of features.'' i.e,$m<n$. In general $m>n$ - so why do the dual form? it enables the kernel trick.
+Chapelle ``Training a Support Vector Machine in the Primal`` page 2: Primal $\mathcal{O}(mn^2 + n^3)=\mathcal{O}(n^2(m+n))$ and Dual $\mathcal{O}(nm^2+m^3)=\mathcal{O}(m^2(n+m))$. I.e. $m<n$ dual is preferred.  
 
 
 \section{Prediction}
