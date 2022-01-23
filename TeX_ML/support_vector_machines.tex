@@ -4,6 +4,10 @@
 \newcommand{\ber}{\begin{eqnarray}}
 \newcommand{\eer}{\end{eqnarray}}
 \newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\ddeps}{\frac{d}{d\epsilon}\Big{|}_{\rightarrow{0}}}
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -145,7 +149,43 @@ Instead of explicitly enforcing constraints, penelize them.
 ``Support Vector Regression is a supervised learning algorithm that is used to predict discrete values. Support Vector Regression uses the same principle as the SVMs. The basic idea behind SVR is to find the best fit line. In SVR, the best fit line is the hyperplane that has the maximum number of points (within a tolerance - nhg).'' \url{https://towardsdatascience.com/unlocking-the-true-power-of-support-vector-regression-847fd123a4a0} But what is the dependent variable? Suppose we are given data points $(x_i,y_i)$. We use a support vector regression to determine the line which contains most of the points. This line is $y=wx+b$. When we see a new point $x_{new}$, put it in and get $y_{new}$. i.e. $y_{new} = wx_{new}+b$
 
 \section{Complexity of the primal and dual problem}
-- Check profs notes
+Geron, page 161, ``The dual problem is faster to solve than the primal when the number of training instances is smaller than the number of features.'' i.e,$m<n$. In general $m>n$ - so why do the dual form? it enables the kernel trick.
 
+
+\section{Prediction}
+
+Dual problem:
+
+\beq
+\hat{L}(\alpha) = \sum_{j=1}^{j=m}\alpha_j - \frac{1}{2}\sum_{j=1}^{j=m}\sum_{k=1}^{j=m}\alpha_j\alpha_kt_jt_k(\pmb{x}^{(j)})^T\pmb{x}^{(k)}
+\eeq
+
+This involves only the inner product of $(\pmb{x}^{(j)})^T\pmb{x}^{(k)}$. We can preplace it by any other inner product $K(\pmb{x}^{(j)},\pmb{x}^{(k)})$. This is the kernel trick. This gives
+
+\beq
+\hat{L}(\alpha) = \sum_{j=1}^{j=m}\alpha_j - \frac{1}{2}\sum_{j=1}^{j=m}\sum_{k=1}^{j=m}\alpha_j\alpha_kt_jt_kK(\pmb{x}^{(j)},\pmb{x}^{(k)})
+\eeq
+
+After $\alpha_j$ has been computed by solving the dual problem $\pmb{w},b$ appearing in the hyperplane $\pmb{w}^{T}\pmb{x} + b$ can be computed from the stationarity conditions.
+(Geron 5-7)
+
+\ber
+\pdd{L}{\pmb{w}} &=& 0 \implies \pmb{w} = \sum_{j=1}^{j=m} \alpha_j t_j \pmb{x}^{(j)} \\
+\pdd{L}{b}  &=& 0 \implies b = \frac{1}{n_s}\sum_{j=1}^{j=m} (1-t^{(i)}(\pmb{w}^T\cdot\pmb{x}^{(i)}))
+\eer
+where $n_s$ is the number of support vectors. (Geron, appendix)
+
+Knowing $w_j$ and $b$ we can now make predictions for a new data point $\pmb{x}^{k}$ as 
+
+\ber
+\pmb{w}^T{\pmb{x}^{(k)}} + b &=& \sum_{p=1}^{n}(\sum_{j=1}^{j=m} \alpha_j t_j x_p^{(j)})x^{(k)}_{p} + b \\
+&=& \sum_{j=1}^{j=m}  \alpha_j t_j ( \sum_{p=1}^{n}x_p^{(j)}x^{(k)}_{p}) + b
+\eer
+
+Replace the inner product $\sum_{p=1}^{n}x_p^{(j)}x^{(k)}_{p}$ with the kernel to get non-linear predictions
+
+\ber
+\pmb{w}^T{\pmb{x}^{(k)}} + b = \sum_{j=1}^{j=m}  \alpha_j t_j K(\pmb{x}^{(j)},\pmb{x}^{(k)}) + b
+\eer
 
 \end{document}
