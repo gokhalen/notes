@@ -42,7 +42,7 @@ Note: there is no implied summation over $j$. Then, our optimization problem bec
 \beq
 \label{eqn:formulation1}
 \begin{aligned}
-  \max_{\pmb{\beta},\beta_0,M} &  \qquad M \\
+  \max_{\pmb{\beta},\beta_0,M} & \qquad M \\
   \textrm{s.t.} & \qquad \frac{t^{(j)}(\pmb{\beta}^T{\pmb{x^{(j)}}} + \beta_0)}{\|\pmb{\beta}\|} \ge\, M, \, \qquad \forall \,{j}
 \end{aligned}
 \eeq
@@ -51,8 +51,8 @@ We make the following substitution
 
 \beq
 \label{eqn:subs1}
-M = \frac{M'}{\|\pmb{\beta}\|}
-\eeq
+M = \frac{M'}{\|\pmb{\beta}\|}  \text{ where } M' > 0
+\eeq 
 
 Note that $\|\pmb{\beta}\|\ne{0}$ because if $\pmb{\beta}=0$ there is no hyperplane because the hyperplane equation reduces to $\beta_0=0$ because  $\pmb{\beta}=0 \implies {\beta_i}=0, i\ne{0}$. This condition, $\|\pmb{\beta}\|\ne{0}$, will have to be enforced in the optimization program.\\
 
@@ -123,7 +123,10 @@ Convert the maximization problem to a minimization problem by taking the recipro
 \end{aligned}
 \eeq
 
-These transformations are combined into one step in the book Elements of Statistical Learning.
+These transformations are combined into one step in the book Elements of Statistical Learning. \\
+
+Since $M$ has dropped out of our optimization program, we need find it by manall checking the distance of each datapoint from the separating hyperplane.
+
 
 \section{Setting minimum distance}
 
@@ -193,5 +196,25 @@ Replace the inner product $\sum_{p=1}^{n}x_p^{(j)}x^{(k)}_{p}$ with the kernel t
 \ber
 \pmb{w}^T{\pmb{x}^{(k)}} + b = \sum_{j=1}^{j=m}  \alpha_j t_j K(\pmb{x}^{(j)},\pmb{x}^{(k)}) + b
 \eer
+
+\textbf{$\alpha_j$ is non-zero only for support vectors. Geron p.g. 163}
+
+\section{ Regularization }
+
+In linear regression
+\ber
+\alpha\,&\rightarrow&\,{0} \text{, overfit }\\
+\alpha\,&\rightarrow&\,{\infty} \text{,underfit}
+\eer
+
+In soft-margin SVM in Geron's (fig 5-4) and IISc formulation
+
+\ber
+C\,&\rightarrow&\,{0} \text{, underfit because margins can be as large as required} \\
+C\,&\rightarrow&\,{\infty} \text{, overfit because margins are zero} 
+\eer
+
+\section{Other notes}
+\url{https://jeremykun.com/2017/06/05/formulating-the-support-vector-machine-optimization-problem/}
 
 \end{document}
