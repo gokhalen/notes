@@ -130,10 +130,14 @@ Since $M$ has dropped out of our optimization program, we need find it by manall
 
 \section{Setting minimum distance}
 
-We add a constraint $t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)=1$ for the closest point - we are NOT assuming the knowledge of the point closest to the plane. We are just saying that there is a closest point and we will find that closest point as part of the optimization program.
+We add a constraint $t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)=1$ for the closest point - we are NOT assuming the knowledge of the point closest to the plane. We are just saying that there is a closest point and we will find that closest point as part of the optimization program. We can pick $\pmb{w},b$ such that $t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)=1$ because $\pmb{w}^T\pmb{x}+b=0$ is the same hyperplane, upto a scaling of $\pmb{w},b$. So the minimum distance to the closest point becomes $\frac{t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)}{\|\pmb{w}\|}=\frac{1}{\|\pmb{w}\|}$. We can directly optimize that, which is what the IISC notes do.
+
+\section{Hyperplane is symmetric}
+Let $\pmb{x}^{(1)},\pmb{x}^{(2)}$. The objective of the hyperplane is to maximine the minimum distance between the hyperplane and points $\pmb{x}^{(1)},\pmb{x}^{(2)}$. If the hyperplane is not symmetric between $\pmb{x}^{(1)},\pmb{x}^{(2)}$ then one distance is smaller than the other and that smaller distance will be our separation. By moving the hyperplane in the direction of the point with the larger distance, we can increase the minimum distance to the hyperplane. This process can continue until the distances are exactly equal.
 
 \section{Soft margin classifier}
-Instead of explicitly enforcing constraints, penelize them.
+-Instead of explicitly enforcing constraints, penalize them.
+-Useful when linear separation is impossible.
 
 \section{SVM vs logistic regression with poly features}
 - Logistic regression is hard to train with polyfeatures\\
