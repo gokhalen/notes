@@ -128,9 +128,9 @@ These transformations are combined into one step in the book Elements of Statist
 Since $M$ has dropped out of our optimization program, we need find it by manall checking the distance of each datapoint from the separating hyperplane.
 
 
-\section{Setting minimum distance}
+\section{Alternative elegant formulation}
 
-We add a constraint $t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)=1$ for the closest point - we are NOT assuming the knowledge of the point closest to the plane. We are just saying that there is a closest point and we can choose $\pmb{w},b$ such that $\pmb{w}^T\pmb{x}^{(j)}+b=1$ for that closest point. We can pick $\pmb{w},b$ such that $t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)=1$ because $\pmb{w}^T\pmb{x}+b=0$ is the same hyperplane, upto a scaling of $\pmb{w},b$. So the minimum distance to the closest point becomes $\frac{t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)}{\|\pmb{w}\|}=\frac{1}{\|\pmb{w}\|}$. We can directly optimize that (since we want to maximize the distance to the closest point), which is what the IISC notes do. When we solve the optimization problem as formulated a pair of points will satisfy $t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)=1$. Since the distance for the closest point is $\frac{1}{\|\pmb{w}\|}$, the distance of all other points should be greater than or equal to that.\\
+We add a constraint $t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)=1$ for the closest point - we are NOT assuming the knowledge of the point closest to the plane. We are just saying that there is a closest point and we can choose $\pmb{w},b$ such that $\pmb{w}^T\pmb{x}^{(j)}+b=1$ for that closest point. We can pick $\pmb{w},b$ such that $t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)=1$ because $\pmb{w}^T\pmb{x}+b=0$ is the same hyperplane, upto a scaling of $\pmb{w},b$. So the minimum distance to the closest point becomes $\frac{t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)}{\|\pmb{w}\|}=\frac{1}{\|\pmb{w}\|}$. We can directly optimize that (since we want to maximize the distance to the closest point), which is what the IISC notes do. Since the distance for the closest point is $\frac{1}{\|\pmb{w}\|}$, the distance of all other points should be greater than or equal to that.\\
 
 That is we must have
 
