@@ -153,8 +153,20 @@ Distances of other points is still
 \frac{t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)}{\|\pmb{w}\|} 
 \eeq
 
+See section (\ref{sect:symmetric}). I think the constraint $\pmb{w}^T\pmb{x}^{(j)}+b=1$ needs to be enforced for a PAIR of closest points from the positive and negative class. (somehow, and intelligently). If it is enforced for only one point, it ends up maximizing the distance from that point only. (not sure about this)
 
-\section{Hyperplane is symmetric}
+\subsection{Sample formulation}
+Let there be two points +ve class $(1,1)$ and negative class $(0,0)$. Obviously the optimal separating hyperplane is $x+y=1$. Let us pick the (0,0) point as the closest point. And let us look for solutions of the form $ax+ay-1=0$ which ensure that the $|(a,a)^T(0,0)-1|=1$. So our problem is
+
+\ber
+\max_{a} &  \qquad \frac{1}{\|(a,a)\|}\\
+\text{s.t.} & (a,a)^T(1,1)-1 \,\ge\, 1
+\eer
+
+The constraint reduces to $a\,\ge\,1$ and prevents maximization by letting $a\rightarrow{0}$, and makes the hyperplane lie in between both the points.
+ 
+
+\section{\label{sect:symmetric}Hyperplane is symmetric}
 Let $\pmb{x}^{(1)},\pmb{x}^{(2)}$ be two points, one in the +ve class and one in the -ve class. The objective of the hyperplane is to maximine the minimum distance between the hyperplane and points $\pmb{x}^{(1)},\pmb{x}^{(2)}$. If the hyperplane is not symmetric between $\pmb{x}^{(1)},\pmb{x}^{(2)}$ then one distance is smaller than the other and that smaller distance will be our separation. By moving the hyperplane in the direction of the point with the larger distance, we can increase the minimum distance to the hyperplane. This process can continue until the distances are exactly equal.
 
 \section{Soft margin classifier}
