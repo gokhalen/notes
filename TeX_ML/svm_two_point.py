@@ -72,7 +72,8 @@ print('a= ',res['x'][0],'b= ',res['x'][1])
 # and our constraints are 
 # -((a,b)^T X1 + c) >= 1   ==>  -c>=1  c<=-1
 #    (a,b)^T X2 + c >= 1   ===> a+b+c>=1
-# 
+#  So, we have never explicitly enforced (a,b)^T X{i} + b = 1 for either point
+#  they are all taken care of in the constraint equations
 
 x0_3 = np.asarray([5.0,5.0,5.0])
 
