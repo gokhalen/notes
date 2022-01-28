@@ -153,7 +153,7 @@ Distances of other points is still
 \frac{t^{(j)}(\pmb{w}^T\pmb{x^{(j)}}+b)}{\|\pmb{w}\|} 
 \eeq
 
-See section (\ref{sect:symmetric}). I think the constraint $\pmb{w}^T\pmb{x}^{(j)}+b=1$ needs to be enforced for a PAIR of closest points from the positive and negative class. (somehow, and intelligently). If it is enforced for only one point, it ends up maximizing the distance from that point only. (not sure about this)
+See section (\ref{sect:symmetric}). I think the constraint $\pmb{w}^T\pmb{x}^{(j)}+b=1$ needs to be enforced for a PAIR of closest points from the positive and negative class. (somehow, and intelligently). If it is enforced for only one point, it ends up maximizing the distance from that point only. (not sure about this) (this thinking is wrong)  in svm\_two\_point.py We can see that setting $\pmb{w}^T\pmb{x}^{(j)}+b=1$ for only one point suffices to find the separating hyperplane. I'm 
 
 \subsection{Sample formulation}
 Let there be two points +ve class $(1,1)$ and negative class $(0,0)$. Obviously the optimal separating hyperplane is $x+y=1$. Let us pick the (0,0) point as the closest point. And let us look for solutions of the form $ax+ay-1=0$ which ensure that the $|(a,a)^T(0,0)-1|=1$. So our problem is
