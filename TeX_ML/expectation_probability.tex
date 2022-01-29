@@ -15,6 +15,7 @@
 \newcommand{\bU}{{\mathbf{U}}}
 \newcommand{\bS}{{\mathbf{S}}}
 \newcommand{\bV}{{\mathbf{V}}}
+\newcommand{\ddeps}{\frac{d}{d\epsilon}\Big{|}_{\rightarrow{0}}}
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -262,6 +263,52 @@ F_Z(z) &=& P(Z \le z)  \qquad \text{by definition of cdf, $P$ is probability} \\
 Hence, by point 1, $z$ is uniformly distributed.\\
 4. If $Z$ is uniformly distributed on $[0,1]$ as it is in a random number generator on a computed, we can do $X=F_X^{-1}(Z)$ to get a random variable $X$ distributed according to cdf $F_X$. Sometimes $F_X^{-1}$
 is hard to calculate. This might make sampling from a distribution governed by $F_X$ hard. Hence, we might need to use a easier distribution to sample from. This motivates \textit{importance sampling}.
+%
+%
+%
+\section{pdf with maximum entropy}
+\beq
+H(x) = -\int_{a}^{b}p(x)\log{p(x)}dx \\
+\eeq
+Introduce Lagrangian and look for its stationary points
+\beq
+L(p(x),\lambda(x)) = -\int_{a}^{b}p(x)\log{p(x)}dx  + \lambda(x)\Big(\int_{a}^{b}p(x)dx - 1 \Big)\\
+\eeq
+Take derivatives wrt $p(x)$ and $\lambda(x)$ and set them to zero. Also drop spatial dependence for clarity
+\beq
+\label{eqn:stat1}
+\delta{}L_{\lambda} = \ddeps L(p,\lambda+\epsilon\delta\,\lambda)=\delta\lambda\Big(\int_a^b {p\,}dx-1\Big) = 0 \, \implies \,\int_a^b {p\,}dx-1=0
+\eeq
+%
+% 
+\ber
+\delta{}L_u = \ddeps L(p+\epsilon\delta{p},\lambda) = -\int_a^b\Big(\log{p} + p\frac{1}{p} -\lambda\Big)\,\delta{p}\,dx \\
+= -\int_a^b\Big(\log{p} + 1 -\lambda\Big)\,\delta{p}\,dx \stackrel{set}{=} 0 \,\,\forall\,\delta{p}
+\eer
+This yields
+%
+%
+\beq
+\label{eqn:stat2}
+p = -\exp(1-\lambda)
+\eeq
+%
+%
+Using the above in equation (\ref{eqn:stat1}) yields
+\beq
+-\int_a^b\exp(1-\lambda)=1 \implies \int_a^b\exp(1-\lambda)=-1
+\eeq
+The integrand $1-\lambda$ is positive, and $b>a$ so we will need to let $\lambda$ take complex values. We need
+%
+%
+\beq
+1-\lambda = \log\Big(\frac{-1}{b-a}\Big)
+\eeq
+Using the above in (\ref{eqn:stat2}) yields
+\beq
+p = \frac{1}{b-a}
+\eeq
+which is a uniform distribution. Therefore a uniform distribution maximizes entropy.
 %
 %
 %
