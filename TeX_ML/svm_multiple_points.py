@@ -142,7 +142,7 @@ for idx_ in range(npos):
 linear_constraint = LinearConstraint(constraint_matrix,lower_constraint,upper_constraint)
     
     
-x0  = np.asarray([aa,bb,cc])
+x0  = np.asarray([7,3.1,2])
 res = minimize(obj_func,x0,method='trust-constr',
                jac=gradient,constraints=[linear_constraint],
                tol=1e-16
