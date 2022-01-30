@@ -12,3 +12,4 @@ movies_hi_res/
 *.npy
 *.out
 *.log
+*.aux

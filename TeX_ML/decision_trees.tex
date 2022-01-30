@@ -23,5 +23,5 @@
 \textbf{Answer} ``The probability of a particular sample in the training set not appearing in the bootstrap sample is 
 $$p=\left(\frac{m-1}{m}\right)^m=\left(1-\frac{1}{m}\right)^m\rightarrow e^{-1}$$ as $m$ grows. That means probability of this particular sample being present in the bootstrap sample is $1-p=1-1/e\approx 0.63$. This means, on average, $63\%$ of the training set is expected to be in the bootstrapped sample.''
 
-\textbf{Comment} ``This means that if we pick a sample of m points, on average $e^-1$\% are not going to be picked''. This becomes that tree's out-of-bag
+\textbf{Comment} ``This means that if we pick a sample of m points with replacement from m datapoints, on average, $e^{-1}$\% are not going to be picked''. This becomes that tree's out-of-bag
 \end{document}

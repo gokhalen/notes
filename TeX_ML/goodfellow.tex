@@ -632,6 +632,12 @@ See table (\ref{tab:sigmoid}). Summarizes discussion in Goodfellow after equatio
   \caption{\label{tab:sigmoid} Two class classification properties. When we have the correct ans}  
 \end{table}
 \section{Softmax}
+\subsection{Equation 6.3.1}
+The following tells us the fraction of examples belonging to class $i$ in the neighborhoold of $\pmb{x}^{k}$.
+\url{https://stats.stackexchange.com/questions/553522/softmax-equation-from-goodfellows-deep-learning-book}
+\beq
+\text{softmax}(\pmb{z}(\pmb{x}^{(k)},\pmb{\theta}))_i = \frac{\sum_{j=1}^{m}\pmb{1}_{y^{(j)}=i,\pmb{x}^{(j)}=\pmb{x}}}{\sum_{j=1}^{m}\pmb{1}_{x^{(j)}=\pmb{x}}}
+\eeq
 \subsection{Numerical stability}
 \url{https://stackoverflow.com/questions/42599498/numercially-stable-softmax}
 \section{Binary function for classification: pg 199 }

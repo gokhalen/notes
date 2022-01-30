@@ -1,0 +1,45 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\ddeps}{\frac{d}{d\epsilon}\Big{|}_{\rightarrow{0}}}
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\bD}{{\mathbf{D}}}
+\newcommand{\notimplies}{\;\not\!\!\!\implies}
+\usepackage{amsmath}
+\DeclareMathOperator{\sign}{sign}
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage[hyphens]{url}
+\usepackage{amssymb} 
+\usepackage[utf8]{inputenc} 
+%\usepackage[ngerman]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage{cancel}
+\definecolor {processblue}{cmyk}{0.96,0,0,0}
+\usetikzlibrary {positioning}
+\usepackage{hyperref}
+% for booktabs
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\begin{document}
+\title{EI using Symbolic algebra}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Formulation}
+This document shows how to use symbolic algebra systems such as Sympy \url{https://www.sympy.org/en/index.html} to formulate the elasticity imaging inverse problem. Suppose we know a displacement field $\pmb{u}^m(\pmb{x})=\pmb{v}^m(\pmb{x}) + \pmb{q}^m(\pmb{x})$ which is sufficiently noiseless. We put this displacement field in the discretized weak form of the elasticity equations to get 
+\beq
+a(\pmb{w}^h,\pmb{v^m}) = (\pmb{w}^h,
+\eeq
+
+
+\end{document}
+
