@@ -1,0 +1,27 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\ddeps}{\frac{d}{d\epsilon}\Big{|}_{\rightarrow{0}}}
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Decision trees}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Geron: Out of bag evaluation}
+\url{https://stats.stackexchange.com/questions/562284/proof-out-of-bag-evaluation}
+\textbf{Question} "In Geron's book "Hands-on Machine Learning with Scikit-Learn and Tensorflow" there is this sentence on page 187 "By default a BaggingClassifier samples m training instances with replacement (bootstrap=True), where m is the size of the training set. This means that only about 63\% of the training instances are sampled on average for each predictor."  And in the footnote he mentions this ratio approaches $1-\exp(-1)$ as $m$ grows (the author means that approaches $\infty$, I think). How should I prove this? I have no idea apart from: there are $m^m$ possible training sets."\\
+\textbf{Answer} ``The probability of a particular sample in the training set not appearing in the bootstrap sample is 
+$$p=\left(\frac{m-1}{m}\right)^m=\left(1-\frac{1}{m}\right)^m\rightarrow e^{-1}$$ as $m$ grows. That means probability of this particular sample being present in the bootstrap sample is $1-p=1-1/e\approx 0.63$. This means, on average, $63\%$ of the training set is expected to be in the bootstrapped sample.''
+
+\textbf{Comment} ``This means that if we pick a sample of m points, on average $e^-1$\% are not going to be picked''. This becomes that tree's out-of-bag
+\end{document}
