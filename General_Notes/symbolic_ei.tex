@@ -4,9 +4,10 @@
 \newcommand{\ber}{\begin{eqnarray}}
 \newcommand{\eer}{\end{eqnarray}}
 \newcommand{\nn}{\nonumber}
-\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\dd}[1]{\frac{d}{d{#1}} }
 \newcommand{\ddeps}{\frac{d}{d\epsilon}\Big{|}_{\rightarrow{0}}}
-\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\pdd}[1]{\frac{\partial}{\partial{#1}}}
+\newcommand{\pddd}[2]{\frac{\partial^2}{\partial{#1}\partial{#2}}}
 \newcommand{\bD}{{\mathbf{D}}}
 \newcommand{\notimplies}{\;\not\!\!\!\implies}
 \usepackage{amsmath}
@@ -30,16 +31,62 @@
 % for booktabs
 \newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
 \begin{document}
-\title{EI using Symbolic algebra}
+\title{EI using symbolic algebra}
 \author{Nachiket Gokhale}
 \date{\today}
 \maketitle
 \section{Formulation}
-This document shows how to use symbolic algebra systems such as Sympy \url{https://www.sympy.org/en/index.html} to formulate the elasticity imaging inverse problem. Suppose we know a displacement field $\pmb{u}^m(\pmb{x})=\pmb{v}^m(\pmb{x}) + \pmb{q}^m(\pmb{x})$ which is sufficiently noiseless. We put this displacement field in the discretized weak form of the elasticity equations to get 
+This document shows how to use symbolic algebra systems such as Sympy \url{https://www.sympy.org/en/index.html} to formulate the elasticity imaging inverse problem. Consider 1D elasticity.
+%
+%
 \beq
-a(\pmb{w}^h,\pmb{v^m}) = (\pmb{w}^h,
+\dd{x}\Big(k(x)\dd{x}u(x)\Big) = 0
 \eeq
+%
+%
+Suppose we know a displacement field ${u}^m(x)$ which is sufficiently noiseless. We put this displacement field in the discretized weak form of the elasticity equations,  to get
+%
+%
+\beq
+a(w^h,u^m;k^h) = 0
+\eeq
+where $k^h(x)=\sum_{B}N_B(x)k_A$ is the stiffness we're trying to calculate. Using $w^h=\sum_{A}N_A(x)c_A$ and pulling out the constants we get
+%
+%
+\beq
+a(N_A,u^m;k^h) = 0  \,\, \forall \, A
+\eeq
+%
+%
+The above equation is a vector which is equal to zero. The entries of the vector are linear in the nodal value of stiffness $k_i$. The equations look like the following
+%
+%
+\beq
+\label{eqn:vectoreqn}
+\begin{pmatrix}
+  \alpha_{11}k_1 + \alpha_{12}k_2 + \cdots \\
+  \alpha_{21}k_1 + \alpha_{22}k_2 + \cdots \\
+  \vdots\\
+  \alpha_{n1}k_1 + \alpha_{n2}k_2 + \cdots
+\end{pmatrix}
+=\pmb{0}
+\eeq
+%
+%
+The $\alpha_{ij}$ are terms that depend on the measured displacement field $u^m$. Also, each entry in the vector equations only contains a few $k_i$ because of the localness of the basis functions used to represent $k(x)$. If $r_i$ represents each entry in the above vector, then all we need to do is solve
+%
+%
+\beq
+\pi = \sum_{i}r_i^2 = 0
+\eeq
+to get a solution for the $k_i$. Using symbolic algebra the first and second derivatives of $\pi$ wrt $k_i$ can be computed symbolically for every $k_i$. That is we can compute symbolically
+\beq
+\pdd{k_i}\pi \qquad \text{ and } \qquad \pddd{k_i}{k_j}\pi = \text{constant}
+\eeq
+once and for all. As long as your finite element code supports \textit{operator overloading} computing equation (\ref{eqn:vectoreqn}) and its derivatives symbolically should be possible. Instead of supplying numeric values for the stiffness to the element routines, we just supply the symbols $k_i$. Operator overloading takes care of the rest. At every iteration the symbolic expressions for the derivative can be evaluated. The derivative calculation can be sped up by keeping track of which $k_i$ appear in each $r_i$ taking into account finite element connectivity.\\
 
-
+This symbolic calculation procedure can also be carried out for 2D and 3D elasticity.
+%
+%
 \end{document}
 
