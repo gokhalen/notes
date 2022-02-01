@@ -58,7 +58,7 @@ a(N_A,u^m;k^h) = 0  \,\, \forall \, A
 \eeq
 %
 %
-The above equation is a vector which is equal to zero. The entries of the vector are linear in the nodal value of stiffness $k_i$. The equations look like the following
+The above equation is a vector which is equal to zero. The entries of the vector are linear in the nodal value of stiffness $k_i$ (this depends on the element formulation - the u-p formulation will not give linear entries). The equations look like the following
 %
 %
 \beq
@@ -85,8 +85,9 @@ to get a solution for the $k_i$. Using symbolic algebra the first and second der
 \eeq
 once and for all. As long as your finite element code supports \textit{operator overloading} computing equation (\ref{eqn:vectoreqn}) and its derivatives symbolically should be possible. Instead of supplying numeric values for the stiffness to the element routines, we just supply the symbols $k_i$. Operator overloading takes care of the rest. At every iteration the symbolic expressions for the derivative can be evaluated. The derivative calculation can be sped up by keeping track of which $k_i$ appear in each $r_i$ taking into account finite element connectivity.\\
 
-This symbolic calculation procedure can also be carried out for 2D and 3D elasticity.
+This symbolic calculation procedure can also be carried out for 2D and 3D elasticity.\\
 %
 %
+Paul thinks this is unstable. Can add regularization too. Can also be done without symbolic algebra.
 \end{document}
 
