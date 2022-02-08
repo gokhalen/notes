@@ -77,10 +77,12 @@ The $\alpha_{ij}$ are terms that depend on the measured displacement field $u^m$
 %
 %
 \beq
+\label{eqn:pi}
 \pi = \sum_{i}r_i^2 = 0
 \eeq
 to get a solution for the $k_i$. Using symbolic algebra the first and second derivatives of $\pi$ wrt $k_i$ can be computed symbolically for every $k_i$. That is we can compute symbolically
 \beq
+\label{eqn:gradhessian}
 \pdd{k_i}\pi \qquad \text{ and } \qquad \pddd{k_i}{k_j}\pi = \text{constant}
 \eeq
 once and for all. As long as your finite element code supports \textit{operator overloading} computing equation (\ref{eqn:vectoreqn}) and its derivatives symbolically should be possible. Instead of supplying numeric values for the stiffness to the element routines, we just supply the symbols $k_i$. Operator overloading takes care of the rest. At every iteration the symbolic expressions for the derivative can be evaluated. The derivative calculation can be sped up by keeping track of which $k_i$ appear in each $r_i$ taking into account finite element connectivity.\\
@@ -89,5 +91,24 @@ This symbolic calculation procedure can also be carried out for 2D and 3D elasti
 %
 %
 Paul thinks this is unstable. Can add regularization too. Can also be done without symbolic algebra.
+%
+%
+\section{Second formulation}
+This formulation is motivated by the fact that the Hessian in equation (\ref{eqn:gradhessian}) is positive definite for convex functions. If we know that the solution for the stiffness is unique (either by boundary conditions or by multiple fields) then it is in our interest to make (\ref{eqn:pi}) convex.\\
+
+The idea is this: The measured displacement fields in general will not render (\ref{eqn:pi}) convex. So, we find a new displacement field $\pmb{u}$ close to the measured displacement field $\pmb{u}^m$, which makes (\ref{eqn:pi}) convex by solving the following Linear Semidefinite Programming Problem (for one measured displacement field). \url{https://scicomp.stackexchange.com/questions/40972/optimization-problem-with-a-positive-definiteness-constraint}.\\
+
+
+\begin{align}
+\min_{\pmb{u}} & \qquad \frac{1}{2}(\pmb{u}-\pmb{u}^m)^{T}(\pmb{u}-\pmb{u}^m)\\
+\textrm{s.t.}  & \qquad \pmb{A}(\pmb{u}) \textrm{ is positive definite}
+\end{align}
+
+Here $\pmb{u},\pmb{u}^m\,\in\mathbb{R}^n$, $\pmb{u}^m$  is known, and $\pmb{A}(\pmb{u})\in\,\mathbb{R}^{m\times{m}}, m\approx{n}$. The entries of $\pmb{A}$, which is the Hessian in equation (\ref{eqn:gradhessian}),  depend linearly on the components of $\pmb{u}$ in a known manner. e.g. ${A}_{7,8}=c_1u_3 + c_2u_{12} + c_3u_{4}$ with $c_i$ known.\\
+
+This can be thought of as a way to filter or smooth or process the measured displacement field.\\
+
+Since we have made the Hessian positive definite, full Newton's method should be able to find the minima of equation (\ref{eqn:pi}) in one step.
+
 \end{document}
 

@@ -1,0 +1,67 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\ddeps}{\frac{d}{d\epsilon}\Big{|}_{\rightarrow{0}}}
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Independence and mutually exclusive events}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+%
+%
+\section{Poll question 1}
+%
+From (Class03\_20211120.pdf)
+%
+\textbf{Question 1: Which of the following is FALSE}
+\begin{enumerate}
+\item{Mutually Exclusive Events are Dependent}
+\item{Mutually Exclusive Events are Independent}
+\item{Disjoint Events are Dependent}
+\item{Disjoint Events are Equi-probable}  
+\end{enumerate}
+%
+%
+\textbf{Answers}
+%
+%
+\begin{enumerate}
+\item{\textbf{True} If one event occurs then the other has not ocurred. The occurrence of one says complete information about the other}  
+\item{\textbf{False} $P(A\cap{B})=0\neq P(A)P(B)$ unless either $P(A)=0$ or $P(B)=0$ or both.}
+\item{\textbf{True} If one event occurs then the other has not ocurred. The occurrence of one says complete information about the other}
+\item{\textbf{False} There is no reason for $P(A)$ to be equal to be $P(B)$. Might happen in special cases. Not in general}  
+\end{enumerate}
+%
+%
+\section{Poll question 2}
+\textbf{Question 2: A venn diagram with zero intersection represents independent events}
+\textbf{Options:}
+\begin{enumerate}
+\item{True}
+\item{\textbf{False}:If one event occurs then the other has not ocurred. The occurrence of one says complete information about the other}
+\item{Sometimes True}
+\item{Sometimes False}
+\end{enumerate}  
+%
+%
+\section{Poll question 3}
+\textbf{Question 3: 3. Which of the following is TRUE}
+\begin{enumerate}
+\item{Conditional independence implies unconditional independence: \textbf{False} Just doesn't seem right. But I can't make an example to show it is false. \url{https://math.stackexchange.com/questions/23093/could-someone-explain-conditional-independence}}
+\item{Conditional independence statements are possible as conditioning results in a complete probability law: \textbf{Can't say} What is a 'conditioning results'?}
+\item{If $P(A\cap{B}|C)=P(A|C)*P(B|C)$, then A and B are conditionally independent given C: \textbf{True}}
+\item{If $P(A\cap{B}|C)=P(A|C)*P(B|C)$, then A and B are conditionally dependent given C: \textbf{False}}  
+\end{enumerate}
+%
+%
+\end{document}
