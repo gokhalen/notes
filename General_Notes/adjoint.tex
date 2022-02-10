@@ -1,0 +1,125 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[1]{\frac{d}{d{#1}} }
+\newcommand{\ddeps}{\frac{d}{d\epsilon}\Big{|}_{\rightarrow{0}}}
+\newcommand{\pdd}[1]{\frac{\partial}{\partial{#1}}}
+\newcommand{\pddd}[2]{\frac{\partial^2}{\partial{#1}\partial{#2}}}
+\newcommand{\bD}{{\mathbf{D}}}
+\newcommand{\notimplies}{\;\not\!\!\!\implies}
+\usepackage{amsmath}
+\DeclareMathOperator{\sign}{sign}
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage[hyphens]{url}
+\usepackage{amssymb} 
+\usepackage[utf8]{inputenc} 
+%\usepackage[ngerman]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage{cancel}
+\definecolor {processblue}{cmyk}{0.96,0,0,0}
+\usetikzlibrary {positioning}
+\usepackage{hyperref}
+% for booktabs
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\begin{document}
+\title{Adjoint method explained}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+%
+%
+%
+\section{Formulation}
+The presentation of the adjoint method in Oberai,Gokhale,Feijoo 2003 is not clear. It is asserted that on surfaces satisfying $a(\pmb{w},\pmb{u};\mu)=(\pmb{w},\pmb{h})_{\Gamma_h}$, $\delta{L}=\delta{\pi}$ and hence $\delta{L}_{\mu}=\delta{\pi}_{\mu}$. Here, we provide an algebraic explanation of this.
+%
+%
+%
+\section{Straightforward calculation}
+%
+%
+\beq
+\label{eqn:pi}
+\pi(\pmb{u}(\mu)) = \frac{1}{2}\|\pmb{u}-\pmb{u}^m\|^2
+\eeq
+%
+Where $\pmb{u}$ obeys the elasticity equations $a(\pmb{w},\pmb{u};\mu)=(\pmb{w},\pmb{h})_{\Gamma_h}$. Differentiating (\ref{eqn:pi}) with respect to $\mu$ we get
+%
+\beq
+\label{eqn:deltapi}
+\delta{\pi} = (\pmb{u}-\pmb{u}^m,\delta{\pmb{u}})
+\eeq
+%
+Where $\delta{\pmb{u}}$ satisfies
+%
+\beq
+\label{eqn:varumu}
+a(\pmb{w},\delta\pmb{u};\mu) + a(\pmb{w},\pmb{u};\delta\mu) = 0 ,\,\forall\,\pmb{w}
+\eeq
+%
+which is nothing but the elasticity equation differentiated wrt $\mu$. To find the change in $\pi$ due to a change $\delta\mu$ we calculated first $\delta{\pmb{u}}$ using equation (\ref{eqn:varumu}) and then use it in equation (\ref{eqn:deltapi})
+%
+%
+%
+\section{Adjoint calculation}
+Consider the following function
+%
+%
+%
+\beq
+L(\pmb{u},\pmb{w},\mu) = \frac{1}{2}\|\pmb{u}-\pmb{u}^m\|^2 + a(\pmb{w},\pmb{u};\mu)-(\pmb{w},\pmb{h})_{\Gamma_h}
+\eeq
+where $\pmb{u},\pmb{w},\mu$ are free to be whatever they want. Taking variations we get
+%
+\beq
+\delta{L} = \delta{L}_{\pmb{u}} + \delta{L}_{\pmb{w}} + \delta{L}_{\mu}
+\eeq
+%
+If we choose $\pmb{w}$ such that $\delta{L}_{\pmb{u}}=0,\,\forall\,\delta\pmb{u}$, and $\pmb{u}$ such that $\delta{L}_{\pmb{w}}=0,\,\forall\,\delta\pmb{w}$, we get
+%
+\beq
+\label{eqn:deltaLmu}
+\delta{L} = \delta{L}_{\mu} = a(\pmb{w},\pmb{u};\delta\mu)
+\eeq
+%
+\textbf{CLAIM}: $\delta{L}_{\mu}$ from (\ref{eqn:deltaLmu}) is the same as $\delta{\pi}$ from (\ref{eqn:deltapi})
+\beq
+\delta{L}_{\mu} = a(\pmb{w},\pmb{u};\delta\mu) = \delta{\pi}
+\eeq
+%
+\textbf{PROOF}:
+Note: $\delta{L}_{\pmb{w}}=0,\,\forall\,\delta\pmb{w}$ implies equation (\ref{eqn:varumu})
+\ber
+\delta{L}_{\mu} = a(\pmb{w},\pmb{u};\delta\mu) &=& -a(\pmb{w},\delta\pmb{u};\mu) \qquad \text{ using } (\ref{eqn:varumu}) \\
+\label{eqn:Ldeltamu2}
+&=& -a(\delta\pmb{u},\pmb{w};\mu) \qquad \text{using symmetry of } a(\cdot,\cdot,\mu) 
+\eer
+$\delta{L}_{\pmb{u}}=0,\,\forall\,\delta\pmb{u}$ reduces to 
+\beq
+(\pmb{u}-\pmb{u}^m,\delta{\pmb{u}}) + a(\delta\pmb{u},\pmb{w},\mu) = 0
+\eeq
+Using the above eqation in (\ref{eqn:Ldeltamu2}) we get
+\beq
+\delta{L}_{\mu} = (\pmb{u}-\pmb{u}^m,\delta{\pmb{u}})
+\eeq
+which is the same as equation (\ref{eqn:pi}). QED.
+%The condition $\delta{L}_{\pmb{w}}=0,\,\forall\,\delta\pmb{w}$ implies
+%\beq
+%a(\delta\pmb{w},\pmb{u};\mu)-(\delta\pmb{w},\pmb{h})_{\Gamma_h} = 0\,\forall\,\delta\pmb{w}
+%\eeq
+%Which can be differentied wrt $\mu$ to get
+%
+%\beq
+%a(\delta\pmb{w},\pmb{u};\delta\mu) + a(\delta\pmb{w},\delta\pmb{u};\mu) = 0\,\forall\,\delta\pmb{w}
+%\eeq
+%
+\end{document}
+
