@@ -14,8 +14,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
-
-
 nn       = 4096
 ycorrect = np.random.choice([0,1],size=(nn,))
 yprob    = np.random.random(size=(nn,))

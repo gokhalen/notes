@@ -24,4 +24,19 @@
 $$p=\left(\frac{m-1}{m}\right)^m=\left(1-\frac{1}{m}\right)^m\rightarrow e^{-1}$$ as $m$ grows. That means probability of this particular sample being present in the bootstrap sample is $1-p=1-1/e\approx 0.63$. This means, on average, $63\%$ of the training set is expected to be in the bootstrapped sample.''
 
 \textbf{Comment} ``This means that if we pick a sample of m points with replacement from m datapoints, on average, $e^{-1}$\% are not going to be picked''. This becomes that tree's out-of-bag
+%
+%
+%
+\section{Bounding of Gini}
+note $\mathcal{G}$ as Gini. Then,
+\beq
+\mathcal{G} = 1 - \sum_{i=1}^{n}p_i^2
+\eeq
+\textbf{Upper bound}: Since $p_i>0$ and there is some $p_i$ such that $0<p_i<1$, $\mathcal{G} < 1$\\
+\textbf{Lower bound}:
+\beq
+\sum_{i=1}^{n}p_i = 1 \implies (\sum_{i=1}^{n}p_i)^2 = 1 \implies \sum_{i=1}^{n}p_i^2 < 1 \implies \mathcal{G} > 0
+\eeq
+Hence $0<\mathcal{G}<1$
+
 \end{document}
