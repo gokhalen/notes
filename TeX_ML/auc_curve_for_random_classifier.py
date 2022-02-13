@@ -10,6 +10,10 @@ Created on Fri Feb 11 15:17:44 2022
 # Outputs random probabilities
 # 
 
+# point corresponding to low threshhold is on the 
+# upper right, point for highest threshold 
+# is on the lower left
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
@@ -27,6 +31,8 @@ for th in threshhold:
     tpr_list.append(tp/(tp+fn))
     fpr_list.append(fp/(tn+fp))
 plt.plot(fpr_list,tpr_list)
+plt.plot(tpr_list[0],fpr_list[0],'ro')
+plt.plot(tpr_list[-1],fpr_list[-1],'bo')
 plt.xlabel('fpr')
 plt.ylabel('tpr')
 plt.title('ROC Curve for Random Classifier')
