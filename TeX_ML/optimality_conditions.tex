@@ -82,4 +82,24 @@ In steepest descent we are making a function that is a quadratic approximation o
 \section{Stochastic gradient with restart}
 \url{https://towardsdatascience.com/https-medium-com-reina-wang-tw-stochastic-gradient-descent-with-restarts-5f511975163}
 ``In order to find a more stable local minimum, we can increase the learning rate from time to time, encouraging the model to “jump” from one local minimum to another if it is in a steep trough. This is the “restarts” in SGDR.''
+%
+%
+%
+\section{Proper learning rate necessary for convergence even for convex functions}
+If learning rate is not set correctly, gradient descent even convex functions will diverge. Consider the convex function $f(x)=x^2$. Gradient descent for this function is
+\beq
+x^{i+1} = x^{i} - \eta(2x^{i}) = (1-2\eta)x^{i}
+\eeq
+A reasonable condition for convergence is
+\beq
+\Big|\frac{x^{i+1}}{x^{i}}\Big| = |1-2\eta| < 1 \implies 0 < \eta < 1
+\eeq
+The following python code implements gradient descent for $f(x)=x^2$ starting from $x=1$
+\begin{verbatim}
+xx  = [1.0]
+eta = 0.9
+for ii in range(10):
+    xx.append(xx[-1]*(1-2*eta))
+print(xx)
+\end{verbatim}
 \end{document}
