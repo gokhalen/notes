@@ -20,6 +20,10 @@
 \section{K-means clustering}
 1. Algorithm is guaranteed to converge but may not convert to the correct solution. To tackle this, we need an ensemble.\\
 2 Scaling issues. Data MUST be scaled.\\
-3. Algorithm stops when no centroids move
-4. Goodness of clustering: Inertia.
+3. Algorithm stops when no centroids move\\
+4. Goodness of clustering: Inertia (lower the intertia, better is clustering). But, you can use $k=n$ and inertia will be zero. (overfitting) \textbf{Understand Silhouette coeff}\\
+5. Prof's comment in chat: But note that means is guaranteed to converge only for Euclidean distances
+
+\section{DB-Scan}
+1. DBScan figures out number of clusters for itself.
 \end{document}
