@@ -22,13 +22,20 @@
 2 Scaling issues. Data MUST be scaled.\\
 3. Algorithm stops when no centroids move\\
 4. Goodness of clustering: Inertia (lower the intertia, better is clustering). But, you can use $k=n$ and inertia will be zero. (overfitting) \textbf{Understand Silhouette coeff}\\
-5. Prof's comment in chat: But note that means is guaranteed to converge only for Euclidean distances
+5. Prof's comment in chat: But note that means is guaranteed to converge only for Euclidean distances\\
+6. K-means fit time is high but can be parallelized using OpenMP
+
+
+\section{GMM}
+Learn means and standard deviation from the data. Expensive to train.
 
 \section{DB-Scan}
 1. DBScan figures out number of clusters for itself.
 
-
 \section{Anamoly detection}
 \textbf{Anamoly} we don't want. \textbf{Novelty} we want. Means and GMMs for the model are learned from the data.
+
+\section{Isolation forests}
+- How is splitting done without knowing labels?
 
 \end{document}
