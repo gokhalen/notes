@@ -1,0 +1,25 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\newcommand{\ddeps}{\frac{d}{d\epsilon}\Big{|}_{\rightarrow{0}}}
+\newcommand{\pdd}[2]{\frac{\partial{#1}}{\partial{#2}}}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\begin{document}
+\title{Unsupervised}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{K-means clustering}
+1. Algorithm is guaranteed to converge but may not convert to the correct solution. To tackle this, we need an ensemble.\\
+2 Scaling issues. Data MUST be scaled.\\
+3. Algorithm stops when no centroids move
+4. Goodness of clustering: Inertia.
+\end{document}
