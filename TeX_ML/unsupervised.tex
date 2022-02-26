@@ -27,7 +27,15 @@
 
 
 \section{GMM}
-Learn means and standard deviation from the data. Expensive to train.
+Learn means and standard deviation from the data. Expensive to train. \url{https://towardsdatascience.com/gaussian-mixture-models-d13a5e915c8e} Note: It’s worth noting, that the algorithm is susceptible to local maxima. (from previous url) \url{https://www.geeksforgeeks.org/gaussian-mixture-model/}. (Geeks for geeks is the explanation closest to an algorithm). My understanding is as follows (based on geeksforgeeks)
+
+\begin{enumerate}
+\item{Guess parameters for the mixture: $\mu_k$, $\Sigma_{k}$, $\pi_k$.}
+\item{\textbf{Estimation Step:} Assign each data point to the cluster for which the probability is highest. This enables the computation of the latent variables $\gamma_k$.}
+\item{\textbf{Maximization Step} Update the values of $\mu_k$, $\Sigma_{k}$, $\pi_k$ using maximization of likelihood}
+\item{Continue steps 2 and 3 until likelihood is maximized sufficiently}  
+\end{enumerate}
+
 
 \section{DB-Scan}
 1. DBScan figures out number of clusters for itself.
