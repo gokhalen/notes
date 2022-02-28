@@ -38,15 +38,15 @@ Learn means and standard deviation from the data. Expensive to train. \url{https
 
 
 \section{DB-Scan}
-1. DBScan figures out number of clusters for itself.
-2. DBSCAN cannot predict which cluster a new instance belongs too
-3. Bigger $\epsilon$ means fewer clusters. Smaller $\epsilon$ more clusters
-4. More min\_samples means bigger,fewer clusters. Smaller min\_samples more clusters. \url{https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31}. Think of it this way: Suppose $\epsilon=1$ and we have two clusters in the form of circles. These clusters are widely separated and have 500 and 300 samples respectively. Now if min\_samples is 300 then 2 clusters will be formed. If min\_samples is 500 then only one cluster will be formed. 
+1. DBScan figures out number of clusters for itself.\\
+2. DBSCAN cannot predict which cluster a new instance belongs too\\
+3. Bigger $\epsilon$ means fewer clusters. Smaller $\epsilon$ more clusters\\
+4. More min\_samples means bigger,fewer clusters. Smaller min\_samples more clusters. \url{https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31}. Think of it this way: Suppose $\epsilon=1$ and we have two clusters in the form of circles whose radius is  $<\epsilon$. These clusters are widely separated and have 500 and 300 samples respectively. Now if min\_samples is 300 then 2 clusters will be formed. If min\_samples is 500 then only one cluster will be formed. \\
 
 \section{Anamoly detection}
 \textbf{Anamoly} we don't want. \textbf{Novelty} we want. Means and GMMs for the model are learned from the data.
 
 \section{Isolation forests}
-- How is splitting done without knowing labels?
+- How is splitting done without knowing labels? (It is just done on the basis of randomly selected features).
 
 \end{document}
