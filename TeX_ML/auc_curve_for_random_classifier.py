@@ -50,7 +50,7 @@ plt.xlabel('fpr')
 plt.ylabel('tpr')
 plt.title('ROC Curve for Random Classifier')
 
-# Plot 
+# The following plot is tricky to explain
 # this plot is a bit tricky to explain
 # 1) Our output dataset is balanced - same number 
 #    of 0's as 1's
