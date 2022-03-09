@@ -6,6 +6,7 @@
 \newcommand{\nn}{\nonumber}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{url}
 \begin{document}
@@ -240,11 +241,41 @@ We have abused some notation in denoting a scalar value $\bar{b}_3$ and a vector
 %
 %
 \section{Normal equations always have a solution}
-\url{https://sites.math.washington.edu/~burke/crs/308/LeastSquares.pdf}
+\url{https://sites.math.washington.edu/~burke/crs/308/LeastSquares.pdf} (Normal\_Equations\_LeastSquares\_Washington.pdf)
 \beq
 \pmb{X}^T\pmb{X}\pmb{\theta} = \pmb{X}^T\pmb{y}
 \eeq
-$\pmb{X}^T\pmb{y} \in \text{Ran}({\pmb{X}^T})$  and $\text{Ran}(\pmb{X}^T\pmb{X})=\text{Ran}(\pmb{X}^T)$. So the system always has an equation. 
+$\pmb{X}^T\pmb{y} \in \text{Ran}({\pmb{X}^T})$  and $\text{Ran}(\pmb{X}^T\pmb{X})=\text{Ran}(\pmb{X}^T)$. So the system always has an equation. \\
+
+\textbf{Property 1} Null($\pmb{X}$)$^\complement$ = Ran$(\pmb{X}^T)$ where $^\complement$ is the orthogonal complement\\
+
+Let $\pmb{\theta}\in\text{Null}(\pmb{X})$. Hence,
+\beq
+\pmb{X}\pmb{\theta} = 0
+\eeq
+So, rows of $\pmb{X}$ are orthogonal to $\pmb{\theta}$ and hence lie in $\text{Null}(\pmb{X})^\complement$. $\text{Ran}(\pmb{X}^T)$ is the column space of $\pmb{X}^T$ which is the row space of $\pmb{X}$ which is the orthogonal complement of $\text{Null}(\pmb{X})$. This proves \textbf{Property 1}.\\
+
+\textbf{Property: 2 } Null($\pmb{X}^T\pmb{X}$) = Null($\pmb{X}$)\\
+
+Let $\pmb{\theta}\in\text{Null}(\pmb{X})$. Hence $\pmb{X}\pmb{\theta}=0$ and hence $\pmb{X}^T\pmb{X}\pmb{\theta}=0$ i.e. $\pmb{\theta}\in\text{Null}(\pmb{X}^T\pmb{X})$ i.e. Null($\pmb{X}$) $\in$  Null($\pmb{X}^T\pmb{X}$) \\\\
+%
+Let $\pmb{\theta}\in\text{Null}(\pmb{X}^T\pmb{X})$ i.e. $\pmb{X}^T\pmb{X}\pmb{\theta}=0$ i.e. $\pmb{\theta}^T\pmb{X}^T\pmb{X}\pmb{\theta}=0$ i.e. $(\pmb{X}\pmb{\theta})^T(\pmb{X}\pmb{\theta})=0$ i.e. $\pmb{\theta}\in\text{Null}(\pmb{X})$ i.e. Null($\pmb{X}^T\pmb{X}$) $\in$ Null($\pmb{X}$)\\\\
+%
+%
+Hence Null($\pmb{X}^T\pmb{X}$) = Null($\pmb{X}$)\\\\
+%
+%
+%
+To complete the proof
+
+\ber
+\text{Ran}(\pmb{X}^T\pmb{X}) &=& \text{Ran}((\pmb{X}^T\pmb{X})^T) \qquad \text{by symmetry of } \pmb{X}^T\pmb{X}\\
+&=& \text{Null}(\pmb{X}^T\pmb{X})^\complement \\
+&=& \text{Null}(\pmb{X})^\complement\\
+&=& \text{Ran}(\pmb{X}^T)
+\eer
+
+
 %
 %
 %
