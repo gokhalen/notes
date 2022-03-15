@@ -199,6 +199,7 @@ J = \sum_{i=0}^{m}\|x^{(i)}-\bPi{x^{(i)}}\|_2^2
 \eeq
 I'm pretty sure the above equation is not entirely corect in the context of data science. I think it should be
 \beq
+\label{eqn:minimizedifference}
 J = \sum_{i=0}^{m}\|x^{(i)}-\hat{U}\hat{U}^T{x^{(i)}}\|_2^2
 \eeq
 And we find the optimal projector $U$ of rank $k$.The rest of the theory is pretty much the same as POD theory. Equation (\ref{eqn:discretexxt}) is a discrete analog of (\ref{eqn:continuousxxt}).
@@ -416,6 +417,11 @@ T = BV =
   x_m^Tv_1 & x_m^Tv_2 & \hdots & x_m^Tv_n
 \end{pmatrix}  
 \eeq
+%
+%
+%
+\section{Why capture (co)variance?}
+We want to minimize the difference given in equation (\ref{eqn:minimizedifference}) using a projector of a given rank. Turns out the best projector of a given rank, as measured by equation (\ref{eqn:minimizedifference}), is given by considering the SVD of the co-variance matrix. As more and more rank is retained, we end up capturing more variance.
 %
 %
 %
