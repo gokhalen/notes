@@ -34,6 +34,7 @@ a = AA(1.0,2.0)
 # and so on into an infinite recursion, which ends with max recursion depth
 # being exceeded
 
+
 class AA(object):
-    def __new__(cls,x,y):
-        return cls(x,y)
+   def __new__(cls,x,y):
+       return cls(x,y)
