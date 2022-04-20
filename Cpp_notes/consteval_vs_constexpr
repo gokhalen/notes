@@ -1,0 +1,2 @@
+consteval is required to be evaluated at compile time. compilation will fail if this is not possible.
+constexpr can be evaluated at runtime.
