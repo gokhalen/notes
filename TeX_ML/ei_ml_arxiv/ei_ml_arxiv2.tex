@@ -703,7 +703,8 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \item{We think that using millions of training examples will improve the performance of the CNNs evaluated in this work. Using a large number of examples will also help incorporate large ranges of $\mu$, complex inclusion shapes, different boundary conditions, and training with many noisy displacement or strain fields generated from noiseless fields. These noisy fields, corresponding to different realizations of noise, will correspond to the same true shear modulus field. Highly optimized finite element solvers and state of the art computer hardware such as high end clusters of CPUs and GPUs and fast SSD storage will be required for data generation and CNN training.}
  %
 \item{We think that using the scaled error, equation (\ref{eqn:averagescalederror}), as the loss function instead of mean squared error would improve results.}
-\item{Exploring error as a function of training set size would enable us to know if the model is over-fitting or under-fitting}  
+\item{Exploring error as a function of training set size would enable us to know if the model is over-fitting or under-fitting}
+\item{Using depth wise separable kernels may result in lower computational time for training \cite{misc:sepconv}. }
 \end{enumerate}
 \clearpage
 \newpage
