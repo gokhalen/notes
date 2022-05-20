@@ -52,13 +52,14 @@ Pick the first $k$ columns of $U$:
 We can view $U$ containing information about which combination of features is most significant.
 Define new variables:
 \beq
+\label{eqn:ngproj}
 z^{(i)}   = {\hat{U}}^{T}x^{(i)} \qquad z^{(i)} \in \mathbb{R}^{k},\,\, {\hat{U}}^{T} \in \mathbb{R}^{k\times{n}}
 \eeq
 Now training data becomes $(z^{(0)},y^{(0)}), (z^{(1)},y^{(1)}), \cdots, (z^{(m)},y^{(m)})$. If needed, the original variables can be recovered using
 \beq
 x^{(i)} = \hat{U}z^{(i)}
 \eeq
-\textbf{Output of PCA (z) depends on how the eigenvectors/sigularvectors are normalized! You can flip the sign of a singular vector. It will still remain a singular vector with the same eigenvalue, but z will change!}
+\textbf{Output of PCA (z) depends on how the eigenvectors/sigularvectors are normalized! You can flip the sign of a singular vector. It will still remain a singular vector with the same eigenvalue, but z will change! May 5 2022: This is probably because, symmetry of $\Sigma$ implies $V=U$ and we can replace $V$ and $U$ by $-V$ and $-U$ respectively.} 
 %
 %
 %
@@ -71,7 +72,7 @@ We have:
 \ber
 y_{p}a_{pq}^{(i)}y_{q} &=& y_{p}x^{(i)}_{p}{x^{(i)}_{q}}y_{q}  \\
 &=& (y_{c}x^{(i)}_{c})({x^{(i)}_{c}}y_{c}) \text{ ... switching dummy inidces to }c\\
-&=& (y_{c}x^{(i)}_{c}) \ge 0
+&=& (y_{c}x^{(i)}_{c})^2 \ge 0
 \eer
 Since, $\Sigma$ is a sum of all $a^{i}$, it is also symmetric-positive-semi-definite.
 \section{Model reduction in mechanics}
@@ -417,6 +418,14 @@ T = BV =
   x_m^Tv_1 & x_m^Tv_2 & \hdots & x_m^Tv_n
 \end{pmatrix}  
 \eeq
+%
+%
+%
+\section{IISc Method described above and Ng's method}
+IISc method and Ng's method (\ref{eqn:ngproj}) yield projected matrices that are the transposes of each other. See learn\_svd\_compare\_ng\_iisc.py
+\begin{center}
+  \lstinputlisting[language=Python]{learn\_svd\_compare\_ng\_iisc.py}
+\end{center}  
 %
 %
 %

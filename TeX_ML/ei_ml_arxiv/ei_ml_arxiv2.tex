@@ -82,7 +82,7 @@
 \begin{document}
 % bib
 \title{Solving an elastic inverse problem using Convolutional Neural Networks}
-\author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone, Ph.D. (Professor, Mechanical Engineering, Boston University, Boston, MA, USA.) for patiently answering many questions about finite elements and for his constructive comments on an earlier version of this document. Conversations with Arnab Majumdar, Ph.D. (Founder, ArcVision Technologies, Kolkata, India), Michael Richards, Ph.D. (Assistant Professor, Department of Biomedical Engineering, Kate Gleason College of Engineering, Rochester Institute of Technology, Rochester, NY, USA) and Mandar Kulkarni, Ph.D. (Houston, TX, USA) are gratefully acknowledged and appreciated.}, Ph.D.\\nachiket.gokhale@arcvisions.com{\footnote{Alternate email: gokhalen@gmail.com}}\\ArcVision Technologies, Kolkata, India.}
+\author{Nachiket Gokhale\footnote{The author is very grateful to Paul Barbone, Ph.D. (Professor, Mechanical Engineering, Boston University, Boston, MA, USA.) for patiently answering many questions about finite elements and for his constructive comments on an earlier version of this document. Conversations with Arnab Majumdar, Ph.D. (Founder, ArcVision Technologies, Kolkata, India), Michael Richards, Ph.D. (Assistant Professor, Department of Biomedical Engineering, Kate Gleason College of Engineering, Rochester Institute of Technology, Rochester, NY, USA) and Mandar Kulkarni, Ph.D. (USAA, Houston, TX, USA) are gratefully acknowledged and appreciated.}, Ph.D.\\nachiket.gokhale@arcvisions.com{\footnote{Alternate email: gokhalen@gmail.com}}\\ArcVision Technologies, Kolkata, India.}
 \date{\today}
 \maketitle
 \abstract{We explore the application of a Convolutional Neural Network (CNN) to image the shear modulus field of an almost incompressible, isotropic, linear elastic medium in plane strain using displacement or strain field data. This problem is important in medicine because the shear modulus of suspicious and potentially cancerous growths in soft tissue is elevated by about an order of magnitude as compared to the background of normal tissue. Imaging the shear modulus field therefore can lead to high-contrast medical images. Our imaging problem is: \textit{Given a displacement or strain field (or its components), predict the corresponding shear modulus field}. Our CNN is trained using 6000 training examples consisting of a displacement or strain field and a corresponding shear modulus field. We observe encouraging results which warrant further research and show the promise of this methodology.}
@@ -705,7 +705,7 @@ In this work, we have presented CNNs capable of predicting shear modulus fields 
 \item{We think that using the scaled error, equation (\ref{eqn:averagescalederror}), as the loss function instead of mean squared error would improve results.}
 \item{Exploring error as a function of training set size would enable us to know if the model is over-fitting or under-fitting}
 \item{Using depth wise separable kernels may result in lower computational time for training \cite{misc:sepconv}.}
-\item{Constructing CNNs to map displacement fields to strain fields will also be interesting.}
+\item{Constructing CNNs to denoise displacement fields will be interesting.}
 \end{enumerate}
 \clearpage
 \newpage
