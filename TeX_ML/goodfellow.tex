@@ -35,7 +35,7 @@
 \date{\today}
 \maketitle
 \section{PCA Section 2.12}
-Given a decoder $\pmb{D}$, what should the encoder be? The idea is that of all the points $\pmb{c}$ that one could map $\pmb{x}$ to, we should choose the point $\pmb{c}^*$ that minimizes $\|\pmb{x}-g(\pmb{c})\|_2$. Taking derivatives we find that the minimizer satisfies $\pmb{c}^* = \pmb{D}^T\pmb{x}$. So, $\pmb{D}^T$ is our encoder.
+Given a decoder $\pmb{D}$, such that $\pmb{D}^T\pmb{D}=1$ what should the encoder be? The idea is that of all the points $\pmb{c}$ that one could map $\pmb{x}$ to, we should choose the point $\pmb{c}^*$ that minimizes $\|\pmb{x}-g(\pmb{c})\|_2$. Taking derivatives we find that the minimizer satisfies $\pmb{c}^* = \pmb{D}^T\pmb{x}$. So, $\pmb{D}^T$ is our encoder. The book has a more detailed derivation. 
 \section{Covariance and independence Section 3.8}
 \ber
 \text{ indepdent variables } & & \implies \text{ zero covariance }\\
