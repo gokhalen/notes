@@ -446,6 +446,8 @@ D:\GoogleDrive\Books\Papers\ML
 \url{https://people.eecs.berkeley.edu/~wainwrig/stat241b/scholkopf_kernel.pdf} or scholkopf\_kernel\_pca.pdf in Books/Papers/ML folder\\
 The idea is to compute new coordinates for each data point using equation 10. The LHS of 10 is the projection of the datapoint in high-dimensional space along along the k-th eigenvector. This can be computed using the RHS without computing $\pmb{\phi}(\pmb{x})$ explicitly because all be need, as in SVMs, is the dot-product $(\pmb{\phi}(\pmb{x_i})\cdot\pmb{\phi}(\pmb{x}))$\\
 
-But the thing is, the if you still want the eigenvectors in higher diemnsional space, you still need to explicitly know $\pmb{\phi}$ (equation 5). But the $\alpha_i$ in equation 5 can be solved usinga lower dimensional eigenproblem 7.
+But the thing is, the if you still want the eigenvectors in higher diemnsional space, you still need to explicitly know $\pmb{\phi}$ (equation 5). But the $\alpha_i$ in equation 5 can be solved using a lower dimensional eigenproblem 7. \\
+
+Usually, we don't need to know the higher dimensional eigenvectors. Just using the fact that they're orthogonal, means we can plot a 2D plot or a 3D plot using their coordinates. i.e. one of the orthogonal higher dimensional eigenvectors is along the x axis and the other along the y axis
 \end{document}
 
