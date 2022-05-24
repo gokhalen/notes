@@ -398,6 +398,7 @@ So, the entries of $c^2$ are determining how $u^1,u^2$ are getting mixed to form
 %
 %
 \section{Principal component analysis: IISC Notes (Matrix decomposition)}
+
 They say the principal components are
 \beq
 T = BV =
@@ -422,6 +423,22 @@ T = BV =
 %
 %
 \section{IISc Method described above and Ng's method}
+In the IISC method, the SVD of
+\beq
+B = \begin{pmatrix} x_i^T \\ \vdots \\ x_m^T\end{pmatrix}  \qquad \text{ assuming centered data}
+\eeq
+is computed.
+In Ngs method the SVD of 
+\beq
+\Sigma = \frac{1}{m}\sum_{i=0}^{m}x^{(i)}{x^{(i)}}^{T}
+\eeq
+is computed. If the SVD of $B$ is $USV^T$ the the SVD of $\Sigma=B^TB$ is $VS^2V^T$. So Ngs $U$ is IISc's $V$.\\
+We get
+\beq
+(V^TX^T) = (XV)^T = (USV^TV)^T = (US)^T  
+\eeq
+Which is a proof of the important line in the following code.
+%
 IISc method and Ng's method (\ref{eqn:ngproj}) yield projected matrices that are the transposes of each other. See learn\_svd\_compare\_ng\_iisc.py
 \begin{center}
   \lstinputlisting[language=Python]{learn\_svd\_compare\_ng\_iisc.py}
@@ -449,5 +466,8 @@ The idea is to compute new coordinates for each data point using equation 10. Th
 But the thing is, the if you still want the eigenvectors in higher diemnsional space, you still need to explicitly know $\pmb{\phi}$ (equation 5). But the $\alpha_i$ in equation 5 can be solved using a lower dimensional eigenproblem 7. \\
 
 Usually, we don't need to know the higher dimensional eigenvectors. Just using the fact that they're orthogonal, means we can plot a 2D plot or a 3D plot using their coordinates. i.e. one of the orthogonal higher dimensional eigenvectors is along the x axis and the other along the y axis
+
+\section{T-SNE}
+T-SNE does not have an inverse transformation to original space.
 \end{document}
 
