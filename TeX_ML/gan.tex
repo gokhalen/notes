@@ -1,0 +1,40 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage{url}
+\begin{document}
+\title{GANs}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+\section{Objective Function}
+The IISc notes give the objective function for a GAN as
+%
+\beq
+\label{eqn:objfunc}
+\pi = E_x[\log(D(x))] + E_z[\log(1-D(G(z)))]
+\eeq
+Drop the expectations (to make things simpler) to get,
+\beq
+\label{eqn:objfunc2}
+\pi =\log(D(x)) + \log(1-D(G(z)))
+\eeq
+%
+$D(x)$ is the discriminators estimate of the probabuility that the real data instance x is real. $E_x$ is expected value over all real instances. $E_z$ is the expeced value over all random inputs to the generator. D(G(z)) is the discriminator's estimate of the probability that a fake instance is real.\\
+
+The discriminator wants to maximize \ref{eqn:objfunc2}. To see this, if $D(x)$ is always zero, then $\pi\,\rightarrow\,-\infty$. To see this, if $D(x)$ is always 1, then $\pi\,\rightarrow\,-\infty$. Since $D(x)$ is a probability it lies between zero and (1). So the intuition is that if we try to maximize  \ref{eqn:objfunc2} then $D$ will learn what is true and what is fake. \\
+
+Now for the generator $G$. What the generator wants to do is to fool the discriminator. It wants make $D = 1$ all the time. So it wants to make $\pi\rightarrow{-\infty}$.\\
+
+So to train $D$ we need to maximize \ref{eqn:objfunc2} and to train $G$ we need to minimize \ref{eqn:objfunc2}.\
+
+\end{document}
+
+
