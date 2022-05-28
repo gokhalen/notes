@@ -468,6 +468,9 @@ But the thing is, the if you still want the eigenvectors in higher diemnsional s
 Usually, we don't need to know the higher dimensional eigenvectors. Just using the fact that they're orthogonal, means we can plot a 2D plot or a 3D plot using their coordinates. i.e. one of the orthogonal higher dimensional eigenvectors is along the x axis and the other along the y axis
 
 \section{T-SNE}
-T-SNE does not have an inverse transformation to original space.
+T-SNE does not have an inverse transformation to original space. Perhaps this is the reason that it is strictly (ref. IISC homework) for visualization. This is not convincing. We could compute projections using T-SNE and then use the projected data for classification.\\
+
+IISC Lecture: Make historgrams of pair-wise distances in higher dimensional space. Convert this histogram into  pdf. Try to match lower dimensional pdf to higher dimensional pdf by minimizing Kullback-Leibler divergence.
+
 \end{document}
 

@@ -14,7 +14,8 @@ kk = 2  # number of columns to use for projection
 # Andrew Ng's method
 
 xx     = np.random.random(size=(mm,nn))
-x_mean = np.mean(xx,axis=1).reshape((mm,1))
+#x_mean = np.mean(xx,axis=1).reshape((mm,1))
+x_mean = np.mean(xx,axis=0)
 XX     = xx - x_mean
 
 Sig_ng = (1.0/mm)*XX.T@XX
