@@ -1,0 +1,31 @@
+\documentclass{article}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ber}{\begin{eqnarray}}
+\newcommand{\eer}{\end{eqnarray}}
+\newcommand{\nn}{\nonumber}
+\newcommand{\dd}[2]{\frac{d}{d{#2}}{(#1)} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage{url}
+\begin{document}
+\title{Multilabel, Multiclass, Multioutput}
+\author{Nachiket Gokhale}
+\date{\today}
+\maketitle
+%
+\section{Multilabel}
+From Geron's chapter on Classification.\\
+Facial recognition. From a photograph identify Alice,Bob,Charlie. The output vector would be [0,1,1].
+%
+\section{Multiclass}
+%
+Typically the classes are mutually exclusive. e.g. classifying digits in the MNIST dataset. We will produce an output vector containing probabilities using softmax.
+%
+\section{Multioutput}
+Predict multiple labels where each label can be multiclass. e.g. in a photgraph predict whether bicycles, motorbikes and cars are present. And then identify the make of each bicycle,motorbike and car with some probability. So the label output vector might be [0,1,1] when only mototbikes and cars are present. And then for each 1 i.e. for motorbike and car we can output a probability vector indicating which make it is. 
+%
+\end{document}
+
+
