@@ -474,6 +474,9 @@ T-SNE does not have an inverse transformation to original space. Perhaps this is
 
 IISC Lecture: Make historgrams of pair-wise distances in higher dimensional space. Convert this histogram into  pdf. Try to match lower dimensional pdf to higher dimensional pdf by minimizing Kullback-Leibler divergence.
 
+\subsection{Perplexity}
+\url{https://distill.pub/2016/misread-tsne/} ``The parameter is, in a sense, a guess about the number of close neighbors each point has.''
+
 \section{Sklearn implementation}
 SKlearns takes data, centers (not scales) it and then performs pca. to recover it applies the inverse transformation and then adds previously computed means (while centering).\\
 %
